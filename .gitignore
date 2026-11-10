@@ -1,23 +1,19 @@
 
+# Python
 .venv/
-venv/
 __pycache__/
-*.py[cod]
+*.pyc
 
+# Environment variables and secrets
 .env
-.env.*
-!.env.example
 
+# Power BI local settings and cache
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+
+# VS Code
 .vscode/
-.idea/
 
-.pytest_cache/
-.coverage
-htmlcov/
-*.log
-
-data/raw/*
-data/staging/*
-data/processed/*
-data/archive/*
-
+# OS
+.DS_Store
+Thumbs.db
