@@ -457,3 +457,38 @@ Called by the Python pipeline in the load order of §6, inside the pipeline's tr
 **Shared contract:** the run must exist with status `Running` (`usp_assert_run`). Duplicate business keys in staging raise an error instead of being merged unpredictably. Only rows whose values changed are updated (null-safe `EXCEPT` comparison), so a reload of the same file reports 0 inserted and 0 updated. Facts are never deleted.
 
 **Resolved open point:** two *different* unknown codes on the same date, shift and line both map to `part_key = -1`. The periodic-fact procedures detect this on the resolved grain and raise an error. The validator must therefore reject such rows with VR-GEN-05 (Phase 6).
+
+---
+
+## 12. Reporting layer, schema `rpt` (Phase 8, 2026-11-11)
+
+Power BI loads only these views (§8). They expose no lineage columns, which a test checks.
+
+| View | Grain | Derived columns |
+|---|---|---|
+| `v_dim_calendar`, `v_dim_shift`, `v_dim_production_line`, `v_dim_defect_type`, `v_dim_inspection_stage` | as the dimension | `severity_label` |
+| `v_dim_part` | part, **flattened with program** (D10) | `lifecycle_phase` as of today: Pre-launch / Launch (SOP + 90 days) / Serial / Run-out (EOP − 180 days) / Ended |
+| `v_fact_production`, `v_fact_nonconformity`, `v_fact_scrap`, `v_fact_rework` | as the fact | none |
+| `v_fact_inspection` | as the fact | `is_final_stage`: highest stage sequence with data for the line (**D22**) |
+| `v_fact_8d` | 8D | `opened_date`, `target_closure_date`, `closed_date`, `is_closed`, `status_derived`, `is_overdue`, `is_closed_on_time`, `days_to_close`, `days_open`, `is_repeat`, `has_linked_nc`, `status_mismatch` (VR-8D-02) |
+| `v_fact_8d_action` | action | `is_completed`, `is_completed_on_time`, `is_overdue` |
+| `v_fact_audit_finding` | finding | `is_closed`, `is_overdue`, `is_closed_on_time`, `days_to_close`, `classification_sort` |
+| `v_kpi_target` + function `rpt.fn_kpi_rag` | KPI × validity | `is_current`; the single RAG rule of blueprint §6.3 |
+| **`v_kpi_monthly`** | month × line, plus plant row `line_code = 'ALL'` | SQL reference for every KPI in blueprint §6.2: numerators, denominators and ratios. Used to reconcile DAX in Phase 9 |
+| `v_kpi_monthly_stage` | month × line × stage | FPY per stage |
+
+**Definitions fixed in SQL (DAX must match them exactly):**
+
+| KPI detail | Rule |
+|---|---|
+| Ratios | Σ numerator / Σ denominator, never an average of rates. Fractions (0.97 = 97 %). NULL when the denominator is 0 |
+| FTY | Product of the stage FPYs of the line's stages with inspections in the period (D1). Plant FTY = line FTYs weighted by `qty_started` |
+| Final stage (D22) | Highest stage sequence with inspection data for the line **over all loaded data**, not per period, so the final stage of a line cannot change from month to month |
+| Defect rate, DPU, DPMO, passed quantity | Final-stage inspected quantity as the denominator; NCs from all stages in the numerator (blueprint §6.2) |
+| Rejected quantity | Σ `qty_failed` over all stages |
+| Production value (COPQ %) | `qty_started × current standard_unit_cost_eur` |
+| Open / overdue 8Ds and findings | Snapshot **as of the month end** (semi-additive). Overdue = open and the target / due date is before the month end |
+| 8D closure time, on-time % | 8Ds **closed** in the month, by `closed_date_key` |
+| Repeat defect (D23) | 8D opened in the month whose part **and** defect type had another 8D **closed** in the 180 days before this one was opened. Unknown part or defect never counts as a repeat |
+| Corrective-action completion | Actions **due** in the month; completed = completed on or before that month's end (even if late) |
+| Audit KPIs | Major NCs by audit date; closure KPIs by closed date; plant-wide findings (line −2) are a separate line row and are included in the plant row |
