@@ -658,5 +658,7 @@ No Notion connection is available in this environment, so this is the structure 
 | D21 | RAG for targets of 0 (overdue counts): absolute amber band (1 = amber); Major NCs have no amber band | ✅ A relative ±10 % band around 0 is empty (§6.3). Seeded in `060_seed_kpi_targets.sql` |
 | D22 | A line's *final* inspection stage = highest stage sequence with data over all loaded data (not per period) | ✅ Stable month to month; matches the approved stage map (data dictionary §3.7) |
 | D23 | Repeat defect = same part **and** defect type, previous 8D *closed* within 180 days before the new one opened | ✅ Makes the §6.2 definition testable; window from `settings.toml`, kept in sync by a test |
+| D24 | Absolute cost targets rescaled to the simulated plant (scrap €75k, rework €30k per month; were €15k / €8k) | ✅ The plant produces ≈ €6.5M/month; the original values would be red every month. % targets unchanged. `061_rescale_cost_targets.sql` |
+| D25 | `config/source_schemas.toml` (planned for Phase 6) created in Phase 5 as the single file contract for generator **and** ETL | ✅ Headers, types and spelling variants cannot drift between the writer and the reader |
 
 Every future decision is added here and mirrored in the Notion *Decisions & Change Log* database.
