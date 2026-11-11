@@ -410,8 +410,10 @@ These rules drive both the synthetic generator (which injects violations) and th
 
 ---
 
-## 10. Open questions for review
+## 10. Review outcome (2026-11-11)
 
-1. **Line → inspection stages** (§3.7): are Moulding/Welding = EOL only, Painting = IPC + EOL and Assembly = IPC + EOL + FA acceptable for the simulation?
-2. **Rework labour rate:** one plant-wide illustrative rate (proposed €38.00/h), or a rate per line?
-3. **Calendar range** 2024-01-01 to 2027-12-31 with 24 months of history (2024-11 to 2026-10): OK?
+1. **Line → inspection stages** (§3.7): ✅ approved. Moulding/Welding = EOL; Painting = IPC + EOL; Assembly = IPC + EOL + FA.
+2. **Rework labour rate:** ✅ one plant-wide illustrative rate of €38.00/h, stored in `config/settings.yaml`.
+3. **Calendar range:** ✅ `dim_calendar` covers 2024-01-01 to 2027-12-31; synthetic history covers 2024-11-01 to 2026-10-31 (24 months).
+
+Decisions D8–D12 were accepted with this review.

@@ -436,7 +436,7 @@ Green = meets target; Amber = within 10 % (relative) of target; Red = worse. Thr
 | Storage account | `azurestoragecentralkpi` | ✅ exists, Switzerland North. Recommended: StorageV2, LRS, Hot tier, *soft delete for blobs 7 days*, public access disabled | < €1 |
 | Containers | `rawdata`, `archive`, `processeddata`, `stagingdata`, `backupdata` | ✅ exist. `stagingdata` is probably unnecessary (staging happens in SQL); keep it but don't use it | — |
 | Azure SQL logical server | `sql-qualitykpi-<suffix>` (globally unique) | **Same region as storage (Switzerland North, allowed by your policy).** Entra ID admin = your account; SQL authentication optional | free |
-| Azure SQL Database | `QualityKPI` | **Free offer** (General Purpose Serverless, 100 000 vCore-seconds + 32 GB per month, *auto-pause* and "stop when free limit reached"). Fallback if not offered: Basic DTU (~€5/month). | €0 |
+| Azure SQL Database | `QualityKPI` | Planned: free offer. **Actual (D14): Basic, 5 DTU, 2 GB** on server `sql-qualitykpi-og6p7`, Austria East (D13). Details in `03_azure_infrastructure.md`. | ≈ €4.5 |
 | Firewall | Client IP rule for your machine | "Allow Azure services" **off** unless needed | — |
 
 The region restriction is real: your subscription's policy only allows 5 regions. Switzerland North is one of them and already hosts the storage account, so co-locating there avoids cross-region traffic.
@@ -640,10 +640,12 @@ No Notion connection is available in this environment, so this is the structure 
 | D5 | Azure SQL authentication | ✅ Both: Entra ID for people and Power BI; SQL authentication (`etl_loader`) for the scheduled ETL (§8.2) |
 | D6 | Audit findings | ✅ In scope: `fact_audit_finding`, audit KPIs (§6.2) and report page 8 |
 | D7 | Unit cost: snapshot into the facts instead of a Type 2 part dimension | Proposed in §5.3; accepted with the model unless you object |
-| D8 | Fiscal year = calendar year | Proposed (Phase 2, `02_data_dictionary.md` §9) |
-| D9 | 8D → NC and 8D → audit-finding relationships inactive in Power BI | Proposed (Phase 2) |
-| D10 | Vehicle program flattened into the part view in Power BI | Proposed (Phase 2) |
-| D11 | Special dimension members: −1 Unknown, −2 Not applicable | Proposed (Phase 2) |
-| D12 | Imputed rework costs flagged with `cost_source` | Proposed (Phase 2) |
+| D8 | Fiscal year = calendar year | ✅ Accepted (Phase 2, `02_data_dictionary.md` §9) |
+| D9 | 8D → NC and 8D → audit-finding relationships inactive in Power BI | ✅ Accepted |
+| D10 | Vehicle program flattened into the part view in Power BI | ✅ Accepted |
+| D11 | Special dimension members: −1 Unknown, −2 Not applicable | ✅ Accepted |
+| D12 | Imputed rework costs flagged with `cost_source` | ✅ Accepted |
+| D13 | Azure SQL server in **Austria East**, not Switzerland North | ✅ Forced: Switzerland North refused new SQL servers (`03_azure_infrastructure.md` §2) |
+| D14 | Azure SQL **Basic** (≈ €4.5/month) instead of the free offer | ✅ Forced: free offer not available in the region; documented fallback |
 
 Every future decision is added here and mirrored in the Notion *Decisions & Change Log* database.
