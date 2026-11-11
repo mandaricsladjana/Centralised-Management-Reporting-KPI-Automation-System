@@ -199,8 +199,8 @@ def build_calendar(conn, settings: dict) -> int:
     return cur.execute("SELECT COUNT(*) FROM dw.dim_calendar").fetchval()
 
 
-def deploy(environment: str, dry_run: bool = False) -> int:
-    target = db_target(environment)
+def deploy(environment: str, dry_run: bool = False, database: str | None = None) -> int:
+    target = db_target(environment, database)
     settings = load_settings()
     scripts = discover_scripts()
     log.info("Target %s", target.describe())
@@ -235,6 +235,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--env", choices=("dev", "prod"),
                         help="target environment (required for prod; defaults to ENVIRONMENT for dev)")
     parser.add_argument("--dry-run", action="store_true", help="list pending scripts without applying them")
+    parser.add_argument("--database", help="override the database name (e.g. QualityKPI_Test)")
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)-7s %(message)s")
 
@@ -244,7 +245,7 @@ def main(argv: list[str] | None = None) -> int:
         log.error("Refusing to deploy to PROD implicitly: pass --env prod explicitly.")
         return 2
     try:
-        return deploy(env, dry_run=args.dry_run)
+        return deploy(env, dry_run=args.dry_run, database=args.database)
     except (ConfigError, DeployError) as exc:
         log.error("%s", exc)
         return 1

@@ -60,21 +60,22 @@ def _require(name: str) -> str:
     return value
 
 
-def db_target(environment: str | None = None) -> DbTarget:
+def db_target(environment: str | None = None, database: str | None = None) -> DbTarget:
     """Build the connection target for an environment from environment variables.
 
     DEV  = local SQL Server Express, Windows authentication.
     PROD = Azure SQL, AZURE_SQL_AUTH=entra (az login token) or sql (etl_loader), D5.
+    database overrides the configured database name (e.g. QualityKPI_Test for tests).
     """
     env = (environment or os.getenv("ENVIRONMENT", "dev")).strip().lower()
     if env not in ENVIRONMENTS:
         raise ConfigError(f"ENVIRONMENT must be one of {ENVIRONMENTS}, got {env!r}")
 
     if env == "dev":
-        return DbTarget("dev", _require("LOCAL_SQL_SERVER"), _require("LOCAL_SQL_DATABASE"), "windows")
+        return DbTarget("dev", _require("LOCAL_SQL_SERVER"), database or _require("LOCAL_SQL_DATABASE"), "windows")
 
     auth = os.getenv("AZURE_SQL_AUTH", "entra").strip().lower()
-    server, database = _require("AZURE_SQL_SERVER"), _require("AZURE_SQL_DATABASE")
+    server, database = _require("AZURE_SQL_SERVER"), database or _require("AZURE_SQL_DATABASE")
     if auth == "entra":
         return DbTarget("prod", server, database, "entra")
     if auth == "sql":
