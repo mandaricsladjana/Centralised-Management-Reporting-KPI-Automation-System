@@ -3,13 +3,36 @@
 .venv/
 __pycache__/
 *.pyc
+.pytest_cache/
+.coverage
+htmlcov/
 
 # Environment variables and secrets
 .env
+.env.*
+!.env.example
+*.pem
+*.pfx
+
+# Data: generated and raw data never go to Git (only data/sample is committed)
+data/raw/**
+data/processed/**
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Logs, backups and exports
+logs/**
+!logs/.gitkeep
+*.log
+*.bacpac
+*.bak
 
 # Power BI local settings and cache
 **/.pbi/localSettings.json
 **/.pbi/cache.abf
+
+# Office temp/lock files
+~$*
 
 # VS Code
 .vscode/

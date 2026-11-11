@@ -1,0 +1,25 @@
+# Normalise line endings in the repository (LF), check out natively per OS.
+* text=auto
+
+# Windows-only scripts keep CRLF in the working tree
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# SQL, Python, docs, Power BI text formats: always LF in the repo
+*.sql   text
+*.py    text
+*.md    text
+*.yaml  text
+*.json  text
+*.tmdl  text
+*.pbir  text
+*.pbism text
+*.pbip  text
+
+# Binary files
+*.xlsx binary
+*.parquet binary
+*.abf binary
+*.png binary
+*.pbix binary
