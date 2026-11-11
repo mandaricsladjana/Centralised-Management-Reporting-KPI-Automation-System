@@ -1,0 +1,99 @@
+{
+  "company": "Danube Automotive Components d.o.o.",
+  "seed": 20261111,
+  "period": {
+    "start": "2025-03-01",
+    "end": "2025-03-31"
+  },
+  "files": [
+    {
+      "file": "audit_findings.xlsx",
+      "source": "audit_findings",
+      "rows": 7,
+      "rule_issues": 2,
+      "sha256": "8001d29b38cbdb273175720316cfc6c2b1822086ec6da1f6f23ee6eaa4271222"
+    },
+    {
+      "file": "8d_actions.xlsx",
+      "source": "eight_d_actions",
+      "rows": 4,
+      "rule_issues": 3,
+      "sha256": "101c39879126404b32bbb43d68698c5c83877dc1f3a3606337e23c6fd27e3fe7"
+    },
+    {
+      "file": "8d_tracker.xlsx",
+      "source": "eight_d_tracker",
+      "rows": 1,
+      "rule_issues": 0,
+      "sha256": "b773ffb568ab2e5b74683b37b4b9bda2c46fb2a5324de6807b54b8e4f34aa02a"
+    },
+    {
+      "file": "master_defects.xlsx",
+      "source": "master_defects",
+      "rows": 15,
+      "rule_issues": 0,
+      "sha256": "00657946c292dda77e669360f18850057c5e425cf044e878599bf492161950bd"
+    },
+    {
+      "file": "master_lines.xlsx",
+      "source": "master_lines",
+      "rows": 6,
+      "rule_issues": 0,
+      "sha256": "3d1f5ed4bd2e64b75a84c20c8c6d57f2c7e996a0a809734e046641c1e80defd6"
+    },
+    {
+      "file": "master_parts.xlsx",
+      "source": "master_parts",
+      "rows": 15,
+      "rule_issues": 0,
+      "sha256": "40d9a59e3255644b99d6ec4987afe4eac74fcab5097e1a1fe88eb9730036bce8"
+    },
+    {
+      "file": "master_programs.xlsx",
+      "source": "master_programs",
+      "rows": 3,
+      "rule_issues": 0,
+      "sha256": "b22930890600aba33e3dff4a20bb103dbde01d20102be6d18fb59299c77a3427"
+    },
+    {
+      "file": "production_daily_2025_03.xlsx",
+      "source": "production_daily",
+      "rows": 636,
+      "rule_issues": 20,
+      "sha256": "c91d3a33f0aaacae36a138df289d19390d02ab515d0f09aeb5ae9a5fb84237a3"
+    },
+    {
+      "file": "qa_defects.csv",
+      "source": "qa_defects",
+      "rows": 2249,
+      "rule_issues": 67,
+      "sha256": "9d50a12cefc59d1d0d9768fb87095e2ed035f065d5f32b8bd31df0fc798c1cfa"
+    },
+    {
+      "file": "qa_inspections.csv",
+      "source": "qa_inspections",
+      "rows": 1143,
+      "rule_issues": 43,
+      "sha256": "9b1a115b7fe17a7104e625515da11bc3b49250e5b161dcbe0cc1817008a89c08"
+    },
+    {
+      "file": "rework_log.xlsx",
+      "source": "rework_log",
+      "rows": 1298,
+      "rule_issues": 39,
+      "sha256": "542cf5fda1a99b649dc2d139b38b065f1003a3f7660411c2c2a4996cd9c6c488"
+    },
+    {
+      "file": "scrap_log.csv",
+      "source": "scrap_log",
+      "rows": 569,
+      "rule_issues": 17,
+      "sha256": "fd8e7f9ba3cf1a5fa5448f7e97e70395f62b4da34e0736997715607fd4ef00b8"
+    }
+  ],
+  "transaction_rows": 5907,
+  "rule_issues": 191,
+  "rule_issue_rate": 0.0323,
+  "standardisation_variants": 395,
+  "scripted_8d_events": []
+}

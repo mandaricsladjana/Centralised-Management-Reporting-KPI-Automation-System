@@ -1,0 +1,587 @@
+file,source_row_number,business_key,issue,rule_id,expected,detail
+audit_findings.xlsx,2,AF-2025-0001,classification_variant,,Standardise,classification spelling variant
+audit_findings.xlsx,5,AF-2025-0004,unmappable_classification,VR-AF-01,Reject,classification cannot be mapped
+audit_findings.xlsx,6,AF-2025-0005,unmappable_classification,VR-AF-01,Reject,classification cannot be mapped
+audit_findings.xlsx,7,AF-2025-0006,classification_variant,,Standardise,classification spelling variant
+8d_actions.xlsx,3,8D-2025-001-A02,unknown_8d,VR-8D-03,Reject,8D ID not in tracker
+8d_actions.xlsx,4,8D-2025-001-A03,unknown_8d,VR-8D-03,Reject,8D ID not in tracker
+8d_actions.xlsx,5,8D-2025-001-A04,missing_value,VR-GEN-02,Reject,mandatory owner_name empty
+production_daily_2025_03.xlsx,4,2025-03-03 | N | L1 | DAC-10421,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,17,31.02.2025 | E | L04 | DAC-30210,invalid_date,VR-GEN-03,Reject,date does not exist
+production_daily_2025_03.xlsx,30,2025-03-03 | L | L6 | DAC-40427,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,34,2030-03-04 | N | L01 | DAC-10421,future_date,VR-GEN-07,Reject,event date in the future
+production_daily_2025_03.xlsx,35,2025-03-04 | E | L1 | DAC-10433,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,44,2025-03-04 | E | LINE-03 | DAC-20144,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,53,2025-03-04 | E | ASSY-1 | DAC-40310,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,62,2025-03-05 | E | L1 | DAC-10421,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,63,2025-03-05 | L | LINE-01 | DAC-10421,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,94,06.03.2025 | N | L01 | DAC-10421,date_text,,Standardise,date written as text in an accepted format
+production_daily_2025_03.xlsx,97,2025-03-06 |  | L01 | DAC-10433,missing_value,VR-GEN-02,Reject,mandatory shift_code empty
+production_daily_2025_03.xlsx,105,2025-03-06 | L | L03 | DAC-90000,unknown_part,VR-GEN-06,Warn,part number not in master_parts
+production_daily_2025_03.xlsx,112,06/03/2025 | N | L04 | DAC-30224,date_text,,Standardise,date written as text in an accepted format
+production_daily_2025_03.xlsx,130,07.03.2025 | N | L02 | DAC-10512,date_text,,Standardise,date written as text in an accepted format
+production_daily_2025_03.xlsx,136,2025-03-07 | N | L03 | DAC-90001,unknown_part,VR-GEN-06,Warn,part number not in master_parts
+production_daily_2025_03.xlsx,143,2025-03-07 | E | Line 5 | DAC-40310,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,144,07/03/2025 | L | L05 | DAC-40310,date_text,,Standardise,date written as text in an accepted format
+production_daily_2025_03.xlsx,165,2025-03-10 | L | L03 | DAC-20144,negative_qty,VR-QTY-01,Reject,qty_started negative
+production_daily_2025_03.xlsx,171,10.03.2025 | L | L04 | DAC-30224,date_text,,Standardise,date written as text in an accepted format
+production_daily_2025_03.xlsx,178,2025-03-10 | N | LINE-05 | DAC-40322,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,182,2025-03-10 | N | L06 | DAC-40427,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+production_daily_2025_03.xlsx,189,2025-03-11 | E | LINE-02 | DAC-10512,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,193,2025-03-11 | L | Line 3 | DAC-20118,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,194,2025-03-11 |  | L03 | DAC-20118,missing_value,VR-GEN-02,Reject,mandatory shift_code empty
+production_daily_2025_03.xlsx,204,2025-03-11 | N | L04 | DAC-30224,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+production_daily_2025_03.xlsx,216,12/03/2025 | N | L01 | DAC-10421,date_text,,Standardise,date written as text in an accepted format
+production_daily_2025_03.xlsx,220,2025-03-12 | E | LINE-02 | DAC-10512,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,224,2025-03-12 | L | WELD | DAC-20118,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,228,2025-03-12 | N | LINE-03 | DAC-20144,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,230,12.03.2025 | L | L04 | DAC-30210,date_text,,Standardise,date written as text in an accepted format
+production_daily_2025_03.xlsx,241,2025-03-12 | E | Line 6 | DAC-40427,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,242,2025-03-12 | L | Line 6 | DAC-40427,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,266,2025-03-13 | L | ASSY-1 | DAC-40310,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,291,2025-03-14 |  | L04 | DAC-30210,missing_value,VR-GEN-02,Reject,mandatory shift_code empty
+production_daily_2025_03.xlsx,297,2025-03-14 | N | LINE-05 | DAC-40310,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,299,2025-03-14 | L | L05 | DAC-90002,unknown_part,VR-GEN-06,Warn,part number not in master_parts
+production_daily_2025_03.xlsx,303,2030-03-14 | N | L06 | DAC-40427,future_date,VR-GEN-07,Reject,event date in the future
+production_daily_2025_03.xlsx,304,17/03/2025 | E | L01 | DAC-10421,date_text,,Standardise,date written as text in an accepted format
+production_daily_2025_03.xlsx,306,2025-03-17 | N | LINE-01 | DAC-10421,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,312,17.03.2025 | N | L02 | DAC-10512,date_text,,Standardise,date written as text in an accepted format
+production_daily_2025_03.xlsx,313,2025-03-17 | E | L3 | DAC-20118,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,318,2025-03-17 | N | L3 | DAC-20144,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,339,2025-03-18 | N | L1 | DAC-10433,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,340,18/03/2025 | E | L02 | DAC-10512,date_text,,Standardise,date written as text in an accepted format
+production_daily_2025_03.xlsx,341,2025-03-18 | L | L02 | DAC-10512,negative_qty,VR-QTY-01,Reject,qty_started negative
+production_daily_2025_03.xlsx,352,2025-03-18 | E | Line 4 | DAC-30224,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,356,18.03.2025 | L | L05 | DAC-40310,date_text,,Standardise,date written as text in an accepted format
+production_daily_2025_03.xlsx,379,19/03/2025 | E | L04 | DAC-30210,date_text,,Standardise,date written as text in an accepted format
+production_daily_2025_03.xlsx,384,2025-03-19 | L | L04 | DAC-30224,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+production_daily_2025_03.xlsx,385,2025-03-19 | N | L04 | DAC-30224,negative_qty,VR-QTY-01,Reject,qty_started negative
+production_daily_2025_03.xlsx,387,2025-03-19 | L | ASSY-1 | DAC-40310,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,397,20.03.2025 | N | L01 | DAC-10421,date_text,,Standardise,date written as text in an accepted format
+production_daily_2025_03.xlsx,403,20/03/2025 | N | L02 | DAC-10512,date_text,,Standardise,date written as text in an accepted format
+production_daily_2025_03.xlsx,411,2025-03-20 | E | L04 | DAC-30210,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+production_daily_2025_03.xlsx,416,20.03.2025 | N | L04 | DAC-30224,date_text,,Standardise,date written as text in an accepted format
+production_daily_2025_03.xlsx,436,2025-03-21 | E | L03 | DAC-20118,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+production_daily_2025_03.xlsx,438,2025-03-21 | N | Line 3 | DAC-20118,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,443,2025-03-21 | E | L04 | DAC-30210,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+production_daily_2025_03.xlsx,459,2025-03-24 | L | IM-1 | DAC-10421,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,523,2025-03-26 | N | Line 1 | DAC-10433,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,529,26/03/2025 | N | L03 | DAC-20118,date_text,,Standardise,date written as text in an accepted format
+production_daily_2025_03.xlsx,541,2025-03-26 | N | L5 | DAC-40310,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,543,26.03.2025 | L | L05 | DAC-40322,date_text,,Standardise,date written as text in an accepted format
+production_daily_2025_03.xlsx,544,2025-13-26 | N | L05 | DAC-40322,invalid_date,VR-GEN-03,Reject,date does not exist
+production_daily_2025_03.xlsx,545,26/03/2025 | E | L06 | DAC-40427,date_text,,Standardise,date written as text in an accepted format
+production_daily_2025_03.xlsx,567,2025-03-27 | L | L4 | DAC-30224,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,571,27.03.2025 | N | L05 | DAC-40310,date_text,,Standardise,date written as text in an accepted format
+production_daily_2025_03.xlsx,585,2025-03-28 | L | LINE-02 | DAC-10512,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,607,2025-03-28 | N | L6 | DAC-40427,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,618,2025-03-31 | L | L3 | DAC-20118,line_variant,,Standardise,line_code spelling variant
+production_daily_2025_03.xlsx,629,2025-03-31 | E | L05 | DAC-40310,negative_qty,VR-QTY-01,Reject,qty_started negative
+qa_defects.csv,6,NC-2025-000005,missing_value,VR-GEN-02,Reject,mandatory disposition empty
+qa_defects.csv,23,NC-2025-000021,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+qa_defects.csv,38,NC-2025-000035,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+qa_defects.csv,74,NC-2025-000070,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+qa_defects.csv,80,NC-2025-000075,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+qa_defects.csv,195,NC-2025-000189,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+qa_defects.csv,217,NC-2025-000210,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+qa_defects.csv,225,NC-2025-000218,future_date,VR-GEN-07,Reject,event date in the future
+qa_defects.csv,239,NC-2025-000231,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+qa_defects.csv,256,NC-2025-000247,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+qa_defects.csv,267,NC-2025-000258,missing_value,VR-GEN-02,Reject,mandatory disposition empty
+qa_defects.csv,373,NC-2025-000364,unknown_defect,VR-GEN-06,Warn,defect code not in master_defects
+qa_defects.csv,389,NC-2025-000380,negative_qty,VR-QTY-01,Reject,qty_affected negative
+qa_defects.csv,476,NC-2025-000467,negative_qty,VR-QTY-01,Reject,qty_affected negative
+qa_defects.csv,501,NC-2025-000492,unknown_defect,VR-GEN-06,Warn,defect code not in master_defects
+qa_defects.csv,596,NC-2025-000587,unknown_defect,VR-GEN-06,Warn,defect code not in master_defects
+qa_defects.csv,601,NC-2025-000592,missing_value,VR-GEN-02,Reject,mandatory disposition empty
+qa_defects.csv,633,NC-2025-000624,future_date,VR-GEN-07,Reject,event date in the future
+qa_defects.csv,683,NC-2025-000674,missing_value,VR-GEN-02,Reject,mandatory disposition empty
+qa_defects.csv,689,NC-2025-000680,unknown_defect,VR-GEN-06,Warn,defect code not in master_defects
+qa_defects.csv,706,NC-2025-000696,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+qa_defects.csv,747,NC-2025-000737,future_date,VR-GEN-07,Reject,event date in the future
+qa_defects.csv,827,NC-2025-000817,unknown_defect,VR-GEN-06,Warn,defect code not in master_defects
+qa_defects.csv,866,NC-2025-000855,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+qa_defects.csv,923,NC-2025-000912,negative_qty,VR-QTY-01,Reject,qty_affected negative
+qa_defects.csv,943,NC-2025-000932,unknown_defect,VR-GEN-06,Warn,defect code not in master_defects
+qa_defects.csv,980,NC-2025-000969,missing_value,VR-GEN-02,Reject,mandatory disposition empty
+qa_defects.csv,1014,NC-2025-001002,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+qa_defects.csv,1050,NC-2025-001038,missing_value,VR-GEN-02,Reject,mandatory disposition empty
+qa_defects.csv,1113,NC-2025-001101,unknown_defect,VR-GEN-06,Warn,defect code not in master_defects
+qa_defects.csv,1117,NC-2025-001105,unknown_defect,VR-GEN-06,Warn,defect code not in master_defects
+qa_defects.csv,1196,NC-2025-001184,future_date,VR-GEN-07,Reject,event date in the future
+qa_defects.csv,1285,NC-2025-001273,unknown_defect,VR-GEN-06,Warn,defect code not in master_defects
+qa_defects.csv,1289,NC-2025-001277,missing_value,VR-GEN-02,Reject,mandatory disposition empty
+qa_defects.csv,1298,NC-2025-001286,missing_value,VR-GEN-02,Reject,mandatory disposition empty
+qa_defects.csv,1317,NC-2025-001305,unknown_defect,VR-GEN-06,Warn,defect code not in master_defects
+qa_defects.csv,1344,NC-2025-001332,missing_value,VR-GEN-02,Reject,mandatory disposition empty
+qa_defects.csv,1385,NC-2025-001373,unknown_defect,VR-GEN-06,Warn,defect code not in master_defects
+qa_defects.csv,1388,NC-2025-001376,unknown_defect,VR-GEN-06,Warn,defect code not in master_defects
+qa_defects.csv,1432,NC-2025-001420,future_date,VR-GEN-07,Reject,event date in the future
+qa_defects.csv,1448,NC-2025-001435,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+qa_defects.csv,1566,NC-2025-001553,unknown_defect,VR-GEN-06,Warn,defect code not in master_defects
+qa_defects.csv,1589,NC-2025-001575,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+qa_defects.csv,1595,NC-2025-001581,future_date,VR-GEN-07,Reject,event date in the future
+qa_defects.csv,1608,NC-2025-001594,negative_qty,VR-QTY-01,Reject,qty_affected negative
+qa_defects.csv,1610,NC-2025-001595,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+qa_defects.csv,1648,NC-2025-001633,negative_qty,VR-QTY-01,Reject,qty_affected negative
+qa_defects.csv,1707,NC-2025-001691,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+qa_defects.csv,1796,NC-2025-001779,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+qa_defects.csv,1827,NC-2025-001810,negative_qty,VR-QTY-01,Reject,qty_affected negative
+qa_defects.csv,1847,NC-2025-001830,unknown_defect,VR-GEN-06,Warn,defect code not in master_defects
+qa_defects.csv,1866,NC-2025-001849,negative_qty,VR-QTY-01,Reject,qty_affected negative
+qa_defects.csv,1881,NC-2025-001864,future_date,VR-GEN-07,Reject,event date in the future
+qa_defects.csv,1897,NC-2025-001880,unknown_defect,VR-GEN-06,Warn,defect code not in master_defects
+qa_defects.csv,1912,NC-2025-001895,negative_qty,VR-QTY-01,Reject,qty_affected negative
+qa_defects.csv,1979,NC-2025-001962,future_date,VR-GEN-07,Reject,event date in the future
+qa_defects.csv,1990,NC-2025-001973,unknown_defect,VR-GEN-06,Warn,defect code not in master_defects
+qa_defects.csv,1996,NC-2025-001979,unknown_defect,VR-GEN-06,Warn,defect code not in master_defects
+qa_defects.csv,2024,NC-2025-002007,negative_qty,VR-QTY-01,Reject,qty_affected negative
+qa_defects.csv,2039,NC-2025-002022,unknown_defect,VR-GEN-06,Warn,defect code not in master_defects
+qa_defects.csv,2048,NC-2025-002031,negative_qty,VR-QTY-01,Reject,qty_affected negative
+qa_defects.csv,2090,NC-2025-002073,unknown_defect,VR-GEN-06,Warn,defect code not in master_defects
+qa_defects.csv,2126,NC-2025-002109,future_date,VR-GEN-07,Reject,event date in the future
+qa_defects.csv,2130,NC-2025-002112,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+qa_defects.csv,2170,NC-2025-002152,missing_value,VR-GEN-02,Reject,mandatory disposition empty
+qa_defects.csv,2182,NC-2025-002164,unknown_defect,VR-GEN-06,Warn,defect code not in master_defects
+qa_defects.csv,2239,NC-2025-002221,future_date,VR-GEN-07,Reject,event date in the future
+qa_inspections.csv,140,2025-03-05 | L | L05 | DAC-40310 | IPC,passed_gt_inspected,VR-INS-01,Reject,passed first time > inspected
+qa_inspections.csv,150,2025-03-05 | L | L05 | DAC-40322 | EOL,passed_gt_inspected,VR-INS-01,Reject,passed first time > inspected
+qa_inspections.csv,204,2025-03-06 | L | L05 | DAC-40322 | EOL,passed_gt_inspected,VR-INS-01,Reject,passed first time > inspected
+qa_inspections.csv,239,2025-03-07 | E | L04 | DAC-30224 | IPC,passed_gt_inspected,VR-INS-01,Reject,passed first time > inspected
+qa_inspections.csv,268,2025-03-07 | L | L06 | DAC-40427 | FA,duplicate_key_conflict,VR-GEN-05,Reject,"same business key as the next row, different quantities"
+qa_inspections.csv,269,2025-03-07 | L | L06 | DAC-40427 | FA,duplicate_key_conflict,VR-GEN-05,Reject,same business key as the row above
+qa_inspections.csv,284,2025-03-10 | N | L03 | DAC-20118 | EOL,passed_gt_inspected,VR-INS-01,Reject,passed first time > inspected
+qa_inspections.csv,285,2025-03-10 | E | L03 | DAC-20144 | EOL,passed_gt_inspected,VR-INS-01,Reject,passed first time > inspected
+qa_inspections.csv,310,2025-03-10 | E | L05 |  | EOL,missing_value,VR-GEN-02,Reject,mandatory part_number empty
+qa_inspections.csv,338,2025-03-11 | N | L03 |  | EOL,missing_value,VR-GEN-02,Reject,mandatory part_number empty
+qa_inspections.csv,377,2025-03-11 | L | L06 | DAC-40427 | FA,duplicate_key_conflict,VR-GEN-05,Reject,"same business key as the next row, different quantities"
+qa_inspections.csv,378,2025-03-11 | L | L06 | DAC-40427 | FA,duplicate_key_conflict,VR-GEN-05,Reject,same business key as the row above
+qa_inspections.csv,403,2025-03-12 | E | L04 | DAC-30224 | IPC,duplicate_key_conflict,VR-GEN-05,Reject,"same business key as the next row, different quantities"
+qa_inspections.csv,404,2025-03-12 | E | L04 | DAC-30224 | IPC,duplicate_key_conflict,VR-GEN-05,Reject,same business key as the row above
+qa_inspections.csv,435,2025-03-12 | N | L06 | DAC-40427 | EOL,duplicate_key_conflict,VR-GEN-05,Reject,"same business key as the next row, different quantities"
+qa_inspections.csv,436,2025-03-12 | N | L06 | DAC-40427 | EOL,duplicate_key_conflict,VR-GEN-05,Reject,same business key as the row above
+qa_inspections.csv,473,2025-03-13 | N | L05 | DAC-40310 | FA,passed_gt_inspected,VR-INS-01,Reject,passed first time > inspected
+qa_inspections.csv,524,2025-03-14 | L | L05 | DAC-40310 | FA,passed_gt_inspected,VR-INS-01,Reject,passed first time > inspected
+qa_inspections.csv,556,2025-03-17 | L | L03 | DAC-20118 | EOL,duplicate_key_conflict,VR-GEN-05,Reject,"same business key as the next row, different quantities"
+qa_inspections.csv,557,2025-03-17 | L | L03 | DAC-20118 | EOL,duplicate_key_conflict,VR-GEN-05,Reject,same business key as the row above
+qa_inspections.csv,571,2025-03-17 | L | L04 | DAC-30224 | VIS,unknown_stage,VR-GEN-06,Warn,stage code not in dim_inspection_stage
+qa_inspections.csv,718,2025-03-20 | E | L03 | DAC-20118 | EOL,negative_qty,VR-QTY-01,Reject,qty_failed negative
+qa_inspections.csv,724,2025-03-20 | E | L04 | DAC-30210 | IPC,negative_qty,VR-QTY-01,Reject,qty_failed negative
+qa_inspections.csv,734,2025-03-20 | N | L04 | DAC-30224 | IPC,negative_qty,VR-QTY-01,Reject,qty_failed negative
+qa_inspections.csv,762,2025-03-20 | N | L06 | DAC-40427 | FA,duplicate_key_conflict,VR-GEN-05,Reject,"same business key as the next row, different quantities"
+qa_inspections.csv,763,2025-03-20 | N | L06 | DAC-40427 | FA,duplicate_key_conflict,VR-GEN-05,Reject,same business key as the row above
+qa_inspections.csv,779,2025-03-21 | E | L04 | DAC-30210 | VIS,unknown_stage,VR-GEN-06,Warn,stage code not in dim_inspection_stage
+qa_inspections.csv,788,2025-03-21 | L | L04 | DAC-30224 | EOL,negative_qty,VR-QTY-01,Reject,qty_failed negative
+qa_inspections.csv,791,2025-03-21 | E | L05 |  | IPC,missing_value,VR-GEN-02,Reject,mandatory part_number empty
+qa_inspections.csv,831,2025-03-24 | L | L03 |  | EOL,missing_value,VR-GEN-02,Reject,mandatory part_number empty
+qa_inspections.csv,843,2025-03-24 | N | L04 | DAC-30224 | IPC,passed_gt_inspected,VR-INS-01,Reject,passed first time > inspected
+qa_inspections.csv,871,2025-03-24 | N | L06 | DAC-40427 | FA,passed_gt_inspected,VR-INS-01,Reject,passed first time > inspected
+qa_inspections.csv,882,2025-03-25 | L | L03 | DAC-20118 | EOL,duplicate_key_conflict,VR-GEN-05,Reject,"same business key as the next row, different quantities"
+qa_inspections.csv,883,2025-03-25 | L | L03 | DAC-20118 | EOL,duplicate_key_conflict,VR-GEN-05,Reject,same business key as the row above
+qa_inspections.csv,916,2025-03-25 | N | L05 | DAC-40322 | EOL,duplicate_key_conflict,VR-GEN-05,Reject,"same business key as the next row, different quantities"
+qa_inspections.csv,917,2025-03-25 | N | L05 | DAC-40322 | EOL,duplicate_key_conflict,VR-GEN-05,Reject,same business key as the row above
+qa_inspections.csv,918,2025-03-25 | N | L05 | DAC-40322 | FA,duplicate_key_conflict,VR-GEN-05,Reject,"same business key as the next row, different quantities"
+qa_inspections.csv,919,2025-03-25 | N | L05 | DAC-40322 | FA,duplicate_key_conflict,VR-GEN-05,Reject,same business key as the row above
+qa_inspections.csv,925,2025-03-25 | L | L06 | DAC-40427 | FA,passed_gt_inspected,VR-INS-01,Reject,passed first time > inspected
+qa_inspections.csv,962,2025-03-26 | N | L05 | DAC-40310 | VIS,unknown_stage,VR-GEN-06,Warn,stage code not in dim_inspection_stage
+qa_inspections.csv,968,2025-03-26 | L | L05 | DAC-40322 | IPC,passed_gt_inspected,VR-INS-01,Reject,passed first time > inspected
+qa_inspections.csv,1111,2025-03-31 | N | L04 | DAC-30210 | EOL,negative_qty,VR-QTY-01,Reject,qty_failed negative
+qa_inspections.csv,1143,2025-03-31 | N | L06 |  | EOL,missing_value,VR-GEN-02,Reject,mandatory part_number empty
+rework_log.xlsx,2,RW-2025-000001,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,4,RW-2025-000003,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,5,RW-2025-000004,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,10,RW-2025-000009,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,12,RW-2025-000011,missing_cost,VR-RWK-02,Warn,rework cost blank: impute hours x rate
+rework_log.xlsx,16,RW-2025-000015,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,19,RW-2025-000018,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,22,RW-2025-000020,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+rework_log.xlsx,27,RW-2025-000025,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,32,RW-2025-000030,missing_cost,VR-RWK-02,Warn,rework cost blank: impute hours x rate
+rework_log.xlsx,42,RW-2025-000040,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,43,RW-2025-000041,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,46,RW-2025-000044,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,47,RW-2025-000045,missing_cost,VR-RWK-02,Warn,rework cost blank: impute hours x rate
+rework_log.xlsx,57,RW-2025-000055,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,58,RW-2025-000056,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,61,RW-2025-000059,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,62,RW-2025-000060,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,63,RW-2025-000061,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,67,RW-2025-000065,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,71,RW-2025-000069,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,73,RW-2025-000071,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,76,RW-2025-000074,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,80,RW-2025-000078,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,83,RW-2025-000081,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,93,RW-2025-000091,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,104,RW-2025-000102,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,107,RW-2025-000105,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,109,RW-2025-000107,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,127,RW-2025-000125,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,128,RW-2025-000126,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,129,RW-2025-000127,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,130,RW-2025-000128,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,132,RW-2025-000130,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,145,RW-2025-000143,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,146,RW-2025-000144,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,153,RW-2025-000151,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,156,RW-2025-000154,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,161,RW-2025-000159,negative_qty,VR-QTY-01,Reject,qty_reworked negative
+rework_log.xlsx,168,RW-2025-000166,missing_cost,VR-RWK-02,Warn,rework cost blank: impute hours x rate
+rework_log.xlsx,172,RW-2025-000170,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,176,RW-2025-000174,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,179,RW-2025-000177,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,180,RW-2025-000178,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,186,RW-2025-000184,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,194,RW-2025-000192,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,205,RW-2025-000203,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,206,RW-2025-000204,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,212,RW-2025-000210,ok_gt_reworked,VR-RWK-01,Reject,qty OK after rework > qty reworked
+rework_log.xlsx,213,RW-2025-000211,missing_cost,VR-RWK-02,Warn,rework cost blank: impute hours x rate
+rework_log.xlsx,222,RW-2025-000220,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,224,RW-2025-000222,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,227,RW-2025-000225,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,237,RW-2025-000235,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,240,RW-2025-000238,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,250,RW-2025-000248,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,254,RW-2025-000252,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,257,RW-2025-000255,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,262,RW-2025-000260,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,264,RW-2025-000262,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,268,RW-2025-000266,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,271,RW-2025-000269,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,281,RW-2025-000279,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,286,RW-2025-000284,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,287,RW-2025-000285,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,296,RW-2025-000293,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+rework_log.xlsx,298,RW-2025-000295,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,306,RW-2025-000303,missing_cost,VR-RWK-02,Warn,rework cost blank: impute hours x rate
+rework_log.xlsx,314,RW-2025-000311,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,316,RW-2025-000313,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,327,RW-2025-000324,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,329,RW-2025-000326,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,334,RW-2025-000331,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,337,RW-2025-000334,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,352,RW-2025-000349,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,358,RW-2025-000355,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,359,RW-2025-000356,ok_gt_reworked,VR-RWK-01,Reject,qty OK after rework > qty reworked
+rework_log.xlsx,368,RW-2025-000365,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,371,RW-2025-000368,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,376,RW-2025-000373,negative_qty,VR-QTY-01,Reject,qty_reworked negative
+rework_log.xlsx,378,RW-2025-000375,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,380,RW-2025-000377,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,389,RW-2025-000386,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,391,RW-2025-000388,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,392,RW-2025-000389,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,394,RW-2025-000391,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,395,RW-2025-000392,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,396,RW-2025-000393,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,402,RW-2025-000399,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,404,RW-2025-000401,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,405,RW-2025-000402,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,406,RW-2025-000403,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,407,RW-2025-000404,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,408,RW-2025-000405,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,411,RW-2025-000408,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,415,RW-2025-000412,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,418,RW-2025-000415,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,422,RW-2025-000419,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,428,RW-2025-000425,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,433,RW-2025-000430,missing_cost,VR-RWK-02,Warn,rework cost blank: impute hours x rate
+rework_log.xlsx,434,RW-2025-000431,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,443,RW-2025-000440,missing_cost,VR-RWK-02,Warn,rework cost blank: impute hours x rate
+rework_log.xlsx,454,RW-2025-000451,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,455,RW-2025-000452,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,460,RW-2025-000457,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,461,RW-2025-000458,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,466,RW-2025-000463,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,467,RW-2025-000464,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,472,RW-2025-000469,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,482,RW-2025-000479,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,484,RW-2025-000481,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,486,RW-2025-000483,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,487,RW-2025-000484,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,489,RW-2025-000486,missing_cost,VR-RWK-02,Warn,rework cost blank: impute hours x rate
+rework_log.xlsx,492,RW-2025-000489,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,495,RW-2025-000492,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,496,RW-2025-000493,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,497,RW-2025-000494,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,498,RW-2025-000495,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,500,RW-2025-000497,missing_cost,VR-RWK-02,Warn,rework cost blank: impute hours x rate
+rework_log.xlsx,508,RW-2025-000505,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,510,RW-2025-000507,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,515,RW-2025-000512,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,516,RW-2025-000513,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,520,RW-2025-000517,ok_gt_reworked,VR-RWK-01,Reject,qty OK after rework > qty reworked
+rework_log.xlsx,524,RW-2025-000521,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,528,RW-2025-000525,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,529,RW-2025-000526,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,543,RW-2025-000540,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,555,RW-2025-000552,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,558,RW-2025-000555,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,562,RW-2025-000559,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,566,RW-2025-000563,ok_gt_reworked,VR-RWK-01,Reject,qty OK after rework > qty reworked
+rework_log.xlsx,570,RW-2025-000567,missing_cost,VR-RWK-02,Warn,rework cost blank: impute hours x rate
+rework_log.xlsx,578,RW-2025-000575,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,582,RW-2025-000579,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,587,RW-2025-000584,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,589,RW-2025-000586,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,591,RW-2025-000588,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,595,RW-2025-000592,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,613,RW-2025-000610,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,615,RW-2025-000612,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,616,RW-2025-000613,missing_cost,VR-RWK-02,Warn,rework cost blank: impute hours x rate
+rework_log.xlsx,637,RW-2025-000634,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,639,RW-2025-000636,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,640,RW-2025-000637,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,642,RW-2025-000639,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,643,RW-2025-000640,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,654,RW-2025-000651,missing_cost,VR-RWK-02,Warn,rework cost blank: impute hours x rate
+rework_log.xlsx,657,RW-2025-000654,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,659,RW-2025-000656,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,660,RW-2025-000657,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,662,RW-2025-000659,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,663,RW-2025-000660,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,673,RW-2025-000670,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,676,RW-2025-000673,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,677,RW-2025-000674,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,682,RW-2025-000679,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,688,RW-2025-000685,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,690,RW-2025-000687,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,694,RW-2025-000691,missing_cost,VR-RWK-02,Warn,rework cost blank: impute hours x rate
+rework_log.xlsx,695,RW-2025-000692,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,698,RW-2025-000695,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,703,RW-2025-000699,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+rework_log.xlsx,707,RW-2025-000703,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,710,RW-2025-000706,ok_gt_reworked,VR-RWK-01,Reject,qty OK after rework > qty reworked
+rework_log.xlsx,718,RW-2025-000714,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,723,RW-2025-000719,ok_gt_reworked,VR-RWK-01,Reject,qty OK after rework > qty reworked
+rework_log.xlsx,724,RW-2025-000720,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,731,RW-2025-000727,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,733,RW-2025-000729,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,734,RW-2025-000730,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,744,RW-2025-000740,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,749,RW-2025-000745,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,750,RW-2025-000746,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,758,RW-2025-000754,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,763,RW-2025-000759,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,768,RW-2025-000764,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,769,RW-2025-000765,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,770,RW-2025-000766,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,778,RW-2025-000774,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,781,RW-2025-000777,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,789,RW-2025-000785,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,791,RW-2025-000787,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,798,RW-2025-000794,negative_qty,VR-QTY-01,Reject,qty_reworked negative
+rework_log.xlsx,803,RW-2025-000799,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,805,RW-2025-000801,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,807,RW-2025-000803,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,809,RW-2025-000805,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,817,RW-2025-000813,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,831,RW-2025-000827,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,834,RW-2025-000830,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,835,RW-2025-000831,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,837,RW-2025-000833,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,838,RW-2025-000834,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,840,RW-2025-000836,missing_cost,VR-RWK-02,Warn,rework cost blank: impute hours x rate
+rework_log.xlsx,841,RW-2025-000837,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,842,RW-2025-000838,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,846,RW-2025-000842,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,850,RW-2025-000845,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+rework_log.xlsx,851,RW-2025-000846,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,873,RW-2025-000868,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,876,RW-2025-000871,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,882,RW-2025-000877,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,892,RW-2025-000887,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,898,RW-2025-000893,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,901,RW-2025-000896,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,906,RW-2025-000901,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,907,RW-2025-000902,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,912,RW-2025-000907,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,913,RW-2025-000908,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,916,RW-2025-000911,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,929,RW-2025-000924,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,939,RW-2025-000934,ok_gt_reworked,VR-RWK-01,Reject,qty OK after rework > qty reworked
+rework_log.xlsx,944,RW-2025-000939,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,946,RW-2025-000941,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,948,RW-2025-000943,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,949,RW-2025-000944,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,952,RW-2025-000947,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,957,RW-2025-000952,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,960,RW-2025-000955,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,962,RW-2025-000957,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,963,RW-2025-000958,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,964,RW-2025-000959,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,965,RW-2025-000960,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,966,RW-2025-000961,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,982,RW-2025-000977,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,983,RW-2025-000978,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,993,RW-2025-000988,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,994,RW-2025-000989,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,997,RW-2025-000992,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,998,RW-2025-000993,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1010,RW-2025-001005,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1014,RW-2025-001009,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1016,RW-2025-001011,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1023,RW-2025-001018,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1026,RW-2025-001021,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1027,RW-2025-001022,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1030,RW-2025-001025,missing_cost,VR-RWK-02,Warn,rework cost blank: impute hours x rate
+rework_log.xlsx,1032,RW-2025-001027,negative_qty,VR-QTY-01,Reject,qty_reworked negative
+rework_log.xlsx,1034,RW-2025-001029,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1036,RW-2025-001031,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1041,RW-2025-001036,ok_gt_reworked,VR-RWK-01,Reject,qty OK after rework > qty reworked
+rework_log.xlsx,1042,RW-2025-001037,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1055,RW-2025-001050,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1072,RW-2025-001067,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1076,RW-2025-001071,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1078,RW-2025-001073,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1083,RW-2025-001078,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1085,RW-2025-001080,negative_qty,VR-QTY-01,Reject,qty_reworked negative
+rework_log.xlsx,1089,RW-2025-001084,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1092,RW-2025-001087,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1093,RW-2025-001088,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1100,RW-2025-001094,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+rework_log.xlsx,1104,RW-2025-001098,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1107,RW-2025-001101,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1113,RW-2025-001107,negative_qty,VR-QTY-01,Reject,qty_reworked negative
+rework_log.xlsx,1114,RW-2025-001108,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1117,RW-2025-001111,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1123,RW-2025-001117,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1128,RW-2025-001122,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1130,RW-2025-001124,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1132,RW-2025-001126,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1134,RW-2025-001127,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+rework_log.xlsx,1142,RW-2025-001135,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1144,RW-2025-001137,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1151,RW-2025-001144,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1153,RW-2025-001146,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1159,RW-2025-001152,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1160,RW-2025-001153,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1167,RW-2025-001160,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1170,RW-2025-001163,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1172,RW-2025-001165,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1173,RW-2025-001166,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1177,RW-2025-001170,missing_cost,VR-RWK-02,Warn,rework cost blank: impute hours x rate
+rework_log.xlsx,1180,RW-2025-001173,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1187,RW-2025-001180,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1199,RW-2025-001192,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1200,RW-2025-001193,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1211,RW-2025-001204,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1216,RW-2025-001209,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1217,RW-2025-001210,missing_cost,VR-RWK-02,Warn,rework cost blank: impute hours x rate
+rework_log.xlsx,1234,RW-2025-001227,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1238,RW-2025-001231,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1247,RW-2025-001240,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1249,RW-2025-001242,missing_cost,VR-RWK-02,Warn,rework cost blank: impute hours x rate
+rework_log.xlsx,1253,RW-2025-001246,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1254,RW-2025-001247,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1255,RW-2025-001248,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1257,RW-2025-001250,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1258,RW-2025-001251,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1262,RW-2025-001255,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1266,RW-2025-001259,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1271,RW-2025-001264,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1281,RW-2025-001274,line_variant,,Standardise,line_code spelling variant
+rework_log.xlsx,1282,RW-2025-001275,shift_variant,,Standardise,shift_code spelling variant
+rework_log.xlsx,1283,RW-2025-001276,shift_variant,,Standardise,shift_code spelling variant
+scrap_log.csv,10,SC-2025-000008,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+scrap_log.csv,15,SC-2025-000013,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,17,SC-2025-000015,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,24,SC-2025-000021,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+scrap_log.csv,25,SC-2025-000022,invalid_date,VR-GEN-03,Reject,date does not exist
+scrap_log.csv,40,SC-2025-000036,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+scrap_log.csv,50,SC-2025-000046,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,52,SC-2025-000048,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,60,SC-2025-000056,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,67,SC-2025-000063,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,88,SC-2025-000084,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,89,SC-2025-000085,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,97,SC-2025-000093,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,103,SC-2025-000099,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,104,SC-2025-000100,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,106,SC-2025-000102,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,111,SC-2025-000107,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,114,SC-2025-000110,negative_qty,VR-QTY-01,Reject,qty_scrapped negative
+scrap_log.csv,118,SC-2025-000114,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,123,SC-2025-000119,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,125,SC-2025-000121,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,127,SC-2025-000123,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,128,SC-2025-000124,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,137,SC-2025-000133,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,144,SC-2025-000140,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,145,SC-2025-000141,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,147,SC-2025-000143,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,156,SC-2025-000152,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,157,SC-2025-000153,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,161,SC-2025-000157,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,163,SC-2025-000159,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,177,SC-2025-000173,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,178,SC-2025-000174,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,195,SC-2025-000191,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,201,SC-2025-000197,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,206,SC-2025-000202,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,225,SC-2025-000221,negative_qty,VR-QTY-01,Reject,qty_scrapped negative
+scrap_log.csv,226,SC-2025-000222,unknown_defect,VR-GEN-06,Warn,defect code not in master_defects
+scrap_log.csv,227,SC-2025-000223,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,240,SC-2025-000236,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,241,SC-2025-000237,missing_value,VR-GEN-02,Reject,mandatory part_number empty
+scrap_log.csv,243,SC-2025-000239,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,246,SC-2025-000242,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,254,SC-2025-000250,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,267,SC-2025-000263,missing_value,VR-GEN-02,Reject,mandatory part_number empty
+scrap_log.csv,280,SC-2025-000276,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,292,SC-2025-000288,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,295,SC-2025-000291,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,302,SC-2025-000298,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,304,SC-2025-000300,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,305,SC-2025-000301,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,306,SC-2025-000302,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,310,SC-2025-000306,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,313,SC-2025-000309,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,317,SC-2025-000313,unknown_defect,VR-GEN-06,Warn,defect code not in master_defects
+scrap_log.csv,330,SC-2025-000326,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,332,SC-2025-000328,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,333,SC-2025-000329,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,338,SC-2025-000334,unknown_defect,VR-GEN-06,Warn,defect code not in master_defects
+scrap_log.csv,341,SC-2025-000337,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,347,SC-2025-000343,missing_value,VR-GEN-02,Reject,mandatory part_number empty
+scrap_log.csv,352,SC-2025-000348,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,357,SC-2025-000353,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,358,SC-2025-000354,invalid_date,VR-GEN-03,Reject,date does not exist
+scrap_log.csv,369,SC-2025-000365,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,370,SC-2025-000366,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,371,SC-2025-000367,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,380,SC-2025-000376,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,385,SC-2025-000381,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,389,SC-2025-000385,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,391,SC-2025-000387,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,401,SC-2025-000397,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,406,SC-2025-000402,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,409,SC-2025-000405,invalid_date,VR-GEN-03,Reject,date does not exist
+scrap_log.csv,415,SC-2025-000411,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,417,SC-2025-000413,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,419,SC-2025-000415,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,428,SC-2025-000423,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+scrap_log.csv,434,SC-2025-000429,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,447,SC-2025-000442,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,449,SC-2025-000444,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,453,SC-2025-000448,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,454,SC-2025-000449,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,468,SC-2025-000463,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,469,SC-2025-000464,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,472,SC-2025-000467,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,473,SC-2025-000468,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,484,SC-2025-000479,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,489,SC-2025-000484,negative_qty,VR-QTY-01,Reject,qty_scrapped negative
+scrap_log.csv,491,SC-2025-000486,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,493,SC-2025-000488,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,495,SC-2025-000489,duplicate_row,VR-GEN-04,Warn,exact copy of source row above
+scrap_log.csv,499,SC-2025-000493,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,505,SC-2025-000499,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,529,SC-2025-000523,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,537,SC-2025-000531,date_text,,Standardise,date written as text in an accepted format
+scrap_log.csv,542,SC-2025-000536,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,548,SC-2025-000542,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,554,SC-2025-000548,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,559,SC-2025-000553,line_variant,,Standardise,line_code spelling variant
+scrap_log.csv,563,SC-2025-000557,line_variant,,Standardise,line_code spelling variant

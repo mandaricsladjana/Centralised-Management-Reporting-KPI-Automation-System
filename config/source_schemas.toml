@@ -1,0 +1,252 @@
+# =============================================================================
+# Source file contract: what each department file looks like.
+# Shared by the synthetic generator (python/generate, Phase 5), which WRITES
+# files with these headers, and the ETL (python/etl, Phase 6), which READS and
+# validates them. Change a header here and both sides follow.
+#
+# columns: source = header in the department file, target = standardised name
+#          (= staging column, data dictionary §5/§6), type, required (VR-GEN-02).
+# types:   str | int | decimal | date | code | bool (Y/N)
+#          date accepts YYYY-MM-DD, DD.MM.YYYY, DD/MM/YYYY and Excel dates (VR-GEN-03)
+# =============================================================================
+
+# --- Spelling variants -> standard code (applied before master-data lookup) ---
+# The first entry of each list is the standard spelling.
+[spelling.line_code]
+L01 = ["L01", "Line 1", "LINE-01", "L1", "IM-1"]
+L02 = ["L02", "Line 2", "LINE-02", "L2", "IM-2"]
+L03 = ["L03", "Line 3", "LINE-03", "L3", "WELD"]
+L04 = ["L04", "Line 4", "LINE-04", "L4", "PAINT"]
+L05 = ["L05", "Line 5", "LINE-05", "L5", "ASSY-1"]
+L06 = ["L06", "Line 6", "LINE-06", "L6", "ASSY-2"]
+
+[spelling.shift_code]
+E = ["E", "Early", "F", "1"]
+L = ["L", "Late", "S", "2"]
+N = ["N", "Night", "3"]
+
+[spelling.classification]          # VR-AF-01: anything not listed is rejected
+"Major NC"    = ["Major NC", "Major", "MAJ", "Major nonconformity", "major nc"]
+"Minor NC"    = ["Minor NC", "Minor", "MIN", "Minor nonconformity", "minor nc"]
+"Observation" = ["Observation", "Obs", "OBS", "observation"]
+"OFI"         = ["OFI", "Opportunity for improvement", "ofi"]
+
+[spelling.disposition]
+"Scrap"              = ["Scrap", "SCRAP", "scrap"]
+"Rework"             = ["Rework", "REWORK", "rework"]
+"Use-as-is"          = ["Use-as-is", "Use as is", "UAI"]
+"Return-to-supplier" = ["Return-to-supplier", "RTS", "Return to supplier"]
+
+# --- Master data ---------------------------------------------------------------
+[sources.master_lines]
+file_pattern = "master_lines.xlsx"
+sheet = "Lines"
+owner = "Production"
+staging_table = "stg.line"
+business_key = ["line_code"]
+columns = [
+  { source = "Line Code",    target = "line_code",    type = "code", required = true },
+  { source = "Line Name",    target = "line_name",    type = "str",  required = true },
+  { source = "Process Type", target = "process_type", type = "str",  required = true },
+  { source = "Area",         target = "area",         type = "str",  required = true },
+  { source = "Active",       target = "is_active",    type = "bool", required = true },
+]
+
+[sources.master_programs]
+file_pattern = "master_programs.xlsx"
+sheet = "Programs"
+owner = "Program management"
+staging_table = "stg.program"
+business_key = ["program_code"]
+columns = [
+  { source = "Program Code", target = "program_code",    type = "code", required = true },
+  { source = "Program Name", target = "program_name",    type = "str",  required = true },
+  { source = "OEM Customer", target = "oem_customer",    type = "str",  required = true },
+  { source = "Segment",      target = "vehicle_segment", type = "str",  required = true },
+  { source = "SOP Date",     target = "sop_date",        type = "date", required = true },
+  { source = "EOP Date",     target = "eop_date",        type = "date", required = false },
+]
+
+[sources.master_parts]
+file_pattern = "master_parts.xlsx"
+sheet = "Parts"
+owner = "Engineering"
+staging_table = "stg.part"
+business_key = ["part_number"]
+columns = [
+  { source = "Part Number",          target = "part_number",            type = "code",    required = true },
+  { source = "Description",          target = "part_name",              type = "str",     required = true },
+  { source = "Component Type",       target = "component_type",         type = "str",     required = true },
+  { source = "Vehicle Program",      target = "program_code",           type = "code",    required = true },
+  { source = "Primary Line",         target = "primary_line_code",      type = "code",    required = true },
+  { source = "Std Cost EUR",         target = "standard_unit_cost_eur", type = "decimal", required = true },
+  { source = "Defect Opportunities", target = "opportunities_per_unit", type = "int",     required = true },
+  { source = "Active",               target = "is_active",              type = "bool",    required = true },
+]
+
+[sources.master_defects]
+file_pattern = "master_defects.xlsx"
+sheet = "Defect Catalogue"
+owner = "Quality"
+staging_table = "stg.defect_type"
+business_key = ["defect_code"]
+columns = [
+  { source = "Defect Code",        target = "defect_code",     type = "code", required = true },
+  { source = "Defect Description", target = "defect_name",     type = "str",  required = true },
+  { source = "Category",           target = "defect_category", type = "str",  required = true },
+  { source = "Severity",           target = "severity",        type = "code", required = true },
+]
+
+# --- Transactions ----------------------------------------------------------------
+[sources.production_daily]
+file_pattern = "production_daily_*.xlsx"      # one file per month: production_daily_YYYY_MM.xlsx
+sheet = "Production"
+owner = "Production"
+staging_table = "stg.production"
+business_key = ["event_date", "shift_code", "line_code", "part_number"]
+columns = [
+  { source = "Date",        target = "event_date",  type = "date", required = true },
+  { source = "Shift",       target = "shift_code",  type = "code", required = true },
+  { source = "Line",        target = "line_code",   type = "code", required = true },
+  { source = "Part No.",    target = "part_number", type = "code", required = true },
+  { source = "Planned Qty", target = "qty_planned", type = "int",  required = true },
+  { source = "Started Qty", target = "qty_started", type = "int",  required = true },
+]
+
+[sources.qa_inspections]
+file_pattern = "qa_inspections.csv"
+owner = "QA"
+staging_table = "stg.inspection"
+business_key = ["event_date", "shift_code", "line_code", "part_number", "stage_code"]
+columns = [
+  { source = "InspDate",        target = "event_date",            type = "date", required = true },
+  { source = "Shift",           target = "shift_code",            type = "code", required = true },
+  { source = "Line",            target = "line_code",             type = "code", required = true },
+  { source = "PartNo",          target = "part_number",           type = "code", required = true },
+  { source = "Stage",           target = "stage_code",            type = "code", required = true },
+  { source = "Inspected",       target = "qty_inspected",         type = "int",  required = true },
+  { source = "PassedFirstTime", target = "qty_passed_first_time", type = "int",  required = true },
+  { source = "Failed",          target = "qty_failed",            type = "int",  required = true },
+]
+
+[sources.qa_defects]
+file_pattern = "qa_defects.csv"
+owner = "QA"
+staging_table = "stg.nonconformity"
+business_key = ["nc_id"]
+columns = [
+  { source = "NC_ID",       target = "nc_id",        type = "code", required = true },
+  { source = "Date",        target = "event_date",   type = "date", required = true },
+  { source = "Shift",       target = "shift_code",   type = "code", required = true },
+  { source = "Line",        target = "line_code",    type = "code", required = true },
+  { source = "PartNo",      target = "part_number",  type = "code", required = true },
+  { source = "Stage",       target = "stage_code",   type = "code", required = true },
+  { source = "DefectCode",  target = "defect_code",  type = "code", required = true },
+  { source = "Qty",         target = "qty_affected", type = "int",  required = true },
+  { source = "Disposition", target = "disposition",  type = "code", required = true },
+]
+
+[sources.scrap_log]
+file_pattern = "scrap_log.csv"
+owner = "Production / Finance"
+staging_table = "stg.scrap"
+business_key = ["scrap_id"]
+columns = [
+  { source = "Scrap ID",     target = "scrap_id",          type = "code",    required = true },
+  { source = "Booking Date", target = "event_date",        type = "date",    required = true },
+  { source = "Shift",        target = "shift_code",        type = "code",    required = true },
+  { source = "Line",         target = "line_code",         type = "code",    required = true },
+  { source = "Part Number",  target = "part_number",       type = "code",    required = true },
+  { source = "Defect Code",  target = "defect_code",       type = "code",    required = true },
+  { source = "Qty Scrapped", target = "qty_scrapped",      type = "int",     required = true },
+  # Finance's own estimate, often blank. Informational only: the warehouse costs
+  # scrap from the part's standard cost snapshot (D7), so this is not loaded.
+  { source = "Cost EUR",     target = "reported_cost_eur", type = "decimal", required = false, load = false },
+]
+
+[sources.rework_log]
+file_pattern = "rework_log.xlsx"
+sheet = "Rework"
+owner = "Rework area"
+staging_table = "stg.rework"
+business_key = ["rework_id"]
+columns = [
+  { source = "Rework ID",           target = "rework_id",       type = "code",    required = true },
+  { source = "Date",                target = "event_date",      type = "date",    required = true },
+  { source = "Shift",               target = "shift_code",      type = "code",    required = true },
+  { source = "Line",                target = "line_code",       type = "code",    required = true },
+  { source = "Part",                target = "part_number",     type = "code",    required = true },
+  { source = "Defect",              target = "defect_code",     type = "code",    required = true },
+  { source = "Qty Reworked",        target = "qty_reworked",    type = "int",     required = true },
+  { source = "Qty OK after Rework", target = "qty_rework_ok",   type = "int",     required = true },
+  { source = "Labour Hours",        target = "labour_hours",    type = "decimal", required = true },
+  { source = "Rework Cost EUR",     target = "rework_cost_eur", type = "decimal", required = false },  # VR-RWK-02
+]
+
+[sources.eight_d_tracker]
+file_pattern = "8d_tracker.xlsx"
+sheet = "8D Tracker"
+owner = "Quality engineering"
+staging_table = "stg.eight_d"
+business_key = ["eight_d_id"]
+columns = [
+  { source = "8D ID",                target = "eight_d_id",          type = "code", required = true },
+  { source = "Opened",               target = "opened_date",         type = "date", required = true },
+  { source = "Part",                 target = "part_number",         type = "code", required = true },
+  { source = "Line",                 target = "line_code",           type = "code", required = true },
+  { source = "Defect Code",          target = "defect_code",         type = "code", required = true },
+  { source = "Source",               target = "problem_source",      type = "str",  required = true },
+  { source = "Owner",                target = "owner_name",          type = "str",  required = true },
+  { source = "Department",           target = "owner_department",    type = "str",  required = true },
+  { source = "D1 Team",              target = "d1_date",             type = "date", required = false },
+  { source = "D2 Problem",           target = "d2_date",             type = "date", required = false },
+  { source = "D3 Containment",       target = "d3_date",             type = "date", required = false },
+  { source = "D4 Root Cause",        target = "d4_date",             type = "date", required = false },
+  { source = "D5 Corrective Action", target = "d5_date",             type = "date", required = false },
+  { source = "D6 Implemented",       target = "d6_date",             type = "date", required = false },
+  { source = "D7 Prevention",        target = "d7_date",             type = "date", required = false },
+  { source = "D8 Closure",           target = "d8_date",             type = "date", required = false },
+  { source = "Target Closure",       target = "target_closure_date", type = "date", required = true },
+  { source = "Status",               target = "status_reported",     type = "str",  required = false },
+  # Comma-separated NC IDs, split by Python into stg.eight_d_nc_link
+  { source = "Linked NCs",           target = "linked_nc_ids",       type = "str",  required = false, load = false },
+]
+
+[sources.eight_d_actions]
+file_pattern = "8d_actions.xlsx"
+sheet = "Actions"
+owner = "Quality engineering"
+staging_table = "stg.eight_d_action"
+business_key = ["action_id"]
+columns = [
+  { source = "Action ID",   target = "action_id",          type = "code", required = true },
+  { source = "8D ID",       target = "eight_d_id",         type = "code", required = true },
+  { source = "Type",        target = "action_type",        type = "str",  required = true },
+  { source = "Description", target = "action_description", type = "str",  required = true },
+  { source = "Owner",       target = "owner_name",         type = "str",  required = true },
+  { source = "Due Date",    target = "due_date",           type = "date", required = true },
+  { source = "Completed",   target = "completed_date",     type = "date", required = false },
+  { source = "Status",      target = "status_reported",    type = "str",  required = false },
+]
+
+[sources.audit_findings]
+file_pattern = "audit_findings.xlsx"
+sheet = "Findings"
+owner = "Quality management"
+staging_table = "stg.audit_finding"
+business_key = ["finding_id"]
+columns = [
+  { source = "Finding ID",     target = "finding_id",          type = "code", required = true },
+  { source = "Audit ID",       target = "audit_id",            type = "code", required = true },
+  { source = "Audit Date",     target = "audit_date",          type = "date", required = true },
+  { source = "Audit Type",     target = "audit_type",          type = "str",  required = true },
+  { source = "Standard Ref",   target = "standard_reference",  type = "str",  required = false },
+  { source = "Line",           target = "line_code",           type = "code", required = false },   # blank = plant-wide
+  { source = "Classification", target = "classification",      type = "code", required = true },
+  { source = "Finding",        target = "finding_description", type = "str",  required = true },
+  { source = "Owner",          target = "owner_name",          type = "str",  required = true },
+  { source = "Due Date",       target = "due_date",            type = "date", required = true },
+  { source = "Closed Date",    target = "closed_date",         type = "date", required = false },
+  { source = "8D Ref",         target = "eight_d_id",          type = "code", required = false },
+  { source = "Status",         target = "status_reported",     type = "str",  required = false },
+]
