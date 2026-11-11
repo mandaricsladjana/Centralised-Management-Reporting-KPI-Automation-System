@@ -63,5 +63,10 @@ def test_unknown_environment_and_auth_are_rejected(env):
         db_target("prod")
 
 
+def test_no_invalid_timeout_keyword(env):
+    """Issue I-03: 'Connection Timeout' is not an ODBC Driver 18 keyword (silently ignored)."""
+    assert "Timeout" not in connection_string(db_target("dev"))
+
+
 def test_describe_is_safe(env):
     assert DbTarget("prod", "s", "d", "sql", "u", "secret").describe() == "prod: s/d (sql as u)"

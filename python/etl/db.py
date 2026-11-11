@@ -10,12 +10,13 @@ from etl.config import DbTarget
 ODBC_DRIVER = "ODBC Driver 18 for SQL Server"
 SQL_COPT_SS_ACCESS_TOKEN = 1256            # msodbcsql pre-connect attribute for an Entra access token
 AZURE_SQL_SCOPE = "https://database.windows.net/.default"
+LOGIN_TIMEOUT_S = 30                       # Azure SQL Basic can take a while on the first login
 
 
 def connection_string(target: DbTarget) -> str:
     """ODBC connection string. Pure function, so it can be unit-tested without a server."""
     parts = [f"Driver={{{ODBC_DRIVER}}}", f"Server={target.server}", f"Database={target.database}",
-             "Encrypt=yes", "Connection Timeout=30"]
+             "Encrypt=yes"]          # login timeout: pyodbc's timeout= argument, not a keyword (issue I-03)
     if target.auth == "windows":
         # Local SQL Express uses a self-signed certificate.
         parts += ["Trusted_Connection=yes", "TrustServerCertificate=yes"]
@@ -40,4 +41,4 @@ def connect(target: DbTarget, autocommit: bool = False) -> pyodbc.Connection:
     kwargs = {}
     if target.auth == "entra":
         kwargs["attrs_before"] = {SQL_COPT_SS_ACCESS_TOKEN: _entra_token_struct()}
-    return pyodbc.connect(connection_string(target), autocommit=autocommit, **kwargs)
+    return pyodbc.connect(connection_string(target), autocommit=autocommit, timeout=LOGIN_TIMEOUT_S, **kwargs)
