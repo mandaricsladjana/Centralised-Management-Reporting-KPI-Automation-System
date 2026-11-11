@@ -640,5 +640,10 @@ No Notion connection is available in this environment, so this is the structure 
 | D5 | Azure SQL authentication | ✅ Both: Entra ID for people and Power BI; SQL authentication (`etl_loader`) for the scheduled ETL (§8.2) |
 | D6 | Audit findings | ✅ In scope: `fact_audit_finding`, audit KPIs (§6.2) and report page 8 |
 | D7 | Unit cost: snapshot into the facts instead of a Type 2 part dimension | Proposed in §5.3; accepted with the model unless you object |
+| D8 | Fiscal year = calendar year | Proposed (Phase 2, `02_data_dictionary.md` §9) |
+| D9 | 8D → NC and 8D → audit-finding relationships inactive in Power BI | Proposed (Phase 2) |
+| D10 | Vehicle program flattened into the part view in Power BI | Proposed (Phase 2) |
+| D11 | Special dimension members: −1 Unknown, −2 Not applicable | Proposed (Phase 2) |
+| D12 | Imputed rework costs flagged with `cost_source` | Proposed (Phase 2) |
 
 Every future decision is added here and mirrored in the Notion *Decisions & Change Log* database.
