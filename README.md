@@ -2,7 +2,7 @@
 
 A portfolio project that simulates an automotive Tier‑1 supplier (*Danube Automotive Components*, fictional). Quality data from five departments is scattered across Excel and CSV files. The project consolidates it into **one governed SQL star schema**, with **one definition per KPI**, and reports it in **Power BI**.
 
-> **Status:** Phase 7 of 12 (SQL database): schema deployed to DEV. See the [roadmap](documentation/01_project_blueprint.md#11-implementation-roadmap).
+> **Status:** Phase 8 of 12 (SQL KPI layer): KPI views on DEV; PROD has the Phase 7 schema (KPI views pending deploy). See the [roadmap](documentation/01_project_blueprint.md#11-implementation-roadmap).
 
 ## Architecture
 

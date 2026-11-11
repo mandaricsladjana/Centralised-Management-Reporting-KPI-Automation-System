@@ -655,5 +655,8 @@ No Notion connection is available in this environment, so this is the structure 
 | D18 | Own minimal migration runner (`python -m etl.deploy`): versioned `NNN_` scripts applied once with checksum, repeatable `CREATE OR ALTER` scripts re-applied on change | ✅ Same scripts on DEV and PROD (§8.6) without adding Flyway/DbUp (Java/.NET) to the stack. Applied scripts are immutable: fixes go into a new number |
 | D19 | `audit.etl_run` row 0 = "deploy" run, owner of all seeded rows | ✅ Keeps lineage columns NOT NULL everywhere |
 | D20 | File hash unique only for `status = 'Loaded'` (filtered index) | ✅ Skipped duplicates and failed attempts can still be logged with the same hash |
+| D21 | RAG for targets of 0 (overdue counts): absolute amber band (1 = amber); Major NCs have no amber band | ✅ A relative ±10 % band around 0 is empty (§6.3). Seeded in `060_seed_kpi_targets.sql` |
+| D22 | A line's *final* inspection stage = highest stage sequence with data over all loaded data (not per period) | ✅ Stable month to month; matches the approved stage map (data dictionary §3.7) |
+| D23 | Repeat defect = same part **and** defect type, previous 8D *closed* within 180 days before the new one opened | ✅ Makes the §6.2 definition testable; window from `settings.toml`, kept in sync by a test |
 
 Every future decision is added here and mirrored in the Notion *Decisions & Change Log* database.
