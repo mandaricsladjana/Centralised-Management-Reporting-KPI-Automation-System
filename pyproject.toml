@@ -1,0 +1,9 @@
+[project]
+name = "quality-kpi-reporting"
+version = "0.4.0"
+description = "Centralised Manufacturing Quality KPI Reporting System (portfolio project)"
+requires-python = ">=3.15"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
