@@ -495,12 +495,14 @@ Proposed target structure. Existing files move as noted; nothing is deleted.
 ```
 Central Dashboard/                         (repo root)
 ├── README.md                              project overview, architecture image, how to run
-├── requirements.txt                       pinned runtime deps (+ openpyxl, pytest)
+├── requirements.txt                       pinned runtime deps
+├── requirements-dev.txt                   + pytest (tests only)
+├── .gitattributes                         line-ending normalisation
 ├── .env.example                           variable names only
 ├── .gitignore                             (+ data/raw/**, data/processed/**, logs/, *.bacpac)
 ├── config/
-│   ├── settings.yaml                      non-secret settings (paths, containers, batch sizes)
-│   └── source_schemas.yaml                expected columns and types per source file (drives validation)
+│   ├── settings.toml                      non-secret settings (paths, containers, batch sizes)
+│   └── source_schemas.toml                expected columns and types per source file (drives validation)
 ├── data/
 │   ├── raw/          .gitkeep             generated sources (ignored by git)
 │   ├── processed/    .gitkeep             (ignored)
@@ -508,7 +510,7 @@ Central Dashboard/                         (repo root)
 ├── python/
 │   ├── generate/                          synthetic data generator (Phase 5)
 │   ├── etl/
-│   │   ├── config.py                      loads .env + yaml
+│   │   ├── config.py                      loads .env (override=True) + toml
 │   │   ├── db.py                          SQL connections (dev/prod, Entra token)
 │   │   ├── storage.py                     Blob upload/download/archive
 │   │   ├── extract.py                     Excel/CSV readers
@@ -582,7 +584,7 @@ No Notion connection is available in this environment, so this is the structure 
 | **3 Azure setup** | Cloud PROD ready | Create SQL server + DB (free offer), firewall, Entra admin, budget alert, blob soft delete | Azure CLI/portal | Running empty DB | `sqlcmd` connects with Entra; budget alert visible | 2 | Medium |
 | **4 Repo setup** | Clean structure | Folders, `.env.example`, `.gitignore`, requirements, README skeleton, move draft SQL, branch protection, `gh auth login` | Git, gh | Structured repo | Fresh clone + `.env` → smoke tests pass | 2 (parallel to 3) | Low |
 | **5 Synthetic data** | Realistic sources | Generator with seed, trends, injected DQ issues | Python | Files in `data/raw`, sample in `data/sample` | Reproducible (same seed → same files); documented injected issues | 4 | Medium |
-| **6 Python ETL** | Automated, validated loading | Modules from §9, validation rules from `source_schemas.yaml`, audit logging, Blob upload/archive, incremental by hash | Python, pytest | `python -m etl.pipeline --env dev` | All injected issues are caught and logged; rerun loads 0 new rows; unit tests pass | 5, 7 (DDL) | High |
+| **6 Python ETL** | Automated, validated loading | Modules from §9, validation rules from `source_schemas.toml`, audit logging, Blob upload/archive, incremental by hash | Python, pytest | `python -m etl.pipeline --env dev` | All injected issues are caught and logged; rerun loads 0 new rows; unit tests pass | 5, 7 (DDL) | High |
 | **7 SQL database** | Single source of truth | DDL scripts, deploy script, MERGE procedures, users/roles | T-SQL, sqlcmd | Schema on DEV and PROD | Scripts idempotent; same version on both | 2 (DDL can start before 6) | Medium |
 | **8 SQL KPI layer** | Governed KPIs | `rpt` views (including audit findings), `dim_kpi_target`, `v_kpi_monthly`, reconciliation queries | T-SQL | Views | Hand-calculated examples from §6 match | 7 | Medium |
 | **9 Power BI** | Dashboards | Model, measures, theme, 8 pages, drill-through, tooltips | Power BI Desktop (PBIP) | Report | DAX = SQL `v_kpi_monthly` for 3 sample months; every page answers its questions | 8 | High |
@@ -647,5 +649,7 @@ No Notion connection is available in this environment, so this is the structure 
 | D12 | Imputed rework costs flagged with `cost_source` | ✅ Accepted |
 | D13 | Azure SQL server in **Austria East**, not Switzerland North | ✅ Forced: Switzerland North refused new SQL servers (`03_azure_infrastructure.md` §2) |
 | D14 | Azure SQL **Basic** (≈ €4.5/month) instead of the free offer | ✅ Forced: free offer not available in the region; documented fallback |
+| D15 | Config files in **TOML** (built-in `tomllib`) instead of YAML | ✅ Forced: PyYAML has no pre-built wheel for Python 3.15 and needs C++ build tools (risk R7). TOML removes the dependency entirely. |
+| D16 | Runtime vs. dev dependencies split (`requirements.txt` / `requirements-dev.txt`) | ✅ The scheduled machine does not need test tools |
 
 Every future decision is added here and mirrored in the Notion *Decisions & Change Log* database.
