@@ -25,3 +25,43 @@ def call(cur, proc, run_id, outputs=("rows_inserted", "rows_updated")):
 
 def scalar(cur, sql, *params):
     return cur.execute(sql, *params).fetchval()
+
+
+# --- the separate test database (never DEV) ---------------------------------------------
+TEST_DB = "QualityKPI_Test"
+RESET_SQL = [  # children before parents; keeps run 0, schema_version, rules, calendar, targets
+    "DELETE FROM [audit].rejected_row", "DELETE FROM [audit].dq_result", "DELETE FROM [audit].file_manifest",
+    "DELETE FROM dw.fact_8d_action", "DELETE FROM dw.fact_nonconformity", "DELETE FROM dw.fact_audit_finding",
+    "DELETE FROM dw.fact_8d", "DELETE FROM dw.fact_scrap", "DELETE FROM dw.fact_rework",
+    "DELETE FROM dw.fact_inspection", "DELETE FROM dw.fact_production",
+    "DELETE FROM dw.dim_part WHERE part_key > 0", "DELETE FROM dw.dim_vehicle_program WHERE program_key > 0",
+    "DELETE FROM dw.dim_production_line WHERE line_key > 0", "DELETE FROM dw.dim_defect_type WHERE defect_type_key > 0",
+    "DELETE FROM [audit].etl_run WHERE etl_run_id > 0",
+]
+_prepared = False
+
+
+def prepare_test_db():
+    """Create QualityKPI_Test if needed, deploy the schema once per session, and empty its data.
+    Raises pytest.skip when no local SQL Server is reachable."""
+    global _prepared
+    import pyodbc
+    import pytest
+
+    from etl import deploy
+    from etl.config import ConfigError, db_target, load_env
+    from etl.db import connect
+
+    load_env()
+    try:
+        with connect(db_target("dev", "master"), autocommit=True) as m:
+            m.cursor().execute(f"IF DB_ID('{TEST_DB}') IS NULL CREATE DATABASE {TEST_DB}")
+    except (ConfigError, pyodbc.Error) as exc:
+        pytest.skip(f"local SQL Server not reachable: {exc}")
+    if not _prepared:
+        deploy.deploy("dev", database=TEST_DB)
+        _prepared = True
+    with connect(db_target("dev", TEST_DB)) as c:
+        for sql in RESET_SQL:
+            c.cursor().execute(sql)
+        c.commit()

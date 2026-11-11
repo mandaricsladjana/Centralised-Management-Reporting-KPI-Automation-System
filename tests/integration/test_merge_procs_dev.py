@@ -1,4 +1,4 @@
-"""Integration tests for the etl.usp_merge_* load procedures on DEV.
+"""Integration tests for the etl.usp_merge_* load procedures (on QualityKPI_Test, see conftest).
 
 Each test stages rows, calls the procedures and checks dw. Everything runs in
 one transaction per test and is rolled back, so DEV data is never changed.
