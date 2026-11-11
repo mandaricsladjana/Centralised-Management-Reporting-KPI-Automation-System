@@ -651,5 +651,9 @@ No Notion connection is available in this environment, so this is the structure 
 | D14 | Azure SQL **Basic** (≈ €4.5/month) instead of the free offer | ✅ Forced: free offer not available in the region; documented fallback |
 | D15 | Config files in **TOML** (built-in `tomllib`) instead of YAML | ✅ Forced: PyYAML has no pre-built wheel for Python 3.15 and needs C++ build tools (risk R7). TOML removes the dependency entirely. |
 | D16 | Runtime vs. dev dependencies split (`requirements.txt` / `requirements-dev.txt`) | ✅ The scheduled machine does not need test tools |
+| D17 | Plant holidays in a table `dw.plant_holiday`, synchronised from `settings.toml` at deploy | ✅ settings.toml stays the single source of truth; the calendar procedure stays pure SQL |
+| D18 | Own minimal migration runner (`python -m etl.deploy`): versioned `NNN_` scripts applied once with checksum, repeatable `CREATE OR ALTER` scripts re-applied on change | ✅ Same scripts on DEV and PROD (§8.6) without adding Flyway/DbUp (Java/.NET) to the stack. Applied scripts are immutable: fixes go into a new number |
+| D19 | `audit.etl_run` row 0 = "deploy" run, owner of all seeded rows | ✅ Keeps lineage columns NOT NULL everywhere |
+| D20 | File hash unique only for `status = 'Loaded'` (filtered index) | ✅ Skipped duplicates and failed attempts can still be logged with the same hash |
 
 Every future decision is added here and mirrored in the Notion *Decisions & Change Log* database.
