@@ -3,7 +3,7 @@
   "version": "4.0",
   "datasetReference": {
     "byPath": {
-      "path": "../Centarlised-KPI-Report-System.SemanticModel"
+      "path": "../Centralised-KPI-Report-System.SemanticModel"
     }
   }
 }

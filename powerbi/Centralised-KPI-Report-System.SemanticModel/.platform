@@ -1,11 +1,11 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
   "metadata": {
-    "type": "Report",
-    "displayName": "Centarlised-KPI-Report-System"
+    "type": "SemanticModel",
+    "displayName": "Centralised-KPI-Report-System"
   },
   "config": {
     "version": "2.0",
-    "logicalId": "51d0fc99-656d-419e-b634-19563d19889e"
+    "logicalId": "f66a43d7-603e-4e67-9fae-9a2a4260a7a3"
   }
 }

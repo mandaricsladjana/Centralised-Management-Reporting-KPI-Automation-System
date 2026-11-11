@@ -1,0 +1,60 @@
+# =============================================================================
+# Non-secret project settings (committed).  Secrets live only in .env.
+# Read with Python's built-in tomllib (decision D15: no YAML dependency).
+# Every value here is referenced by the data dictionary or the blueprint.
+# =============================================================================
+
+[project]
+name = "Centralised Manufacturing Quality KPI Reporting System"
+company = "Danube Automotive Components d.o.o."   # fictional (D3)
+currency_code = "EUR"                              # D2
+
+[periods]
+calendar_start = 2024-01-01      # dim_calendar range (data dictionary §3.1)
+calendar_end   = 2027-12-31
+history_start  = 2024-11-01      # synthetic history: 24 months
+history_end    = 2026-10-31
+earliest_valid_event_date = 2024-01-01   # VR-GEN-07
+
+[costs]
+rework_labour_rate_eur_per_hour = 38.00   # one plant-wide illustrative rate (Phase 2 review)
+
+[shifts]
+# Production-date rule: a night shift starting at 22:00 on day D belongs to day D.
+night_shift_code = "N"
+
+[inspection]
+# Which inspection stages each process type uses (approved in Phase 2 review).
+# FTY = product of the FPY of these stages (D1).
+stages_by_process_type = { "Injection Moulding" = ["EOL"], "Welding" = ["EOL"], "Painting" = ["IPC", "EOL"], "Assembly" = ["IPC", "EOL", "FA"] }
+
+[calendar]
+# Fictional plant holiday rules (feeds dim_calendar.is_plant_holiday).
+annual_holidays_mm_dd = ["01-01", "01-02", "01-07", "02-15", "02-16", "05-01", "05-02", "11-11"]
+# Summer shutdown: two weeks, fixed per year.
+summer_shutdown = [
+  { start = 2025-08-04, end = 2025-08-15 },
+  { start = 2026-08-03, end = 2026-08-14 },
+]
+
+[kpi]
+repeat_defect_window_days = 180          # Repeat Defect Rate (blueprint §6.2)
+rag_amber_band_relative = 0.10           # amber = within 10 % of target (blueprint §6.3)
+
+[storage]
+container_raw       = "rawdata"
+container_archive   = "archive"
+container_processed = "processeddata"
+container_backup    = "backupdata"
+# Blob layout: rawdata/<source_name>/<yyyy>/<mm>/<file_name>
+
+[paths]
+# Relative to the repository root.
+raw_dir       = "data/raw"
+processed_dir = "data/processed"
+sample_dir    = "data/sample"
+log_dir       = "logs"
+
+[synthetic]
+random_seed = 20261111                   # same seed → identical files (Phase 5 acceptance)
+dq_issue_rate = 0.03                     # ~3 % injected data-quality issues (blueprint §4)
