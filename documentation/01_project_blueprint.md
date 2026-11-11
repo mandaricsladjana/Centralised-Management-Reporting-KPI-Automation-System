@@ -660,5 +660,8 @@ No Notion connection is available in this environment, so this is the structure 
 | D23 | Repeat defect = same part **and** defect type, previous 8D *closed* within 180 days before the new one opened | ✅ Makes the §6.2 definition testable; window from `settings.toml`, kept in sync by a test |
 | D24 | Absolute cost targets rescaled to the simulated plant (scrap €75k, rework €30k per month; were €15k / €8k) | ✅ The plant produces ≈ €6.5M/month; the original values would be red every month. % targets unchanged. `061_rescale_cost_targets.sql` |
 | D25 | `config/source_schemas.toml` (planned for Phase 6) created in Phase 5 as the single file contract for generator **and** ETL | ✅ Headers, types and spelling variants cannot drift between the writer and the reader |
+| D26 | New rule VR-GEN-08: wrong type or value outside an allowed list → row rejected | ✅ Otherwise one bad value fails the whole file on a dw CHECK constraint. Migration `062` |
+| D27 | Warn rules are written to `audit.dq_result` as one row per file and rule (count + up to 10 examples), not one row per occurrence | ✅ Readable data-quality page; the occurrences stay countable |
+| D28 | Integration tests that need an empty warehouse run on a separate local database `QualityKPI_Test`, never DEV | ✅ DEV keeps the 24-month load for Power BI development |
 
 Every future decision is added here and mirrored in the Notion *Decisions & Change Log* database.
