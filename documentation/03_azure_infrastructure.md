@@ -100,3 +100,16 @@ Budget: `az rest --method put` against `Microsoft.Consumption/budgets/budget-qua
 | I-03 | First login attempts: `TCP Provider: Timeout error [258]` | Invalid ODBC keyword in the test script (`Connection Timeout`; pyodbc's `timeout=` argument is the correct way), and see I-04 | Script fixed |
 | I-04 | `Azure Active Directory only authentication is enabled` (SQL login) and `The server is not currently configured to accept this token` (Entra), although the server showed Entra-only = false and the correct admin | **Wrong target server.** `.vscode/settings.json` has `"python.terminal.useEnvFile": true`, so VS Code injected the *old* `.env` values (`AZURE_SQL_SERVER=central-kpi-report…`, a server outside this subscription) into the terminal as process variables. `load_dotenv()` does **not** override existing variables, so every test connected to that old server. | Load with `load_dotenv(override=True)`. **Rule for all project code: `.env` always wins** (implemented in `python/etl/config.py`, Phase 6). After editing `.env`, open a new VS Code terminal. |
 | I-05 | While diagnosing I-04, a replacement server `sql-qualitykpi-3indr` was created and the admin password in `.env` was overwritten | Diagnostic step taken before the real cause was found | `og6p7` admin password reset to the value in `.env`; `3indr` verified empty and deleted. Only `sql-qualitykpi-og6p7` remains. |
+| I-06 | `etl/db.py` (first version) used `Connection Timeout=30` in the connection string again | Same invalid keyword as I-03; the driver ignores it silently, so nothing failed | Replaced with pyodbc `timeout=30`; unit test `test_no_invalid_timeout_keyword` prevents a regression |
+
+## 8. Phase 7 deployment to PROD (2026-11-11)
+
+| Step | Result |
+|---|---|
+| `python -m etl.deploy --env prod --dry-run` | 16 of 16 scripts pending (empty database), Entra token via `az login` |
+| `python -m etl.deploy --env prod` | 16 scripts applied; `dw.plant_holiday` 56 rows; `dw.dim_calendar` 1461 days. DEV and PROD now have the same `audit.schema_version` checksums |
+| `etl_loader` user | Contained database user (SQL authentication), member of `etl_writer`. Password: 24 random characters, generated and written directly to `.env` (`AZURE_SQL_USERNAME` / `AZURE_SQL_PASSWORD`), never printed. The previous `.env` was saved as `.env.bak` (git-ignored). **Store the password in your password manager.** |
+| Least-privilege check (logged in as `etl_loader`, all statements rolled back) | Allowed: SELECT `dw`, write and TRUNCATE `stg`, INSERT `audit`, EXEC `etl.usp_merge_line`. Denied: INSERT `dw.dim_shift`, DELETE `dw.fact_scrap`, CREATE TABLE |
+| Power BI reader | The Entra admin already has full access. `rpt_reader` gets members when other report users exist (`CREATE USER [upn] FROM EXTERNAL PROVIDER; ALTER ROLE rpt_reader ADD MEMBER [upn];`) |
+
+**Rotate the `etl_loader` password:** `ALTER USER etl_loader WITH PASSWORD = '<new>'` as the Entra admin, then update `.env`.

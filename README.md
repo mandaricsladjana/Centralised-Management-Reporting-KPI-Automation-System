@@ -2,7 +2,7 @@
 
 A portfolio project that simulates an automotive Tier‑1 supplier (*Danube Automotive Components*, fictional). Quality data from five departments is scattered across Excel and CSV files. The project consolidates it into **one governed SQL star schema**, with **one definition per KPI**, and reports it in **Power BI**.
 
-> **Status:** Phase 4 of 12 (repository setup). See the [roadmap](documentation/01_project_blueprint.md#11-implementation-roadmap).
+> **Status:** Phase 7 of 12 (SQL database): schema deployed to DEV. See the [roadmap](documentation/01_project_blueprint.md#11-implementation-roadmap).
 
 ## Architecture
 
@@ -37,7 +37,7 @@ logs/            run logs (git-ignored)
 powerbi/         Power BI project (PBIP)
 python/          generate/ (synthetic data), etl/ (pipeline), extraction/ (smoke tests)
 sql/             ddl/, etl/ (MERGE procedures), rpt/ (views), tests/, archive/
-tests/           unit/ and data_quality/ (pytest)
+tests/           unit/, integration/ (DEV database) and data_quality/ (pytest)
 ```
 
 ## Getting started (Windows)
@@ -55,10 +55,20 @@ py -3.15 -m venv .venv
 copy .env.example .env      # then fill in the values
 az login                    # for Entra ID access to Azure SQL
 
-# 3. Smoke test
+# 3. Create the schema on the local DEV database (QualityKPI_Dev must exist)
+cd python
+..\.venv\Scripts\python.exe -m etl.deploy --env dev --dry-run   # list pending scripts
+..\.venv\Scripts\python.exe -m etl.deploy --env dev             # apply them
+cd ..
+
+# 4. Smoke test
 .\.venv\Scripts\python.exe python\extraction\test_blob_connection.py
-.\.venv\Scripts\python.exe -m pytest
+.\.venv\Scripts\python.exe -m pytest        # integration tests skip if DEV is unreachable
 ```
+
+### Database changes
+
+`python -m etl.deploy` applies `sql/ddl/NNN_*.sql` once each, in order, and records each one with a SHA-256 checksum in `audit.schema_version`. **Never edit a script that has already been applied**: the deploy refuses it. Add the next number instead (for example `021_fix_8d_closed_check.sql`). Procedures and views in `sql/etl/` and `sql/rpt/` use `CREATE OR ALTER` and are re-applied whenever they change. PROD requires an explicit `--env prod`.
 
 > **VS Code users:** `.env` is also injected into new terminals. After editing `.env`, open a **new** terminal. The project code always loads `.env` with `override=True` ([issue I-04](documentation/03_azure_infrastructure.md#7-issues-log)).
 

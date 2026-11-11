@@ -417,3 +417,43 @@ These rules drive both the synthetic generator (which injects violations) and th
 3. **Calendar range:** ✅ `dim_calendar` covers 2024-01-01 to 2027-12-31; synthetic history covers 2024-11-01 to 2026-10-31 (24 months).
 
 Decisions D8–D12 were accepted with this review.
+
+---
+
+## 11. Phase 7 implementation notes (2026-11-11)
+
+The DDL in `sql/ddl/` implements this dictionary. Where the implementation had to add detail, this is it:
+
+| Topic | Implementation |
+|---|---|
+| Deployment | `python -m etl.deploy --env dev\|prod`. Versioned scripts `sql/ddl/NNN_*.sql` are applied once each; repeatable scripts in `sql/etl/` and `sql/rpt/` (`CREATE OR ALTER`) are re-applied when their checksum changes (**D18**). |
+| `audit.schema_version` | Columns as in §5, plus `script_kind` (`versioned` / `repeatable`), `applied_by` and `git_commit`. Created by `000_schema_version.sql` (deploy bootstrap). The checksum is SHA-256 with line endings normalised to LF. |
+| `audit.etl_run` run 0 | `etl_run_id = 0`, `triggered_by = 'deploy'`. It owns every row seeded by DDL scripts (special members, shifts, stages, holidays, calendar), so lineage columns stay `NOT NULL` (**D19**). |
+| `audit.file_manifest` | "Hash unique per source" is a **filtered** unique index `(source_name, file_sha256) WHERE status = 'Loaded'`, so skipped or failed attempts with the same hash can still be logged (**D20**). |
+| `audit.validation_rule` | Extra column `action` (what the pipeline does). Seeded from §7 by `050_seed_validation_rules.sql`. |
+| `dw.plant_holiday` *(new)* | `holiday_date` (PK), `holiday_type` (`Annual` / `Shutdown`), plus lineage. Synchronised from `config/settings.toml` on every deploy; `etl.usp_build_calendar` reads it (**D17**). |
+| `dim_calendar` | Built by `etl.usp_build_calendar`, independent of `SET DATEFIRST` and `SET LANGUAGE`. `iso_year` = year of the ISO week's Thursday. |
+| Special members | Codes `UNK`/`N/A` (shift, line; `VARCHAR(5)`) or `UNKNOWN`/`N/A` (others). Unknown part: cost 0, 1 opportunity. Unknown program: `sop_date = 1900-01-01` (sentinel; views treat keys < 0 separately). Defect severity `-`. Stage sequence 0, so it is never a "final stage". |
+| Staging column names | Event dates are `event_date` in `stg.production`, `stg.inspection`, `stg.nonconformity`, `stg.scrap` and `stg.rework`; other dates keep their dictionary names (`opened_date`, `due_date`, …). The part's line is `stg.part.primary_line_code`. |
+| Roles | `etl_writer` (stg read/write/truncate, audit read/write, dw read, EXECUTE on `etl`) and `rpt_reader` (SELECT on `rpt`). Users are created outside Git because SQL users need passwords (`040_security.sql` header). |
+| CHECK constraints and NULL | A CHECK only rejects FALSE; UNKNOWN passes. Constraints over nullable columns spell out every branch (`021_fix_8d_closed_check.sql`). |
+
+### 11.1 Load procedures (`sql/etl/`, schema `etl`)
+
+Called by the Python pipeline in the load order of §6, inside the pipeline's transaction. Each one returns counts through OUTPUT parameters for `audit.etl_run`.
+
+| Procedure | Target | Notes |
+|---|---|---|
+| `usp_merge_line`, `_program`, `_part`, `_defect_type` | dimensions | Type 1 overwrite; never deletes; special members never touched |
+| `usp_merge_production`, `_inspection` | periodic facts | Duplicate check on the **resolved** grain |
+| `usp_merge_8d` | `fact_8d` | `opened_date_key` = D1 (else tracker opened date); `closed_date_key` = D8 |
+| `usp_merge_nonconformity` | `fact_nonconformity` | Never writes `eight_d_key` |
+| `usp_apply_8d_nc_links` | `fact_nonconformity.eight_d_key` | Snapshot per staged 8D: NCs no longer listed are unlinked. NCs not yet loaded are counted (`@links_unresolved`) and linked by the next tracker load. One NC listed under two 8Ds → error |
+| `usp_merge_scrap` | `fact_scrap` | `unit_cost_eur` snapshot taken on insert and kept on correction unless the part changes (D7) |
+| `usp_merge_rework` | `fact_rework` | Costs arrive complete (imputed by Python, VR-RWK-02) |
+| `usp_merge_8d_action` | `fact_8d_action` | Unknown 8D → error (the validator should have rejected it, VR-8D-03) |
+| `usp_merge_audit_finding` | `fact_audit_finding` | Blank line → −2, unknown line → −1; unknown 8D ID → NULL and counted |
+
+**Shared contract:** the run must exist with status `Running` (`usp_assert_run`). Duplicate business keys in staging raise an error instead of being merged unpredictably. Only rows whose values changed are updated (null-safe `EXCEPT` comparison), so a reload of the same file reports 0 inserted and 0 updated. Facts are never deleted.
+
+**Resolved open point:** two *different* unknown codes on the same date, shift and line both map to `part_key = -1`. The periodic-fact procedures detect this on the resolved grain and raise an error. The validator must therefore reject such rows with VR-GEN-05 (Phase 6).
