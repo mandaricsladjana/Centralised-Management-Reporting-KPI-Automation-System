@@ -2,72 +2,27 @@
 
 Each test stages rows, calls the procedures and checks dw. Everything runs in
 one transaction per test and is rolled back, so DEV data is never changed.
+Fixtures db / dbcur / run_id come from conftest.py.
 """
 import datetime as dt
 
 import pyodbc
 import pytest
 
-from etl.config import ConfigError, db_target, load_env
-from etl.db import connect
+from dbhelpers import call, scalar, stage
 
 pytestmark = pytest.mark.db
 
-STAGING = ["line", "program", "part", "defect_type", "production", "inspection", "nonconformity", "scrap",
-           "rework", "eight_d", "eight_d_nc_link", "eight_d_action", "audit_finding"]
-SRC = "test_file.xlsx"
 
-
-@pytest.fixture(scope="module")
-def conn():
-    load_env()
-    try:
-        c = connect(db_target("dev"))
-    except (ConfigError, pyodbc.Error) as exc:
-        pytest.skip(f"DEV database not reachable: {exc}")
-    if c.cursor().execute("SELECT OBJECT_ID(N'etl.usp_merge_scrap')").fetchval() is None:
-        pytest.skip("Load procedures not deployed: run python -m etl.deploy --env dev")
-    yield c
-    c.rollback()
-    c.close()
+@pytest.fixture
+def cur(dbcur):
+    return dbcur
 
 
 @pytest.fixture
-def cur(conn):
-    c = conn.cursor()
-    for t in STAGING:
-        c.execute(f"DELETE FROM stg.{t}")
-    yield c
-    conn.rollback()
+def run(run_id):
+    return run_id
 
-
-@pytest.fixture
-def run(cur):
-    return cur.execute("SET NOCOUNT ON; INSERT INTO [audit].etl_run (environment, status, triggered_by) "
-                       "OUTPUT inserted.etl_run_id VALUES ('dev', 'Running', 'manual')").fetchval()
-
-
-# --- helpers -----------------------------------------------------------------------------
-def stage(cur, table, rows):
-    """Insert dict rows into stg.<table>; adds source_file and source_row_number."""
-    cur.execute(f"DELETE FROM stg.{table}")
-    for i, row in enumerate(rows, start=2):
-        row = {**row, "source_file": SRC, "source_row_number": i}
-        cols = ", ".join(row)
-        cur.execute(f"INSERT INTO stg.{table} ({cols}) VALUES ({', '.join('?' * len(row))})", *row.values())
-
-
-def call(cur, proc, run_id, outputs=("rows_inserted", "rows_updated")):
-    """EXEC a load procedure and return its OUTPUT parameters as a dict."""
-    declare = ", ".join(f"@{o} INT" for o in outputs)
-    args = ", ".join(f"@{o} = @{o} OUTPUT" for o in outputs)
-    row = cur.execute(f"SET NOCOUNT ON; DECLARE {declare}; EXEC etl.{proc} @etl_run_id = ?, {args}; "
-                      f"SELECT {', '.join('@' + o for o in outputs)};", run_id).fetchone()
-    return dict(zip(outputs, row))
-
-
-def scalar(cur, sql, *params):
-    return cur.execute(sql, *params).fetchval()
 
 
 def load_masters(cur, run):
