@@ -23,3 +23,7 @@
 *.abf binary
 *.png binary
 *.pbix binary
+
+# Synthetic sample: byte-exact (SHA-256s are recorded in _generation/generation.json
+# and the ETL skips files by hash), so git must never convert its line endings
+data/sample/** -text
