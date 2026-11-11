@@ -238,3 +238,17 @@ def test_8d_population_is_realistic(full_clean):
     af = full_clean["audit_findings"]
     assert af.line_code.isna().any()                          # plant-wide findings exist
     assert (af.classification == "Major NC").any() and af.eight_d_id.notna().any()
+
+
+def test_repeats_are_rare_and_the_scripted_one_is_there(full_clean):
+    """Repeat = same part + defect with a CLOSED 8D in the 180 days before opening (D23).
+    Only the scripted sink-mark repeat should qualify; the Repeat Defect Rate must stay meaningful."""
+    t = full_clean["eight_d_tracker"].sort_values("opened_date")
+    repeats = []
+    for r in t.itertuples():
+        prior = t[(t.part_number == r.part_number) & (t.defect_code == r.defect_code) & (t.eight_d_id != r.eight_d_id)
+                  & t.d8_date.notna()]
+        if any(0 < (r.opened_date - d).days <= 180 for d in prior.d8_date):
+            repeats.append((r.part_number, r.defect_code))
+    assert ("DAC-10421", "SUR-01") in repeats
+    assert len(repeats) / len(t) <= 0.10

@@ -216,10 +216,17 @@ def eight_ds(rng: np.random.Generator, nc: pd.DataFrame, start: dt.date, end: dt
     scripted = {(e.line_code, e.part_number, e.defect_code) for e in sc.EVENTS}
 
     # Unscripted 8Ds: every month 1-2 of the worst (line, part, defect) combinations get one
+    # A part + defect that had an unscripted 8D in the last 300 days is not picked again:
+    # otherwise the same "worst combination" gets an 8D every month and almost every 8D is a
+    # repeat. The only intended repeat is the scripted sink-mark story (scenario.EVENTS).
+    last_8d: dict[tuple[str, str], dt.date] = {}
     month = nc.assign(ym=pd.to_datetime(nc["event_date"]).dt.to_period("M"))
     agg = month.groupby(["ym", "line_code", "part_number", "defect_code"], sort=True)["qty_affected"].sum().reset_index()
     for ym, grp in agg.groupby("ym", sort=True):
-        grp = grp[[(r.line_code, r.part_number, r.defect_code) not in scripted for r in grp.itertuples()]]
+        month_start = ym.start_time.date()
+        grp = grp[[(r.line_code, r.part_number, r.defect_code) not in scripted
+                   and (month_start - last_8d.get((r.part_number, r.defect_code), dt.date.min)).days > 300
+                   for r in grp.itertuples()]]
         top = grp.sort_values(["qty_affected", "line_code", "part_number", "defect_code"],
                               ascending=[False, True, True, True]).head(4).reset_index(drop=True)
         n_8d = min(len(top), 1 + int(rng.random() < 0.35))
@@ -231,6 +238,7 @@ def eight_ds(rng: np.random.Generator, nc: pd.DataFrame, start: dt.date, end: dt
             if opened > end:
                 continue
             source = "Customer complaint" if rng.random() < 0.2 else "Internal"
+            last_8d[(pick.part_number, pick.defect_code)] = opened
             rows.append((opened, pick.line_code, pick.part_number, pick.defect_code, source, "auto",
                          45 if source == "Customer complaint" else 60, bool(rng.random() < 0.25), False))
 
