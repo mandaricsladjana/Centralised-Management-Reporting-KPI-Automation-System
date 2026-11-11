@@ -11,8 +11,8 @@
      weighted by qty_started (blueprint §6.2).
    - FTY (D1) = product of the FPYs of the line's stages with inspections in the month.
    - Defect rate, DPU, DPMO and passed quantity use the line's final stage.
-   - Snapshot KPIs (open / overdue 8Ds and findings) are as of the month end,
-     for months up to the current one.
+   - Snapshot KPIs (open / overdue 8Ds and findings) are as of the month end
+     (today for the current month), for months up to the current one.
    - 8D and action KPIs use the 8D's line; audit findings use the finding's line
      (-2 = plant-wide, shown as its own line row and included in the plant row).
    ============================================================================= */
@@ -20,7 +20,10 @@ CREATE OR ALTER VIEW rpt.v_kpi_monthly AS
 WITH
 cal AS (SELECT date_key, month_start_date FROM dw.dim_calendar),
 months AS (
-    SELECT DISTINCT month_start_date, EOMONTH(month_start_date) AS month_end
+    -- snapshot date: the month end, or today for the current month (never a future date)
+    SELECT DISTINCT month_start_date,
+           CASE WHEN EOMONTH(month_start_date) < CAST(SYSUTCDATETIME() AS DATE)
+                THEN EOMONTH(month_start_date) ELSE CAST(SYSUTCDATETIME() AS DATE) END AS month_end
     FROM dw.dim_calendar
     WHERE month_start_date <= CAST(SYSUTCDATETIME() AS DATE)
 ),
@@ -128,60 +131,80 @@ af_snapshot AS (
     JOIN rpt.v_fact_audit_finding f ON f.audit_date <= m.month_end AND (f.closed_date IS NULL OR f.closed_date > m.month_end)
     GROUP BY m.month_start_date, f.line_key
 ),
-keys AS (
-    SELECT month_start_date, line_key FROM prod        UNION SELECT month_start_date, line_key FROM insp
-    UNION SELECT month_start_date, line_key FROM nc    UNION SELECT month_start_date, line_key FROM scrap
-    UNION SELECT month_start_date, line_key FROM rework
-    UNION SELECT month_start_date, line_key FROM ed_opened UNION SELECT month_start_date, line_key FROM ed_closed
-    UNION SELECT month_start_date, line_key FROM ed_snapshot UNION SELECT month_start_date, line_key FROM actions
-    UNION SELECT month_start_date, line_key FROM af_raised UNION SELECT month_start_date, line_key FROM af_closed
-    UNION SELECT month_start_date, line_key FROM af_snapshot
+-- One pass, no joins: every aggregate is unpivoted to (month, line, measure, value) and
+-- pivoted back with one GROUP BY. (A first version LEFT-JOINed 12 aggregates onto a key
+-- list; with no statistics on the CTEs the optimiser recomputed them per row: > 2 min.)
+long AS (
+    SELECT x.month_start_date, x.line_key, v.k, v.val FROM prod x
+    CROSS APPLY (VALUES ('qty_started', CAST(x.qty_started AS DECIMAL(38,10))), ('production_value_eur', CAST(x.production_value_eur AS DECIMAL(38,10)))) AS v (k, val)
+    UNION ALL
+    SELECT x.month_start_date, x.line_key, v.k, v.val FROM insp x
+    CROSS APPLY (VALUES ('qty_rejected', CAST(x.qty_rejected AS DECIMAL(38,10))), ('qty_inspected_final', CAST(x.qty_inspected_final AS DECIMAL(38,10))), ('qty_passed_final', CAST(x.qty_passed_final AS DECIMAL(38,10))), ('opportunities_final', CAST(x.opportunities_final AS DECIMAL(38,10))), ('fty', CAST(x.fty AS DECIMAL(38,10)))) AS v (k, val)
+    UNION ALL
+    SELECT x.month_start_date, x.line_key, v.k, v.val FROM nc x
+    CROSS APPLY (VALUES ('qty_defects', CAST(x.qty_defects AS DECIMAL(38,10)))) AS v (k, val)
+    UNION ALL
+    SELECT x.month_start_date, x.line_key, v.k, v.val FROM scrap x
+    CROSS APPLY (VALUES ('qty_scrapped', CAST(x.qty_scrapped AS DECIMAL(38,10))), ('scrap_cost_eur', CAST(x.scrap_cost_eur AS DECIMAL(38,10)))) AS v (k, val)
+    UNION ALL
+    SELECT x.month_start_date, x.line_key, v.k, v.val FROM rework x
+    CROSS APPLY (VALUES ('qty_reworked', CAST(x.qty_reworked AS DECIMAL(38,10))), ('qty_rework_ok', CAST(x.qty_rework_ok AS DECIMAL(38,10))), ('rework_cost_eur', CAST(x.rework_cost_eur AS DECIMAL(38,10))), ('rework_cost_imputed_eur', CAST(x.rework_cost_imputed_eur AS DECIMAL(38,10)))) AS v (k, val)
+    UNION ALL
+    SELECT x.month_start_date, x.line_key, v.k, v.val FROM ed_opened x
+    CROSS APPLY (VALUES ('eight_d_opened', CAST(x.eight_d_opened AS DECIMAL(38,10))), ('eight_d_repeat', CAST(x.eight_d_repeat AS DECIMAL(38,10)))) AS v (k, val)
+    UNION ALL
+    SELECT x.month_start_date, x.line_key, v.k, v.val FROM ed_closed x
+    CROSS APPLY (VALUES ('eight_d_closed', CAST(x.eight_d_closed AS DECIMAL(38,10))), ('eight_d_closure_days', CAST(x.eight_d_closure_days AS DECIMAL(38,10))), ('eight_d_closed_on_time', CAST(x.eight_d_closed_on_time AS DECIMAL(38,10)))) AS v (k, val)
+    UNION ALL
+    SELECT x.month_start_date, x.line_key, v.k, v.val FROM ed_snapshot x
+    CROSS APPLY (VALUES ('eight_d_open_at_month_end', CAST(x.eight_d_open_at_month_end AS DECIMAL(38,10))), ('eight_d_overdue_at_month_end', CAST(x.eight_d_overdue_at_month_end AS DECIMAL(38,10)))) AS v (k, val)
+    UNION ALL
+    SELECT x.month_start_date, x.line_key, v.k, v.val FROM actions x
+    CROSS APPLY (VALUES ('actions_due', CAST(x.actions_due AS DECIMAL(38,10))), ('actions_completed', CAST(x.actions_completed AS DECIMAL(38,10)))) AS v (k, val)
+    UNION ALL
+    SELECT x.month_start_date, x.line_key, v.k, v.val FROM af_raised x
+    CROSS APPLY (VALUES ('findings_raised', CAST(x.findings_raised AS DECIMAL(38,10))), ('major_nc', CAST(x.major_nc AS DECIMAL(38,10)))) AS v (k, val)
+    UNION ALL
+    SELECT x.month_start_date, x.line_key, v.k, v.val FROM af_closed x
+    CROSS APPLY (VALUES ('findings_closed', CAST(x.findings_closed AS DECIMAL(38,10))), ('finding_closure_days', CAST(x.finding_closure_days AS DECIMAL(38,10))), ('findings_closed_on_time', CAST(x.findings_closed_on_time AS DECIMAL(38,10)))) AS v (k, val)
+    UNION ALL
+    SELECT x.month_start_date, x.line_key, v.k, v.val FROM af_snapshot x
+    CROSS APPLY (VALUES ('findings_open_at_month_end', CAST(x.findings_open_at_month_end AS DECIMAL(38,10))), ('findings_overdue_at_month_end', CAST(x.findings_overdue_at_month_end AS DECIMAL(38,10)))) AS v (k, val)
 ),
 line_rows AS (
-    SELECT k.month_start_date, k.line_key,
-           ISNULL(pr.qty_started, 0)                    AS qty_started,
-           ISNULL(pr.production_value_eur, 0)           AS production_value_eur,
-           ISNULL(i.qty_rejected, 0)                    AS qty_rejected,
-           ISNULL(i.qty_inspected_final, 0)             AS qty_inspected_final,
-           ISNULL(i.qty_passed_final, 0)                AS qty_passed_final,
-           ISNULL(i.opportunities_final, 0)             AS opportunities_final,
-           ISNULL(n.qty_defects, 0)                     AS qty_defects,
-           ISNULL(s.qty_scrapped, 0)                    AS qty_scrapped,
-           ISNULL(s.scrap_cost_eur, 0)                  AS scrap_cost_eur,
-           ISNULL(r.qty_reworked, 0)                    AS qty_reworked,
-           ISNULL(r.qty_rework_ok, 0)                   AS qty_rework_ok,
-           ISNULL(r.rework_cost_eur, 0)                 AS rework_cost_eur,
-           ISNULL(r.rework_cost_imputed_eur, 0)         AS rework_cost_imputed_eur,
-           ISNULL(eo.eight_d_opened, 0)                 AS eight_d_opened,
-           ISNULL(eo.eight_d_repeat, 0)                 AS eight_d_repeat,
-           ISNULL(ec.eight_d_closed, 0)                 AS eight_d_closed,
-           ISNULL(ec.eight_d_closure_days, 0)           AS eight_d_closure_days,
-           ISNULL(ec.eight_d_closed_on_time, 0)         AS eight_d_closed_on_time,
-           ISNULL(es.eight_d_open_at_month_end, 0)      AS eight_d_open_at_month_end,
-           ISNULL(es.eight_d_overdue_at_month_end, 0)   AS eight_d_overdue_at_month_end,
-           ISNULL(ac.actions_due, 0)                    AS actions_due,
-           ISNULL(ac.actions_completed, 0)              AS actions_completed,
-           ISNULL(ar.findings_raised, 0)                AS findings_raised,
-           ISNULL(ar.major_nc, 0)                       AS major_nc,
-           ISNULL(fc.findings_closed, 0)                AS findings_closed,
-           ISNULL(fc.finding_closure_days, 0)           AS finding_closure_days,
-           ISNULL(fc.findings_closed_on_time, 0)        AS findings_closed_on_time,
-           ISNULL(fs.findings_open_at_month_end, 0)     AS findings_open_at_month_end,
-           ISNULL(fs.findings_overdue_at_month_end, 0)  AS findings_overdue_at_month_end,
-           i.fty
-    FROM keys k
-    LEFT JOIN prod pr        ON pr.month_start_date = k.month_start_date AND pr.line_key = k.line_key
-    LEFT JOIN insp i         ON i.month_start_date  = k.month_start_date AND i.line_key  = k.line_key
-    LEFT JOIN nc n           ON n.month_start_date  = k.month_start_date AND n.line_key  = k.line_key
-    LEFT JOIN scrap s        ON s.month_start_date  = k.month_start_date AND s.line_key  = k.line_key
-    LEFT JOIN rework r       ON r.month_start_date  = k.month_start_date AND r.line_key  = k.line_key
-    LEFT JOIN ed_opened eo   ON eo.month_start_date = k.month_start_date AND eo.line_key = k.line_key
-    LEFT JOIN ed_closed ec   ON ec.month_start_date = k.month_start_date AND ec.line_key = k.line_key
-    LEFT JOIN ed_snapshot es ON es.month_start_date = k.month_start_date AND es.line_key = k.line_key
-    LEFT JOIN actions ac     ON ac.month_start_date = k.month_start_date AND ac.line_key = k.line_key
-    LEFT JOIN af_raised ar   ON ar.month_start_date = k.month_start_date AND ar.line_key = k.line_key
-    LEFT JOIN af_closed fc   ON fc.month_start_date = k.month_start_date AND fc.line_key = k.line_key
-    LEFT JOIN af_snapshot fs ON fs.month_start_date = k.month_start_date AND fs.line_key = k.line_key
+    SELECT month_start_date, line_key,
+           CAST(SUM(CASE WHEN k = 'qty_started' THEN val ELSE 0 END) AS BIGINT) AS qty_started,
+           CAST(SUM(CASE WHEN k = 'production_value_eur' THEN val ELSE 0 END) AS DECIMAL(19,4)) AS production_value_eur,
+           CAST(SUM(CASE WHEN k = 'qty_rejected' THEN val ELSE 0 END) AS BIGINT) AS qty_rejected,
+           CAST(SUM(CASE WHEN k = 'qty_inspected_final' THEN val ELSE 0 END) AS BIGINT) AS qty_inspected_final,
+           CAST(SUM(CASE WHEN k = 'qty_passed_final' THEN val ELSE 0 END) AS BIGINT) AS qty_passed_final,
+           CAST(SUM(CASE WHEN k = 'opportunities_final' THEN val ELSE 0 END) AS BIGINT) AS opportunities_final,
+           CAST(SUM(CASE WHEN k = 'qty_defects' THEN val ELSE 0 END) AS BIGINT) AS qty_defects,
+           CAST(SUM(CASE WHEN k = 'qty_scrapped' THEN val ELSE 0 END) AS BIGINT) AS qty_scrapped,
+           CAST(SUM(CASE WHEN k = 'scrap_cost_eur' THEN val ELSE 0 END) AS DECIMAL(19,2)) AS scrap_cost_eur,
+           CAST(SUM(CASE WHEN k = 'qty_reworked' THEN val ELSE 0 END) AS BIGINT) AS qty_reworked,
+           CAST(SUM(CASE WHEN k = 'qty_rework_ok' THEN val ELSE 0 END) AS BIGINT) AS qty_rework_ok,
+           CAST(SUM(CASE WHEN k = 'rework_cost_eur' THEN val ELSE 0 END) AS DECIMAL(19,2)) AS rework_cost_eur,
+           CAST(SUM(CASE WHEN k = 'rework_cost_imputed_eur' THEN val ELSE 0 END) AS DECIMAL(19,2)) AS rework_cost_imputed_eur,
+           CAST(SUM(CASE WHEN k = 'eight_d_opened' THEN val ELSE 0 END) AS BIGINT) AS eight_d_opened,
+           CAST(SUM(CASE WHEN k = 'eight_d_repeat' THEN val ELSE 0 END) AS BIGINT) AS eight_d_repeat,
+           CAST(SUM(CASE WHEN k = 'eight_d_closed' THEN val ELSE 0 END) AS BIGINT) AS eight_d_closed,
+           CAST(SUM(CASE WHEN k = 'eight_d_closure_days' THEN val ELSE 0 END) AS BIGINT) AS eight_d_closure_days,
+           CAST(SUM(CASE WHEN k = 'eight_d_closed_on_time' THEN val ELSE 0 END) AS BIGINT) AS eight_d_closed_on_time,
+           CAST(SUM(CASE WHEN k = 'eight_d_open_at_month_end' THEN val ELSE 0 END) AS BIGINT) AS eight_d_open_at_month_end,
+           CAST(SUM(CASE WHEN k = 'eight_d_overdue_at_month_end' THEN val ELSE 0 END) AS BIGINT) AS eight_d_overdue_at_month_end,
+           CAST(SUM(CASE WHEN k = 'actions_due' THEN val ELSE 0 END) AS BIGINT) AS actions_due,
+           CAST(SUM(CASE WHEN k = 'actions_completed' THEN val ELSE 0 END) AS BIGINT) AS actions_completed,
+           CAST(SUM(CASE WHEN k = 'findings_raised' THEN val ELSE 0 END) AS BIGINT) AS findings_raised,
+           CAST(SUM(CASE WHEN k = 'major_nc' THEN val ELSE 0 END) AS BIGINT) AS major_nc,
+           CAST(SUM(CASE WHEN k = 'findings_closed' THEN val ELSE 0 END) AS BIGINT) AS findings_closed,
+           CAST(SUM(CASE WHEN k = 'finding_closure_days' THEN val ELSE 0 END) AS BIGINT) AS finding_closure_days,
+           CAST(SUM(CASE WHEN k = 'findings_closed_on_time' THEN val ELSE 0 END) AS BIGINT) AS findings_closed_on_time,
+           CAST(SUM(CASE WHEN k = 'findings_open_at_month_end' THEN val ELSE 0 END) AS BIGINT) AS findings_open_at_month_end,
+           CAST(SUM(CASE WHEN k = 'findings_overdue_at_month_end' THEN val ELSE 0 END) AS BIGINT) AS findings_overdue_at_month_end,
+           MAX(CASE WHEN k = 'fty' THEN CAST(val AS FLOAT) END) AS fty
+    FROM long
+    GROUP BY month_start_date, line_key
 ),
 all_rows AS (
     SELECT 'Line' AS row_level, * FROM line_rows

@@ -1,22 +1,17 @@
-"""Fixtures for DEV integration tests. Every test's changes are rolled back."""
-import pyodbc
+"""Fixtures for integration tests that need an EMPTY warehouse: they run against the
+separate QualityKPI_Test database (reset per module), never DEV, because DEV holds
+the 24-month load. Every test's own changes are rolled back."""
 import pytest
 
-from dbhelpers import STAGING
-from etl.config import ConfigError, db_target, load_env
+from dbhelpers import STAGING, TEST_DB, prepare_test_db
+from etl.config import db_target
 from etl.db import connect
 
 
 @pytest.fixture(scope="module")
 def db():
-    """Module-wide DEV connection; skips the module when DEV is unreachable or not deployed."""
-    load_env()
-    try:
-        c = connect(db_target("dev"))
-    except (ConfigError, pyodbc.Error) as exc:
-        pytest.skip(f"DEV database not reachable: {exc}")
-    if c.cursor().execute("SELECT OBJECT_ID(N'audit.schema_version')").fetchval() is None:
-        pytest.skip("DEV schema not deployed: run python -m etl.deploy --env dev")
+    prepare_test_db()
+    c = connect(db_target("dev", TEST_DB))
     yield c
     c.rollback()
     c.close()

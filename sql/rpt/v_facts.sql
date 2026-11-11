@@ -12,20 +12,19 @@ GO
 
 /* is_final_stage: the highest stage sequence with data for the line (data dictionary §3.7).
    Defect Rate, DPMO and Passed Quantity use the final stage only (blueprint §6.2). */
+-- Window function, not a self-joined aggregate: the first version joined a GROUP BY of
+-- the same table back to it, which the optimiser recomputed per row (108 s on 30k rows).
 CREATE OR ALTER VIEW rpt.v_fact_inspection AS
-WITH final_stage AS (
-    SELECT f.line_key, MAX(st.stage_sequence) AS final_sequence
+SELECT x.inspection_key, x.date_key, x.shift_key, x.line_key, x.part_key, x.stage_key,
+       x.qty_inspected, x.qty_passed_first_time, x.qty_failed,
+       CAST(CASE WHEN x.stage_key > 0 AND x.stage_sequence = x.final_sequence THEN 1 ELSE 0 END AS BIT) AS is_final_stage
+FROM (
+    SELECT f.inspection_key, f.date_key, f.shift_key, f.line_key, f.part_key, f.stage_key,
+           f.qty_inspected, f.qty_passed_first_time, f.qty_failed, st.stage_sequence,
+           MAX(CASE WHEN st.stage_key > 0 THEN st.stage_sequence END) OVER (PARTITION BY f.line_key) AS final_sequence
     FROM dw.fact_inspection f
     JOIN dw.dim_inspection_stage st ON st.stage_key = f.stage_key
-    WHERE st.stage_key > 0
-    GROUP BY f.line_key
-)
-SELECT f.inspection_key, f.date_key, f.shift_key, f.line_key, f.part_key, f.stage_key,
-       f.qty_inspected, f.qty_passed_first_time, f.qty_failed,
-       CAST(CASE WHEN st.stage_key > 0 AND st.stage_sequence = fs.final_sequence THEN 1 ELSE 0 END AS BIT) AS is_final_stage
-FROM dw.fact_inspection f
-JOIN dw.dim_inspection_stage st ON st.stage_key = f.stage_key
-LEFT JOIN final_stage fs        ON fs.line_key  = f.line_key;
+) x;
 GO
 
 CREATE OR ALTER VIEW rpt.v_fact_nonconformity AS

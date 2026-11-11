@@ -2,7 +2,7 @@
 
 A portfolio project that simulates an automotive Tier‑1 supplier (*Danube Automotive Components*, fictional). Quality data from five departments is scattered across Excel and CSV files. The project consolidates it into **one governed SQL star schema**, with **one definition per KPI**, and reports it in **Power BI**.
 
-> **Status:** Phases 1–8 built (Phase 6 ETL next). Synthetic data generator ready; KPI views on DEV, PROD has the Phase 7 schema. See the [roadmap](documentation/01_project_blueprint.md#11-implementation-roadmap).
+> **Status:** Phases 1–8 complete: 24 months of synthetic data loaded into DEV by the ETL. Next: Phase 9, the Power BI report. See the [roadmap](documentation/01_project_blueprint.md#11-implementation-roadmap).
 
 ## Architecture
 
@@ -27,6 +27,7 @@ The full design is in [documentation/01_project_blueprint.md](documentation/01_p
 | [02 Data dictionary](documentation/02_data_dictionary.md) | Every table and column, ERD, source-to-target mapping, validation rules |
 | [03 Azure infrastructure](documentation/03_azure_infrastructure.md) | Cloud resources, authentication, rebuild commands, issues log |
 | [04 Synthetic data](documentation/04_synthetic_data.md) | Generator, source files, the built-in quality story, injected data-quality issues |
+| [05 ETL pipeline](documentation/05_etl_pipeline.md) | How to run the load, flow, modules, validation rules, data-quality checks |
 
 ## Repository structure
 
@@ -65,9 +66,12 @@ cd ..
 # 4. Generate the synthetic department files (24 months -> data\raw, ~45 s)
 cd python
 ..\.venv\Scripts\python.exe -m generate
+
+# 5. Load them into DEV (~35 s; a rerun skips unchanged files)
+..\.venv\Scripts\python.exe -m etl.pipeline --env dev
 cd ..
 
-# 5. Smoke test
+# 6. Smoke test
 .\.venv\Scripts\python.exe python\extraction\test_blob_connection.py
 .\.venv\Scripts\python.exe -m pytest        # integration tests skip if DEV is unreachable
 ```

@@ -1,4 +1,6 @@
-"""Integration tests against the DEV database (QualityKPI_Dev on SQL Express).
+"""Integration tests of the DEV deployment (QualityKPI_Dev on SQL Express).
+
+DEV holds the 24-month load, so test rows use IDs outside the synthetic ranges (...999...).
 
 Prerequisite: python -m etl.deploy --env dev. Skipped when DEV is unreachable.
 Every test that writes runs inside a transaction that is rolled back.
@@ -100,7 +102,9 @@ def test_reference_data_shifts_and_stages(cur):
 
 
 def test_validation_rules_cover_data_dictionary(cur):
-    assert scalar(cur, "SELECT COUNT(*) FROM [audit].validation_rule") == 15
+    """15 rules of data dictionary §7 (050) + VR-GEN-08 (062, Phase 6)."""
+    rules = {r[0] for r in cur.execute("SELECT rule_id FROM [audit].validation_rule").fetchall()}
+    assert len(rules) == 16 and {"VR-GEN-01", "VR-GEN-08", "VR-AF-01"} <= rules
 
 
 # --- calendar (§3.1) ---------------------------------------------------------------------
@@ -164,8 +168,8 @@ def test_scrap_cost_is_computed_from_snapshot(cur):
     line, part = _seed_one_of_each(cur)
     cur.execute("INSERT INTO dw.fact_scrap (scrap_id, date_key, shift_key, line_key, part_key, defect_type_key, "
                 "qty_scrapped, unit_cost_eur, etl_run_id, source_file) "
-                "VALUES ('SC-2025-000001', 20250312, 3, ?, ?, -1, 180, 42.5, 0, N'test')", line, part)
-    assert scalar(cur, "SELECT scrap_cost_eur FROM dw.fact_scrap WHERE scrap_id = 'SC-2025-000001'") == 7650
+                "VALUES ('SC-2025-999901', 20250312, 3, ?, ?, -1, 180, 42.5, 0, N'test')", line, part)
+    assert scalar(cur, "SELECT scrap_cost_eur FROM dw.fact_scrap WHERE scrap_id = 'SC-2025-999901'") == 7650
 
 
 def test_8d_closed_date_must_equal_d8(cur):
@@ -173,29 +177,29 @@ def test_8d_closed_date_must_equal_d8(cur):
     sql = ("INSERT INTO dw.fact_8d (eight_d_id, opened_date_key, part_key, line_key, defect_type_key, problem_source, "
            "owner_name, owner_department, d1_date, d8_date, target_closure_date_key, closed_date_key, etl_run_id, source_file) "
            "VALUES (?, 20250301, ?, ?, -1, 'Internal', N'A. Test', N'Quality', '2025-03-01', ?, 20250430, ?, 0, N'test')")
-    cur.execute(sql, "8D-2025-001", part, line, "2025-04-15", 20250415)
+    cur.execute(sql, "8D-2025-991", part, line, "2025-04-15", 20250415)
     with pytest.raises(pyodbc.IntegrityError, match="ck_fact_8d_closed_is_d8"):
-        cur.execute(sql, "8D-2025-002", part, line, None, 20250415)    # closed without D8
+        cur.execute(sql, "8D-2025-992", part, line, None, 20250415)    # closed without D8
     with pytest.raises(pyodbc.IntegrityError, match="ck_fact_8d_closed_is_d8"):
-        cur.execute(sql, "8D-2025-003", part, line, "2025-04-15", None)  # D8 but not closed
+        cur.execute(sql, "8D-2025-993", part, line, "2025-04-15", None)  # D8 but not closed
 
 
 def test_nonconformity_disposition_list_is_enforced(cur):
     line, part = _seed_one_of_each(cur)
     sql = ("INSERT INTO dw.fact_nonconformity (nc_id, date_key, shift_key, line_key, part_key, stage_key, defect_type_key, "
            "qty_affected, disposition, etl_run_id, source_file) VALUES (?, 20250312, 1, ?, ?, 2, -1, 1, ?, 0, N'test')")
-    cur.execute(sql, "NC-2025-000001", line, part, "Use-as-is")
+    cur.execute(sql, "NC-2025-999901", line, part, "Use-as-is")
     with pytest.raises(pyodbc.IntegrityError, match="ck_fact_nonconformity_disposition"):
-        cur.execute(sql, "NC-2025-000002", line, part, "Scrapped")    # unstandardised variant
+        cur.execute(sql, "NC-2025-999902", line, part, "Scrapped")    # unstandardised variant
 
 
 def test_audit_finding_classification_list_is_enforced_and_line_can_be_not_applicable(cur):
     sql = ("INSERT INTO dw.fact_audit_finding (finding_id, audit_id, audit_date_key, audit_type, line_key, classification, "
            "finding_description, owner_name, due_date_key, etl_run_id, source_file) "
-           "VALUES (?, 'AU-2025-001', 20250312, 'System', -2, ?, N'Plant-wide finding', N'A. Test', 20250412, 0, N'test')")
-    cur.execute(sql, "AF-2025-0001", "Major NC")
+           "VALUES (?, 'AU-2025-999', 20250312, 'System', -2, ?, N'Plant-wide finding', N'A. Test', 20250412, 0, N'test')")
+    cur.execute(sql, "AF-2025-9991", "Major NC")
     with pytest.raises(pyodbc.IntegrityError, match="ck_fact_audit_finding_class"):
-        cur.execute(sql, "AF-2025-0002", "major")                     # VR-AF-01 variant
+        cur.execute(sql, "AF-2025-9992", "major")                     # VR-AF-01 variant
 
 
 def test_file_hash_can_be_loaded_only_once_per_source(cur):
