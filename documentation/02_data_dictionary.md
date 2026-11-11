@@ -438,4 +438,22 @@ The DDL in `sql/ddl/` implements this dictionary. Where the implementation had t
 | Roles | `etl_writer` (stg read/write/truncate, audit read/write, dw read, EXECUTE on `etl`) and `rpt_reader` (SELECT on `rpt`). Users are created outside Git because SQL users need passwords (`040_security.sql` header). |
 | CHECK constraints and NULL | A CHECK only rejects FALSE; UNKNOWN passes. Constraints over nullable columns spell out every branch (`021_fix_8d_closed_check.sql`). |
 
-**Open point for Phase 6:** `fact_production` and `fact_inspection` have composite business keys. If two *different* unknown part codes appear for the same date, shift and line, both map to `part_key = -1` and collide on the unique key. The validator must reject or aggregate them (proposed: reject with VR-GEN-05, since an unknown part cannot be costed anyway).
+### 11.1 Load procedures (`sql/etl/`, schema `etl`)
+
+Called by the Python pipeline in the load order of §6, inside the pipeline's transaction. Each one returns counts through OUTPUT parameters for `audit.etl_run`.
+
+| Procedure | Target | Notes |
+|---|---|---|
+| `usp_merge_line`, `_program`, `_part`, `_defect_type` | dimensions | Type 1 overwrite; never deletes; special members never touched |
+| `usp_merge_production`, `_inspection` | periodic facts | Duplicate check on the **resolved** grain |
+| `usp_merge_8d` | `fact_8d` | `opened_date_key` = D1 (else tracker opened date); `closed_date_key` = D8 |
+| `usp_merge_nonconformity` | `fact_nonconformity` | Never writes `eight_d_key` |
+| `usp_apply_8d_nc_links` | `fact_nonconformity.eight_d_key` | Snapshot per staged 8D: NCs no longer listed are unlinked. NCs not yet loaded are counted (`@links_unresolved`) and linked by the next tracker load. One NC listed under two 8Ds → error |
+| `usp_merge_scrap` | `fact_scrap` | `unit_cost_eur` snapshot taken on insert and kept on correction unless the part changes (D7) |
+| `usp_merge_rework` | `fact_rework` | Costs arrive complete (imputed by Python, VR-RWK-02) |
+| `usp_merge_8d_action` | `fact_8d_action` | Unknown 8D → error (the validator should have rejected it, VR-8D-03) |
+| `usp_merge_audit_finding` | `fact_audit_finding` | Blank line → −2, unknown line → −1; unknown 8D ID → NULL and counted |
+
+**Shared contract:** the run must exist with status `Running` (`usp_assert_run`). Duplicate business keys in staging raise an error instead of being merged unpredictably. Only rows whose values changed are updated (null-safe `EXCEPT` comparison), so a reload of the same file reports 0 inserted and 0 updated. Facts are never deleted.
+
+**Resolved open point:** two *different* unknown codes on the same date, shift and line both map to `part_key = -1`. The periodic-fact procedures detect this on the resolved grain and raise an error. The validator must therefore reject such rows with VR-GEN-05 (Phase 6).
