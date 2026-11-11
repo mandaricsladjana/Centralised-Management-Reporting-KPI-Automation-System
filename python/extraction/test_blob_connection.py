@@ -3,8 +3,9 @@ import os
 from dotenv import load_dotenv
 from azure.storage.blob import BlobServiceClient
 
-# Load environment variables from .env
-load_dotenv()
+# Load environment variables from .env (.env wins over stale shell variables,
+# see documentation/03_azure_infrastructure.md issue I-04)
+load_dotenv(override=True)
 
 # Retrieve Azure Storage connection string
 connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
