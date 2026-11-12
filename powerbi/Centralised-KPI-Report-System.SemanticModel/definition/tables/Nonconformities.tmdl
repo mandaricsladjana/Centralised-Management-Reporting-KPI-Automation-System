@@ -1,0 +1,129 @@
+/// One row per nonconformity (NC) record = one defect type found on units at one stage (rpt.v_fact_nonconformity). Qty Affected counts defects.
+table Nonconformities
+	lineageTag: 8a813f0d-1c26-4489-b3cb-2aa62d0664d8
+
+	/// Number of defects recorded on nonconformities (a unit with two defect types counts twice).
+	measure 'Defect Quantity' = SUM ( 'Nonconformities'[Qty Affected] )
+		formatString: #,##0
+		displayFolder: Defects
+		lineageTag: 9deb0bd0-355a-4b6b-a535-895ca296fa60
+
+	/// Number of nonconformity (NC) records.
+	measure '# Nonconformities' = COUNTROWS ( 'Nonconformities' )
+		formatString: #,##0
+		displayFolder: Defects
+		lineageTag: 67bd36b9-fbd8-4eb7-9251-59ca61e6cd40
+
+	/// Defects per unit inspected at the final stage. Not equal to 1 - FPY: a unit can carry several defects. Target <= 3 %.
+	measure 'Defect Rate %' = DIVIDE ( [Defect Quantity], [Inspected Quantity Final Stage] )
+		formatString: 0.00%
+		displayFolder: Defects
+		lineageTag: a130ce08-ab36-4d50-bbbc-eaed70e2aa80
+
+	/// Defects Per Unit: same ratio as Defect Rate % shown as a number, the basis of DPMO.
+	measure DPU = DIVIDE ( [Defect Quantity], [Inspected Quantity Final Stage] )
+		formatString: 0.000
+		displayFolder: Defects
+		lineageTag: 4b8444f2-2220-455a-a90f-17353978e54c
+
+	/// Defects Per Million Opportunities = defects / (final-stage units x defect opportunities per part) x 1,000,000. 3.4 is the Six Sigma reference, not a target.
+	measure DPMO =
+			VAR _opportunities =
+			    CALCULATE (
+			        SUMX ( 'Inspections', 'Inspections'[Qty Inspected] * RELATED ( 'Part'[Opportunities Per Unit] ) ),
+			        KEEPFILTERS ( 'Inspections'[Is Final Stage] = TRUE () )
+			    )
+			RETURN
+			    DIVIDE ( [Defect Quantity] * 1000000, _opportunities )
+		formatString: #,##0
+		displayFolder: Defects
+		lineageTag: aa1c69ba-fadb-42ba-844d-be698207d139
+
+	column 'NC Key'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: 55be61c0-2e16-4add-9d12-3c2931be6657
+		summarizeBy: none
+		sourceColumn: nc_key
+
+	/// Nonconformity ID, NC-YYYY-######.
+	column 'NC ID'
+		dataType: string
+		lineageTag: 7b7f7429-06eb-4ce3-9662-6a39536ac249
+		summarizeBy: none
+		sourceColumn: nc_id
+
+	column 'Date Key'
+		dataType: int64
+		isHidden
+		lineageTag: bda0220d-5d5e-487a-b455-bcb97f35d42e
+		summarizeBy: none
+		sourceColumn: date_key
+
+	column 'Shift Key'
+		dataType: int64
+		isHidden
+		lineageTag: 2fc73d35-875f-49a5-b435-6be551766895
+		summarizeBy: none
+		sourceColumn: shift_key
+
+	column 'Line Key'
+		dataType: int64
+		isHidden
+		lineageTag: 9f61a061-b881-418f-a57e-5058d628b308
+		summarizeBy: none
+		sourceColumn: line_key
+
+	column 'Part Key'
+		dataType: int64
+		isHidden
+		lineageTag: aa8540e9-7007-4281-8eed-0c98ad8fa1c5
+		summarizeBy: none
+		sourceColumn: part_key
+
+	column 'Stage Key'
+		dataType: int64
+		isHidden
+		lineageTag: bd9c1986-4f12-4200-8537-0d07f2e3d200
+		summarizeBy: none
+		sourceColumn: stage_key
+
+	column 'Defect Type Key'
+		dataType: int64
+		isHidden
+		lineageTag: e54e35cb-52b9-4873-a9e3-894a592588f5
+		summarizeBy: none
+		sourceColumn: defect_type_key
+
+	column 'Qty Affected'
+		dataType: int64
+		isHidden
+		lineageTag: fd44e360-feac-4a72-a485-19159e75d758
+		summarizeBy: none
+		sourceColumn: qty_affected
+
+	/// Scrap, Rework, Use-as-is or Return-to-supplier.
+	column Disposition
+		dataType: string
+		lineageTag: dc110c5e-c8d2-451c-a3d5-41d321d14a10
+		summarizeBy: none
+		sourceColumn: disposition
+
+	/// 8D report investigating this NC (blank = none). Inactive relationship (D9).
+	column '8D Key'
+		dataType: int64
+		isHidden
+		lineageTag: 6c2baa45-ff51-4ab9-93cc-04a49a83c408
+		summarizeBy: none
+		sourceColumn: eight_d_key
+
+	partition Nonconformities = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServer, SqlDatabase),
+				    Data = Source{[Schema = "rpt", Item = "v_fact_nonconformity"]}[Data]
+				in
+				    Data
+

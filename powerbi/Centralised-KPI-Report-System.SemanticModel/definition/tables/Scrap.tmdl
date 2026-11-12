@@ -1,0 +1,114 @@
+/// One row per scrap booking (rpt.v_fact_scrap). Cost uses the unit-cost snapshot taken at load (D7).
+table Scrap
+	lineageTag: 52535efb-0d30-4cdc-a5c5-c76f045d0354
+
+	/// Units scrapped (scrap bookings).
+	measure 'Scrapped Quantity' = SUM ( 'Scrap'[Qty Scrapped] )
+		formatString: #,##0
+		displayFolder: Scrap
+		lineageTag: 65bbd6ab-4ff2-4dc1-954e-4b73dbcb14f8
+
+	/// Units scrapped x unit cost snapshot at load time (D7). Target <= EUR 75k per month (D24).
+	measure 'Scrap Cost €' = SUM ( 'Scrap'[Scrap Cost] )
+		formatString: € #,##0
+		displayFolder: Scrap
+		lineageTag: 29d24688-7eea-481f-b1fc-d9b3d55d3cdc
+
+	/// Units scrapped / units started. Target <= 1.5 %.
+	measure 'Scrap Rate %' = DIVIDE ( [Scrapped Quantity], [Production Volume] )
+		formatString: 0.00%
+		displayFolder: Scrap
+		lineageTag: e58fdefa-ca9c-435c-a4fa-0ef4008162f8
+
+	/// Internal Cost Of Poor Quality = scrap cost + rework cost. External failure, appraisal and prevention costs are not in the source data.
+	measure 'COPQ €' = [Scrap Cost €] + [Rework Cost €]
+		formatString: € #,##0
+		displayFolder: Cost of Poor Quality
+		lineageTag: d8156a38-70d7-4274-b32c-3793cd4fca2b
+
+	/// Internal COPQ as a share of production value (units started x standard cost). Target <= 1.5 %.
+	measure 'COPQ %' = DIVIDE ( [COPQ €], [Production Value €] )
+		formatString: 0.00%
+		displayFolder: Cost of Poor Quality
+		lineageTag: e604cd20-b22f-4dfc-a0cd-8d1cd51aae0b
+
+	column 'Scrap Key'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: 2d6c3a0c-4dcc-4f35-a5c8-d0e70f31bcd1
+		summarizeBy: none
+		sourceColumn: scrap_key
+
+	/// Scrap booking ID, SC-YYYY-######.
+	column 'Scrap ID'
+		dataType: string
+		lineageTag: f66c5526-e05c-4fac-9f0e-e35edae76ec7
+		summarizeBy: none
+		sourceColumn: scrap_id
+
+	column 'Date Key'
+		dataType: int64
+		isHidden
+		lineageTag: 86d86014-5111-412d-8880-79f15bbe0147
+		summarizeBy: none
+		sourceColumn: date_key
+
+	column 'Shift Key'
+		dataType: int64
+		isHidden
+		lineageTag: c8c7a33b-dd10-4aec-a873-42a61f0b04d9
+		summarizeBy: none
+		sourceColumn: shift_key
+
+	column 'Line Key'
+		dataType: int64
+		isHidden
+		lineageTag: ec299e3e-2dd3-46c1-b3cc-18ef26f369ea
+		summarizeBy: none
+		sourceColumn: line_key
+
+	column 'Part Key'
+		dataType: int64
+		isHidden
+		lineageTag: 6c995ceb-408b-4bb3-96df-c8b314cd19db
+		summarizeBy: none
+		sourceColumn: part_key
+
+	column 'Defect Type Key'
+		dataType: int64
+		isHidden
+		lineageTag: 399261c0-4891-4590-93fe-bddf1177c604
+		summarizeBy: none
+		sourceColumn: defect_type_key
+
+	column 'Qty Scrapped'
+		dataType: int64
+		isHidden
+		lineageTag: b89d57b8-66f5-45e3-999c-2afd9f21df86
+		summarizeBy: none
+		sourceColumn: qty_scrapped
+
+	column 'Unit Cost'
+		dataType: decimal
+		isHidden
+		lineageTag: e39ffde7-34f3-45dc-b089-64ddd4dea1c7
+		summarizeBy: none
+		sourceColumn: unit_cost_eur
+
+	column 'Scrap Cost'
+		dataType: decimal
+		isHidden
+		lineageTag: 34ceb217-2703-4bdb-89e6-da60b010075f
+		summarizeBy: none
+		sourceColumn: scrap_cost_eur
+
+	partition Scrap = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServer, SqlDatabase),
+				    Data = Source{[Schema = "rpt", Item = "v_fact_scrap"]}[Data]
+				in
+				    Data
+

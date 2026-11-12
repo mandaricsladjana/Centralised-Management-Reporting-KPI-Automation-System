@@ -1,0 +1,168 @@
+relationship 'Production_Date Key_Calendar_Date Key'
+	fromColumn: Production.'Date Key'
+	toColumn: Calendar.'Date Key'
+
+relationship 'Production_Shift Key_Shift_Shift Key'
+	fromColumn: Production.'Shift Key'
+	toColumn: Shift.'Shift Key'
+
+relationship 'Production_Line Key_Production Line_Line Key'
+	fromColumn: Production.'Line Key'
+	toColumn: 'Production Line'.'Line Key'
+
+relationship 'Production_Part Key_Part_Part Key'
+	fromColumn: Production.'Part Key'
+	toColumn: Part.'Part Key'
+
+relationship 'Inspections_Date Key_Calendar_Date Key'
+	fromColumn: Inspections.'Date Key'
+	toColumn: Calendar.'Date Key'
+
+relationship 'Inspections_Shift Key_Shift_Shift Key'
+	fromColumn: Inspections.'Shift Key'
+	toColumn: Shift.'Shift Key'
+
+relationship 'Inspections_Line Key_Production Line_Line Key'
+	fromColumn: Inspections.'Line Key'
+	toColumn: 'Production Line'.'Line Key'
+
+relationship 'Inspections_Part Key_Part_Part Key'
+	fromColumn: Inspections.'Part Key'
+	toColumn: Part.'Part Key'
+
+relationship 'Inspections_Stage Key_Inspection Stage_Stage Key'
+	fromColumn: Inspections.'Stage Key'
+	toColumn: 'Inspection Stage'.'Stage Key'
+
+relationship 'Nonconformities_Date Key_Calendar_Date Key'
+	fromColumn: Nonconformities.'Date Key'
+	toColumn: Calendar.'Date Key'
+
+relationship 'Nonconformities_Shift Key_Shift_Shift Key'
+	fromColumn: Nonconformities.'Shift Key'
+	toColumn: Shift.'Shift Key'
+
+relationship 'Nonconformities_Line Key_Production Line_Line Key'
+	fromColumn: Nonconformities.'Line Key'
+	toColumn: 'Production Line'.'Line Key'
+
+relationship 'Nonconformities_Part Key_Part_Part Key'
+	fromColumn: Nonconformities.'Part Key'
+	toColumn: Part.'Part Key'
+
+relationship 'Nonconformities_Stage Key_Inspection Stage_Stage Key'
+	fromColumn: Nonconformities.'Stage Key'
+	toColumn: 'Inspection Stage'.'Stage Key'
+
+relationship 'Nonconformities_Defect Type Key_Defect Type_Defect Type Key'
+	fromColumn: Nonconformities.'Defect Type Key'
+	toColumn: 'Defect Type'.'Defect Type Key'
+
+relationship 'Scrap_Date Key_Calendar_Date Key'
+	fromColumn: Scrap.'Date Key'
+	toColumn: Calendar.'Date Key'
+
+relationship 'Scrap_Shift Key_Shift_Shift Key'
+	fromColumn: Scrap.'Shift Key'
+	toColumn: Shift.'Shift Key'
+
+relationship 'Scrap_Line Key_Production Line_Line Key'
+	fromColumn: Scrap.'Line Key'
+	toColumn: 'Production Line'.'Line Key'
+
+relationship 'Scrap_Part Key_Part_Part Key'
+	fromColumn: Scrap.'Part Key'
+	toColumn: Part.'Part Key'
+
+relationship 'Scrap_Defect Type Key_Defect Type_Defect Type Key'
+	fromColumn: Scrap.'Defect Type Key'
+	toColumn: 'Defect Type'.'Defect Type Key'
+
+relationship 'Rework_Date Key_Calendar_Date Key'
+	fromColumn: Rework.'Date Key'
+	toColumn: Calendar.'Date Key'
+
+relationship 'Rework_Shift Key_Shift_Shift Key'
+	fromColumn: Rework.'Shift Key'
+	toColumn: Shift.'Shift Key'
+
+relationship 'Rework_Line Key_Production Line_Line Key'
+	fromColumn: Rework.'Line Key'
+	toColumn: 'Production Line'.'Line Key'
+
+relationship 'Rework_Part Key_Part_Part Key'
+	fromColumn: Rework.'Part Key'
+	toColumn: Part.'Part Key'
+
+relationship 'Rework_Defect Type Key_Defect Type_Defect Type Key'
+	fromColumn: Rework.'Defect Type Key'
+	toColumn: 'Defect Type'.'Defect Type Key'
+
+relationship '8D Reports_Opened Date Key_Calendar_Date Key'
+	fromColumn: '8D Reports'.'Opened Date Key'
+	toColumn: Calendar.'Date Key'
+
+relationship '8D Reports_Target Closure Date Key_Calendar_Date Key'
+	isActive: false
+	fromColumn: '8D Reports'.'Target Closure Date Key'
+	toColumn: Calendar.'Date Key'
+
+relationship '8D Reports_Closed Date Key_Calendar_Date Key'
+	isActive: false
+	fromColumn: '8D Reports'.'Closed Date Key'
+	toColumn: Calendar.'Date Key'
+
+relationship '8D Reports_Part Key_Part_Part Key'
+	fromColumn: '8D Reports'.'Part Key'
+	toColumn: Part.'Part Key'
+
+relationship '8D Reports_Line Key_Production Line_Line Key'
+	fromColumn: '8D Reports'.'Line Key'
+	toColumn: 'Production Line'.'Line Key'
+
+relationship '8D Reports_Defect Type Key_Defect Type_Defect Type Key'
+	fromColumn: '8D Reports'.'Defect Type Key'
+	toColumn: 'Defect Type'.'Defect Type Key'
+
+relationship '8D Actions_8D Key_8D Reports_8D Key'
+	fromColumn: '8D Actions'.'8D Key'
+	toColumn: '8D Reports'.'8D Key'
+
+relationship '8D Actions_Due Date Key_Calendar_Date Key'
+	isActive: false
+	fromColumn: '8D Actions'.'Due Date Key'
+	toColumn: Calendar.'Date Key'
+
+relationship '8D Actions_Completed Date Key_Calendar_Date Key'
+	isActive: false
+	fromColumn: '8D Actions'.'Completed Date Key'
+	toColumn: Calendar.'Date Key'
+
+relationship 'Nonconformities_8D Key_8D Reports_8D Key'
+	isActive: false
+	fromColumn: Nonconformities.'8D Key'
+	toColumn: '8D Reports'.'8D Key'
+
+relationship 'Audit Findings_Audit Date Key_Calendar_Date Key'
+	fromColumn: 'Audit Findings'.'Audit Date Key'
+	toColumn: Calendar.'Date Key'
+
+relationship 'Audit Findings_Due Date Key_Calendar_Date Key'
+	isActive: false
+	fromColumn: 'Audit Findings'.'Due Date Key'
+	toColumn: Calendar.'Date Key'
+
+relationship 'Audit Findings_Closed Date Key_Calendar_Date Key'
+	isActive: false
+	fromColumn: 'Audit Findings'.'Closed Date Key'
+	toColumn: Calendar.'Date Key'
+
+relationship 'Audit Findings_Line Key_Production Line_Line Key'
+	fromColumn: 'Audit Findings'.'Line Key'
+	toColumn: 'Production Line'.'Line Key'
+
+relationship 'Audit Findings_8D Key_8D Reports_8D Key'
+	isActive: false
+	fromColumn: 'Audit Findings'.'8D Key'
+	toColumn: '8D Reports'.'8D Key'
+

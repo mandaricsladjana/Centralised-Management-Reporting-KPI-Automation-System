@@ -1,0 +1,43 @@
+/// Production shifts (rpt.v_dim_shift). A night shift belongs to the date it starts. Includes Unknown / Not applicable members.
+table Shift
+	lineageTag: 83a669a3-f0bf-4eb7-a185-dc1d1eb4c6b0
+
+	column 'Shift Key'
+		dataType: int64
+		isHidden
+		lineageTag: f680e2a4-bf37-48f6-b359-8c1c388e2099
+		summarizeBy: none
+		sourceColumn: shift_key
+
+	/// E = Early, L = Late, N = Night.
+	column 'Shift Code'
+		dataType: string
+		lineageTag: 96d4eff1-e827-4710-a78a-7af976aa987c
+		summarizeBy: none
+		sourceColumn: shift_code
+		sortByColumn: 'Shift Sort Order'
+
+	/// Shift name: Early 06-14, Late 14-22, Night 22-06.
+	column Shift
+		dataType: string
+		lineageTag: 7e2bf8bb-f1f9-4fa6-8a3f-141c386c492c
+		summarizeBy: none
+		sourceColumn: shift_name
+		sortByColumn: 'Shift Sort Order'
+
+	column 'Shift Sort Order'
+		dataType: int64
+		isHidden
+		lineageTag: 5d0a97a6-cf14-4ec6-94a9-f631ae21f824
+		summarizeBy: none
+		sourceColumn: sort_order
+
+	partition Shift = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServer, SqlDatabase),
+				    Data = Source{[Schema = "rpt", Item = "v_dim_shift"]}[Data]
+				in
+				    Data
+

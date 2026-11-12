@@ -1,0 +1,149 @@
+/// Inspection results, grain date x shift x line x part x stage (rpt.v_fact_inspection). Is Final Stage marks the line's last stage (D22).
+table Inspections
+	lineageTag: 78fd8e2c-aef4-4f7b-b628-30aec6989114
+
+	/// Units inspected, all stages in the filter context. A unit is counted once per stage it passes through.
+	measure 'Inspected Quantity' = SUM ( 'Inspections'[Qty Inspected] )
+		formatString: #,##0
+		displayFolder: Quantities
+		lineageTag: aaa9972b-2e01-461a-841c-75e688c125b2
+
+	/// Units inspected at each line's final stage (D22). Denominator of Defect Rate %, DPU and DPMO.
+	measure 'Inspected Quantity Final Stage' = CALCULATE ( SUM ( 'Inspections'[Qty Inspected] ), KEEPFILTERS ( 'Inspections'[Is Final Stage] = TRUE () ) )
+		formatString: #,##0
+		displayFolder: Quantities
+		lineageTag: 1ec454b9-70d2-411e-b1ca-62054cb01f86
+
+	/// Units that passed the line's final stage the first time (blueprint 6.2).
+	measure 'Passed Quantity' = CALCULATE ( SUM ( 'Inspections'[Qty Passed First Time] ), KEEPFILTERS ( 'Inspections'[Is Final Stage] = TRUE () ) )
+		formatString: #,##0
+		displayFolder: Quantities
+		lineageTag: fb741bba-b9c2-4416-ac51-9dae22c80a62
+
+	/// Units that failed an inspection, all stages.
+	measure 'Rejected Quantity' = SUM ( 'Inspections'[Qty Failed] )
+		formatString: #,##0
+		displayFolder: Quantities
+		lineageTag: 453031ef-72f3-47a1-bee1-3909366745c7
+
+	/// First Pass Yield: share of units that passed an inspection stage the first time (rework counts as failure). Defined per stage: slice by Inspection Stage; do not compare across stages. Target >= 97 %.
+	measure 'FPY %' = DIVIDE ( SUM ( 'Inspections'[Qty Passed First Time] ), SUM ( 'Inspections'[Qty Inspected] ) )
+		formatString: 0.00%
+		displayFolder: Yield
+		lineageTag: dd59090a-f07c-4327-a780-160e6750f7cf
+
+	/// First Pass Yield at each line's final stage (SQL: rpt.v_kpi_monthly.fpy_final_stage_pct).
+	measure 'FPY Final Stage %' = DIVIDE ( [Passed Quantity], [Inspected Quantity Final Stage] )
+		formatString: 0.00%
+		displayFolder: Yield
+		lineageTag: 118a9d8d-09d4-4b5a-9d4b-666b739b3318
+
+	/// First Time Yield (= rolled throughput yield, D1): product of the stage FPYs of a line. Across several lines: line FTYs weighted by Production Volume (blueprint 6.2). Target >= 94 %.
+	measure 'FTY %' =
+			VAR _lines =
+			    ADDCOLUMNS (
+			        VALUES ( 'Production Line'[Line Key] ),
+			        "@fty",
+			            VAR _stages =
+			                FILTER (
+			                    ADDCOLUMNS (
+			                        VALUES ( 'Inspection Stage'[Stage Key] ),
+			                        "@inspected", CALCULATE ( SUM ( 'Inspections'[Qty Inspected] ) ),
+			                        "@passed", CALCULATE ( SUM ( 'Inspections'[Qty Passed First Time] ) )
+			                    ),
+			                    [@inspected] > 0
+			                )
+			            RETURN
+			                IF ( NOT ISEMPTY ( _stages ), PRODUCTX ( _stages, DIVIDE ( [@passed], [@inspected] ) ) ),
+			        "@volume", [Production Volume]
+			    )
+			VAR _weighted =
+			    SUMX ( FILTER ( _lines, NOT ISBLANK ( [@fty] ) ), [@fty] * [@volume] )
+			VAR _volume =
+			    SUMX ( FILTER ( _lines, NOT ISBLANK ( [@fty] ) ), [@volume] )
+			RETURN
+			    DIVIDE ( _weighted, _volume )
+		formatString: 0.00%
+		displayFolder: Yield
+		lineageTag: fe75f28e-d138-43d2-90e2-7c3686e1bdfb
+
+	column 'Inspection Key'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: 8654fadc-f94f-4bbc-8c74-93b2faf468c7
+		summarizeBy: none
+		sourceColumn: inspection_key
+
+	column 'Date Key'
+		dataType: int64
+		isHidden
+		lineageTag: 59438a85-3283-40e0-a522-d319fbca1922
+		summarizeBy: none
+		sourceColumn: date_key
+
+	column 'Shift Key'
+		dataType: int64
+		isHidden
+		lineageTag: b643849b-b136-40c8-ab84-4eda4f62d385
+		summarizeBy: none
+		sourceColumn: shift_key
+
+	column 'Line Key'
+		dataType: int64
+		isHidden
+		lineageTag: 7023133e-609d-42cc-9198-04b5c03de7dc
+		summarizeBy: none
+		sourceColumn: line_key
+
+	column 'Part Key'
+		dataType: int64
+		isHidden
+		lineageTag: 1c1357e4-03d8-4c50-8b37-b4dae7fedc54
+		summarizeBy: none
+		sourceColumn: part_key
+
+	column 'Stage Key'
+		dataType: int64
+		isHidden
+		lineageTag: 19c3f791-db5e-42db-8912-0aee5789b106
+		summarizeBy: none
+		sourceColumn: stage_key
+
+	column 'Qty Inspected'
+		dataType: int64
+		isHidden
+		lineageTag: 6eb4e715-8e40-491a-ac5c-8a9e557b9d31
+		summarizeBy: none
+		sourceColumn: qty_inspected
+
+	column 'Qty Passed First Time'
+		dataType: int64
+		isHidden
+		lineageTag: 07b8f4d9-90d0-4340-a102-454d93f530b8
+		summarizeBy: none
+		sourceColumn: qty_passed_first_time
+
+	column 'Qty Failed'
+		dataType: int64
+		isHidden
+		lineageTag: a6b6e80b-a438-40f3-b70c-a864d562a943
+		summarizeBy: none
+		sourceColumn: qty_failed
+
+	column 'Is Final Stage'
+		dataType: boolean
+		isHidden
+		lineageTag: f5da6a6e-db75-41fd-b0bf-c22a3c384ad4
+		summarizeBy: none
+		sourceColumn: is_final_stage
+
+	partition Inspections = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServer, SqlDatabase),
+				    Data = Source{[Schema = "rpt", Item = "v_fact_inspection"]}[Data]
+				in
+				    Data
+

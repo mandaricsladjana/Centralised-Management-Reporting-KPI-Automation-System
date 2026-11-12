@@ -1,0 +1,53 @@
+/// Defect catalogue (rpt.v_dim_defect_type) plus Unknown / Not applicable.
+table 'Defect Type'
+	lineageTag: 599a59c7-5eef-43a4-a4e9-2cad7985e173
+
+	column 'Defect Type Key'
+		dataType: int64
+		isHidden
+		lineageTag: f0442a81-bbbd-4867-9148-9fa6577cb845
+		summarizeBy: none
+		sourceColumn: defect_type_key
+
+	/// <category>-<nn>, e.g. SUR-01.
+	column 'Defect Code'
+		dataType: string
+		lineageTag: 0e745f7e-ddf0-4442-9a93-fbbfb5e5f5bd
+		summarizeBy: none
+		sourceColumn: defect_code
+
+	/// Defect description, e.g. Sink mark.
+	column Defect
+		dataType: string
+		lineageTag: c36a7cf9-d648-4d2e-85b2-c61e5e815002
+		summarizeBy: none
+		sourceColumn: defect_name
+
+	column 'Defect Category'
+		dataType: string
+		lineageTag: 9b988cb0-6a10-4589-9e22-f53a17249df9
+		summarizeBy: none
+		sourceColumn: defect_category
+
+	/// A critical (safety/function), B major, C minor/cosmetic.
+	column Severity
+		dataType: string
+		lineageTag: 2ba7ec44-d26a-4f14-8436-a165a8b7e5a5
+		summarizeBy: none
+		sourceColumn: severity
+
+	column 'Severity Label'
+		dataType: string
+		lineageTag: 113eaab8-5e62-43cb-a911-3e47cf68b948
+		summarizeBy: none
+		sourceColumn: severity_label
+
+	partition 'Defect Type' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServer, SqlDatabase),
+				    Data = Source{[Schema = "rpt", Item = "v_dim_defect_type"]}[Data]
+				in
+				    Data
+

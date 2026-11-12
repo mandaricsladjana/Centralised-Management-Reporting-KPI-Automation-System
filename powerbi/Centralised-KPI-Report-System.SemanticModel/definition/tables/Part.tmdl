@@ -1,0 +1,128 @@
+/// Parts with their vehicle program flattened in (decision D10, rpt.v_dim_part). Lifecycle phase is derived as of today.
+table Part
+	lineageTag: 4e3c26be-fb4e-4712-b833-9db5a72c7cc7
+
+	column 'Part Key'
+		dataType: int64
+		isHidden
+		lineageTag: 12a6903b-7dcb-42bd-a669-dfa3f787294d
+		summarizeBy: none
+		sourceColumn: part_key
+
+	/// DAC-#####; UNKNOWN = part number not in master data.
+	column 'Part Number'
+		dataType: string
+		lineageTag: aedaf3e7-c38b-4714-ac50-8f5988dc9a84
+		summarizeBy: none
+		sourceColumn: part_number
+
+	/// Part description.
+	column Part
+		dataType: string
+		lineageTag: 4e80042b-0d21-4a8a-b2ef-d18f1ba2b0c2
+		summarizeBy: none
+		sourceColumn: part_name
+
+	column 'Component Type'
+		dataType: string
+		lineageTag: 3c677aad-1094-41ef-9d81-bf73dbda5036
+		summarizeBy: none
+		sourceColumn: component_type
+
+	/// Current standard cost in EUR; facts keep their own cost snapshot (D7).
+	column 'Standard Unit Cost'
+		dataType: decimal
+		isHidden
+		formatString: € #,##0.00
+		lineageTag: 62f1f3bc-9299-4445-8be9-dff0db817185
+		summarizeBy: none
+		sourceColumn: standard_unit_cost_eur
+
+	/// Defect opportunities per unit, used by DPMO.
+	column 'Opportunities Per Unit'
+		dataType: int64
+		isHidden
+		lineageTag: cd9df2d0-b43a-4ee7-b977-c841cd55630b
+		summarizeBy: none
+		sourceColumn: opportunities_per_unit
+
+	column 'Is Active'
+		dataType: boolean
+		isHidden
+		lineageTag: b177ed1d-c50d-485c-af17-1564755bb725
+		summarizeBy: none
+		sourceColumn: is_active
+
+	column 'Primary Line Code'
+		dataType: string
+		isHidden
+		lineageTag: e4827cb0-90ae-4d51-8d0c-db6e05baec06
+		summarizeBy: none
+		sourceColumn: primary_line_code
+
+	column 'Primary Line'
+		dataType: string
+		isHidden
+		lineageTag: f2ace570-1b0f-45e1-bc04-5ae8d6dcd0c4
+		summarizeBy: none
+		sourceColumn: primary_line_name
+
+	/// Vehicle program code, e.g. VP-EV-D.
+	column 'Program Code'
+		dataType: string
+		lineageTag: 36e7427c-6b2c-4ab4-b5dc-fa2e9796a2f9
+		summarizeBy: none
+		sourceColumn: program_code
+
+	/// Vehicle program name.
+	column Program
+		dataType: string
+		lineageTag: c085c6fb-b1b3-4e4f-bcb6-1aa0e2368bb9
+		summarizeBy: none
+		sourceColumn: program_name
+
+	/// Fictional OEM (Original Equipment Manufacturer, the car maker).
+	column 'OEM Customer'
+		dataType: string
+		lineageTag: 02734d03-f333-4604-95b2-6b0fff0f657d
+		summarizeBy: none
+		sourceColumn: oem_customer
+
+	column 'Vehicle Segment'
+		dataType: string
+		lineageTag: 5b779456-8cb3-4a0a-9c4f-be3e96dba453
+		summarizeBy: none
+		sourceColumn: vehicle_segment
+
+	/// Start of production of the program.
+	column 'SOP Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: d89f80df-f599-418c-8bc1-18a453661bc2
+		summarizeBy: none
+		sourceColumn: sop_date
+
+	/// End of production; blank = still running.
+	column 'EOP Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 87f47a06-c8d6-4847-a9d8-a7450a6e6b44
+		summarizeBy: none
+		sourceColumn: eop_date
+
+	/// As of today: Launch (first 90 days after SOP), Serial, Run-out (last 180 days before EOP), Ended.
+	column 'Lifecycle Phase'
+		dataType: string
+		lineageTag: 7c4c3dab-7fbc-4b1a-b5a9-1a3d7e7c7872
+		summarizeBy: none
+		sourceColumn: lifecycle_phase
+
+	partition Part = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServer, SqlDatabase),
+				    Data = Source{[Schema = "rpt", Item = "v_dim_part"]}[Data]
+				in
+				    Data
+

@@ -1,0 +1,42 @@
+/// Inspection stages (rpt.v_dim_inspection_stage): IPC in-process check, EOL end-of-line test, FA final audit.
+table 'Inspection Stage'
+	lineageTag: e13b5441-b012-4182-896e-b956eb7c366f
+
+	column 'Stage Key'
+		dataType: int64
+		isHidden
+		lineageTag: a138a3aa-28d8-4a77-86ec-8136bc8961e8
+		summarizeBy: none
+		sourceColumn: stage_key
+
+	/// IPC = In-Process Check, EOL = End-Of-Line test, FA = Final Audit.
+	column 'Stage Code'
+		dataType: string
+		lineageTag: 5f0dedd8-d7cd-4a41-9b1e-4767c6612cab
+		summarizeBy: none
+		sourceColumn: stage_code
+		sortByColumn: 'Stage Sequence'
+
+	column Stage
+		dataType: string
+		lineageTag: 851f437e-23c1-4afd-a6d5-8fa6be842e48
+		summarizeBy: none
+		sourceColumn: stage_name
+		sortByColumn: 'Stage Sequence'
+
+	column 'Stage Sequence'
+		dataType: int64
+		isHidden
+		lineageTag: 223a1580-be95-4de1-8ae7-2dc4f1d4c7d8
+		summarizeBy: none
+		sourceColumn: stage_sequence
+
+	partition 'Inspection Stage' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServer, SqlDatabase),
+				    Data = Source{[Schema = "rpt", Item = "v_dim_inspection_stage"]}[Data]
+				in
+				    Data
+

@@ -1,0 +1,234 @@
+/// One row per audit finding (rpt.v_fact_audit_finding). Line N/A = plant-wide finding. Active calendar relationship: audit date.
+table 'Audit Findings'
+	lineageTag: f4dcad06-1ba3-49a6-8863-4f5d12fa8f99
+
+	/// Audit findings raised in the selected period (active relationship: audit date).
+	measure '# Findings Raised' = COUNTROWS ( 'Audit Findings' )
+		formatString: #,##0
+		displayFolder: Findings
+		lineageTag: 95da98c5-00b8-4f71-ac16-ce222f7d3792
+
+	/// Major nonconformities raised in audits in the period. Target 0.
+	measure 'Major NCs' = CALCULATE ( COUNTROWS ( 'Audit Findings' ), KEEPFILTERS ( 'Audit Findings'[Classification] = "Major NC" ) )
+		formatString: #,##0
+		displayFolder: Findings
+		lineageTag: fea4eb40-098d-4d97-99ce-81533baae2a6
+
+	/// Audit findings closed in the selected period.
+	measure '# Findings Closed' = CALCULATE ( COUNTROWS ( 'Audit Findings' ), USERELATIONSHIP ( 'Audit Findings'[Closed Date Key], 'Calendar'[Date Key] ) )
+		formatString: #,##0
+		displayFolder: Closure
+		lineageTag: ac836ba6-4bb2-4d42-a28f-b7756205eaa9
+
+	/// Average days from audit to closure for findings closed in the period. Target <= 30 days.
+	measure 'Avg Finding Closure Days' = CALCULATE ( AVERAGE ( 'Audit Findings'[Finding Days To Close] ), USERELATIONSHIP ( 'Audit Findings'[Closed Date Key], 'Calendar'[Date Key] ) )
+		formatString: #,##0.0
+		displayFolder: Closure
+		lineageTag: a5f9fe52-fc4b-47fe-a3b6-e5d6687735dd
+
+	/// Findings closed on or before their due date / findings closed in the period. Target >= 90 %.
+	measure 'Audit On-time Closure %' =
+			CALCULATE (
+			    DIVIDE (
+			        CALCULATE ( COUNTROWS ( 'Audit Findings' ), KEEPFILTERS ( 'Audit Findings'[Is Finding Closed On Time] = TRUE () ) ),
+			        COUNTROWS ( 'Audit Findings' )
+			    ),
+			    USERELATIONSHIP ( 'Audit Findings'[Closed Date Key], 'Calendar'[Date Key] )
+			)
+		formatString: 0.0%
+		displayFolder: Closure
+		lineageTag: e67b6b94-2069-4e90-ad5b-234f2c037983
+
+	/// Audit findings due for closure in the selected period.
+	measure '# Findings Due' = CALCULATE ( COUNTROWS ( 'Audit Findings' ), USERELATIONSHIP ( 'Audit Findings'[Due Date Key], 'Calendar'[Date Key] ) )
+		formatString: #,##0
+		displayFolder: Closure
+		lineageTag: 5b533dba-1028-4515-9032-6cf663d3fd76
+
+	/// Audit findings open at the end of the selected period (or today). Snapshot: do not sum over months.
+	measure 'Open Findings' =
+			VAR _asOf = MIN ( MAX ( 'Calendar'[Date] ), TODAY () )
+			RETURN
+			    CALCULATE (
+			        COUNTROWS ( 'Audit Findings' ),
+			        REMOVEFILTERS ( 'Calendar' ),
+			        'Audit Findings'[Audit Date] <= _asOf,
+			        FILTER ( ALL ( 'Audit Findings'[Finding Closed Date] ), ISBLANK ( 'Audit Findings'[Finding Closed Date] ) || 'Audit Findings'[Finding Closed Date] > _asOf )
+			    )
+		formatString: #,##0
+		displayFolder: Snapshot
+		lineageTag: 6cc3d59b-404f-4aa6-a365-8cd85b6358c3
+
+	/// Open audit findings past their due date at the end of the selected period. Target 0.
+	measure 'Overdue Findings' =
+			VAR _asOf = MIN ( MAX ( 'Calendar'[Date] ), TODAY () )
+			RETURN
+			    CALCULATE (
+			        COUNTROWS ( 'Audit Findings' ),
+			        REMOVEFILTERS ( 'Calendar' ),
+			        'Audit Findings'[Audit Date] <= _asOf,
+			        'Audit Findings'[Finding Due Date] < _asOf,
+			        FILTER ( ALL ( 'Audit Findings'[Finding Closed Date] ), ISBLANK ( 'Audit Findings'[Finding Closed Date] ) || 'Audit Findings'[Finding Closed Date] > _asOf )
+			    )
+		formatString: #,##0
+		displayFolder: Snapshot
+		lineageTag: 7773910f-dbf2-44c5-8a84-ce60c70e1a27
+
+	column 'Finding Key'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: 0d8851a9-3ded-45d7-827e-775f92d14569
+		summarizeBy: none
+		sourceColumn: finding_key
+
+	column 'Finding ID'
+		dataType: string
+		lineageTag: 568bf227-55de-48cb-8775-66bfb412e4a9
+		summarizeBy: none
+		sourceColumn: finding_id
+
+	/// One audit produces several findings.
+	column 'Audit ID'
+		dataType: string
+		lineageTag: ec2e4aef-9b2b-4f5d-8eb5-a58f57ab15a9
+		summarizeBy: none
+		sourceColumn: audit_id
+
+	column 'Audit Date Key'
+		dataType: int64
+		isHidden
+		lineageTag: 3f666462-8776-4962-8bc7-9f22f5e610a6
+		summarizeBy: none
+		sourceColumn: audit_date_key
+
+	/// System, Process (VDA 6.3), Product, Layered Process or Customer.
+	column 'Audit Type'
+		dataType: string
+		lineageTag: 86d407a3-b23e-4d09-8c32-d5584aba8a6d
+		summarizeBy: none
+		sourceColumn: audit_type
+
+	/// Clause reference, e.g. IATF 16949 8.5.1 (no standard text reproduced).
+	column 'Standard Reference'
+		dataType: string
+		lineageTag: 0f66235b-b66d-4408-9510-27416c575694
+		summarizeBy: none
+		sourceColumn: standard_reference
+
+	column 'Line Key'
+		dataType: int64
+		isHidden
+		lineageTag: e5d0d49b-f782-44db-8e19-56c477890208
+		summarizeBy: none
+		sourceColumn: line_key
+
+	/// Major NC, Minor NC, Observation or OFI (Opportunity For Improvement).
+	column Classification
+		dataType: string
+		lineageTag: 1e3834f1-4365-4aa5-bbd4-1eb552e0ca6b
+		summarizeBy: none
+		sourceColumn: classification
+		sortByColumn: 'Classification Sort'
+
+	column Finding
+		dataType: string
+		lineageTag: 81aac74a-c335-476d-82be-f8b6f84a5cef
+		summarizeBy: none
+		sourceColumn: finding_description
+
+	column 'Finding Owner'
+		dataType: string
+		lineageTag: 54ed9268-bc70-4849-a02c-d260b3a3d818
+		summarizeBy: none
+		sourceColumn: owner_name
+
+	column 'Due Date Key'
+		dataType: int64
+		isHidden
+		lineageTag: cf85111f-5b97-4afa-88cc-efb6c9e804d7
+		summarizeBy: none
+		sourceColumn: due_date_key
+
+	column 'Closed Date Key'
+		dataType: int64
+		isHidden
+		lineageTag: 64ff8399-4f46-46dc-ae74-5ed5f1844109
+		summarizeBy: none
+		sourceColumn: closed_date_key
+
+	column '8D Key'
+		dataType: int64
+		isHidden
+		lineageTag: 75ef950c-5451-4881-b9c4-8f31c6971359
+		summarizeBy: none
+		sourceColumn: eight_d_key
+
+	column 'Finding Status Reported'
+		dataType: string
+		lineageTag: ca3c0019-4ab8-4d5a-80c5-1ca5a425f059
+		summarizeBy: none
+		sourceColumn: status_reported
+
+	column 'Audit Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: e24986a1-77a6-499b-903d-c21407372fc2
+		summarizeBy: none
+		sourceColumn: audit_date
+
+	column 'Finding Due Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 5153ca5b-2789-41e6-b785-2932abb14ded
+		summarizeBy: none
+		sourceColumn: due_date
+
+	column 'Finding Closed Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: b2f31045-3af9-4f03-9b26-d550c19b3a61
+		summarizeBy: none
+		sourceColumn: closed_date
+
+	column 'Classification Sort'
+		dataType: int64
+		isHidden
+		lineageTag: 12ebfac3-3f97-47d7-9478-145b1e037cf6
+		summarizeBy: none
+		sourceColumn: classification_sort
+
+	column 'Is Finding Closed'
+		dataType: boolean
+		lineageTag: baa1c427-9b51-44e3-be29-ebe98ef9497e
+		summarizeBy: none
+		sourceColumn: is_closed
+
+	column 'Is Finding Overdue'
+		dataType: boolean
+		lineageTag: 4e1f5554-02d8-462b-8811-1be2b9cbf5d4
+		summarizeBy: none
+		sourceColumn: is_overdue
+
+	column 'Is Finding Closed On Time'
+		dataType: boolean
+		lineageTag: 8203e465-7d3b-4a6f-ba3c-b8154ae503ce
+		summarizeBy: none
+		sourceColumn: is_closed_on_time
+
+	column 'Finding Days To Close'
+		dataType: int64
+		isHidden
+		lineageTag: 3a4c54ea-6d71-44c8-a4d3-708bb16100a0
+		summarizeBy: none
+		sourceColumn: days_to_close
+
+	partition 'Audit Findings' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServer, SqlDatabase),
+				    Data = Source{[Schema = "rpt", Item = "v_fact_audit_finding"]}[Data]
+				in
+				    Data
+

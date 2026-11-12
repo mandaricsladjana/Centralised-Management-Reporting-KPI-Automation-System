@@ -1,0 +1,81 @@
+/// Production volume, grain date x shift x line x part (rpt.v_fact_production). Qty Started is the denominator of scrap and rework rates.
+table Production
+	lineageTag: 5f8bb049-cbca-4551-80f0-7dc0b562efb2
+
+	/// Units started on the line (sum of Qty Started). Denominator of Scrap Rate % and Rework Rate %.
+	measure 'Production Volume' = SUM ( 'Production'[Qty Started] )
+		formatString: #,##0
+		displayFolder: Volume
+		lineageTag: ba18f575-a5fe-4a59-8b98-9e35f3aa57f6
+
+	/// Units planned by production scheduling.
+	measure 'Planned Volume' = SUM ( 'Production'[Qty Planned] )
+		formatString: #,##0
+		displayFolder: Volume
+		lineageTag: b0b42010-0ffd-472f-87c0-fbe49590587e
+
+	/// Units started x current standard unit cost in EUR. Denominator of COPQ %.
+	measure 'Production Value €' = SUMX ( 'Production', 'Production'[Qty Started] * RELATED ( 'Part'[Standard Unit Cost] ) )
+		formatString: € #,##0
+		displayFolder: Volume
+		lineageTag: e4372f9a-105b-4d59-b1b4-e7710115bc04
+
+	column 'Production Key'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: 8b1b6688-860f-4e6e-b56e-54b3b5f50a02
+		summarizeBy: none
+		sourceColumn: production_key
+
+	column 'Date Key'
+		dataType: int64
+		isHidden
+		lineageTag: 1fb42e10-bc26-4f40-b50b-56f1411465a0
+		summarizeBy: none
+		sourceColumn: date_key
+
+	column 'Shift Key'
+		dataType: int64
+		isHidden
+		lineageTag: 88672747-7255-4fa1-8546-0422bc1e6efa
+		summarizeBy: none
+		sourceColumn: shift_key
+
+	column 'Line Key'
+		dataType: int64
+		isHidden
+		lineageTag: 3c57142b-1be9-488c-a2c3-632658b7e369
+		summarizeBy: none
+		sourceColumn: line_key
+
+	column 'Part Key'
+		dataType: int64
+		isHidden
+		lineageTag: 596a4f7a-5c95-4576-b0b7-51a22a16568a
+		summarizeBy: none
+		sourceColumn: part_key
+
+	column 'Qty Planned'
+		dataType: int64
+		isHidden
+		lineageTag: 46a75851-a355-47df-afd0-9cba8d896d17
+		summarizeBy: none
+		sourceColumn: qty_planned
+
+	column 'Qty Started'
+		dataType: int64
+		isHidden
+		lineageTag: 3b2a9a05-1716-4319-af0b-bcd45645e28e
+		summarizeBy: none
+		sourceColumn: qty_started
+
+	partition Production = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServer, SqlDatabase),
+				    Data = Source{[Schema = "rpt", Item = "v_fact_production"]}[Data]
+				in
+				    Data
+

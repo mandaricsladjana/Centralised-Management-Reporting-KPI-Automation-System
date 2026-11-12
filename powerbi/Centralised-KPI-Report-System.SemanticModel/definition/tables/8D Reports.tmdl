@@ -1,0 +1,352 @@
+/// One row per 8D problem-solving report (rpt.v_fact_8d). Status is derived from the D8 date, not from the free-text status (blueprint 5.5). Active calendar relationship: opened date.
+table '8D Reports'
+	lineageTag: 78f39c61-bfe6-4e08-b850-6caed321dca9
+
+	/// 8D reports opened in the selected period (active relationship: opened date).
+	measure '# 8Ds Opened' = COUNTROWS ( '8D Reports' )
+		formatString: #,##0
+		displayFolder: Flow
+		lineageTag: f1e05520-1281-46f4-a8e2-3e35b80f810a
+
+	/// 8Ds opened in the period whose part and defect type had another 8D closed in the 180 days before (D23).
+	measure '# Repeat 8Ds' = CALCULATE ( COUNTROWS ( '8D Reports' ), KEEPFILTERS ( '8D Reports'[Is Repeat] = TRUE () ) )
+		formatString: #,##0
+		displayFolder: Flow
+		lineageTag: f9af1137-e652-4d40-a3c8-501e7bca4797
+
+	/// Repeat 8Ds / 8Ds opened in the period. Measures the effectiveness of past fixes. Target <= 5 %.
+	measure 'Repeat Defect Rate %' = DIVIDE ( [# Repeat 8Ds], [# 8Ds Opened] )
+		formatString: 0.0%
+		displayFolder: Flow
+		lineageTag: b8f22b2b-1850-4cfb-8520-85e5a23dc58c
+
+	/// 8D reports closed (D8 date) in the selected period.
+	measure '# 8Ds Closed' = CALCULATE ( COUNTROWS ( '8D Reports' ), USERELATIONSHIP ( '8D Reports'[Closed Date Key], 'Calendar'[Date Key] ) )
+		formatString: #,##0
+		displayFolder: Closure
+		lineageTag: 3e68ec68-6311-455f-b360-292915187da1
+
+	/// Average days from opening to D8 for 8Ds closed in the period. Target <= 60 days.
+	measure 'Avg 8D Closure Days' = CALCULATE ( AVERAGE ( '8D Reports'[Days To Close] ), USERELATIONSHIP ( '8D Reports'[Closed Date Key], 'Calendar'[Date Key] ) )
+		formatString: #,##0.0
+		displayFolder: Closure
+		lineageTag: 7c697d1a-c68b-4e9e-ba85-1877019fca6c
+
+	/// 8Ds closed on or before their target date / 8Ds closed in the period. Target >= 90 %.
+	measure '8D On-time Closure %' =
+			CALCULATE (
+			    DIVIDE (
+			        CALCULATE ( COUNTROWS ( '8D Reports' ), KEEPFILTERS ( '8D Reports'[Is Closed On Time] = TRUE () ) ),
+			        COUNTROWS ( '8D Reports' )
+			    ),
+			    USERELATIONSHIP ( '8D Reports'[Closed Date Key], 'Calendar'[Date Key] )
+			)
+		formatString: 0.0%
+		displayFolder: Closure
+		lineageTag: d84a7d83-ac33-4d25-b6bb-87610fbc2407
+
+	/// 8D reports whose target closure date falls in the selected period.
+	measure '# 8Ds Due' = CALCULATE ( COUNTROWS ( '8D Reports' ), USERELATIONSHIP ( '8D Reports'[Target Closure Date Key], 'Calendar'[Date Key] ) )
+		formatString: #,##0
+		displayFolder: Closure
+		lineageTag: 859639bf-f467-4e45-ab46-388df9a55cb6
+
+	/// 8Ds open at the end of the selected period (or today for the current period). Snapshot: do not sum over months.
+	measure 'Open 8Ds' =
+			VAR _asOf = MIN ( MAX ( 'Calendar'[Date] ), TODAY () )
+			RETURN
+			    CALCULATE (
+			        COUNTROWS ( '8D Reports' ),
+			        REMOVEFILTERS ( 'Calendar' ),
+			        '8D Reports'[Opened Date] <= _asOf,
+			        FILTER ( ALL ( '8D Reports'[Closed Date] ), ISBLANK ( '8D Reports'[Closed Date] ) || '8D Reports'[Closed Date] > _asOf )
+			    )
+		formatString: #,##0
+		displayFolder: Snapshot
+		lineageTag: 9cd17ac3-b8f5-4ef6-bb49-b41bc52e040f
+
+	/// Open 8Ds past their target closure date at the end of the selected period. Target 0.
+	measure 'Overdue 8Ds' =
+			VAR _asOf = MIN ( MAX ( 'Calendar'[Date] ), TODAY () )
+			RETURN
+			    CALCULATE (
+			        COUNTROWS ( '8D Reports' ),
+			        REMOVEFILTERS ( 'Calendar' ),
+			        '8D Reports'[Opened Date] <= _asOf,
+			        '8D Reports'[Target Closure Date] < _asOf,
+			        FILTER ( ALL ( '8D Reports'[Closed Date] ), ISBLANK ( '8D Reports'[Closed Date] ) || '8D Reports'[Closed Date] > _asOf )
+			    )
+		formatString: #,##0
+		displayFolder: Snapshot
+		lineageTag: aec56e48-d6fb-4dcb-bc6e-78aaae906bf5
+
+	/// Nonconformities investigated by the 8D reports in the filter context (inactive relationship, D9).
+	measure '# Linked NCs' =
+			CALCULATE (
+			    COUNTROWS ( 'Nonconformities' ),
+			    USERELATIONSHIP ( 'Nonconformities'[8D Key], '8D Reports'[8D Key] ),
+			    CROSSFILTER ( 'Nonconformities'[Date Key], 'Calendar'[Date Key], NONE )
+			)
+		formatString: #,##0
+		displayFolder: Links
+		lineageTag: 3df3dbac-2d88-4d50-867a-288cbe3bcfe7
+
+	/// Audit findings that led to the 8D reports in the filter context (inactive relationship, D9).
+	measure '# Linked Audit Findings' =
+			CALCULATE (
+			    COUNTROWS ( 'Audit Findings' ),
+			    USERELATIONSHIP ( 'Audit Findings'[8D Key], '8D Reports'[8D Key] ),
+			    CROSSFILTER ( 'Audit Findings'[Audit Date Key], 'Calendar'[Date Key], NONE ),
+			    CROSSFILTER ( 'Audit Findings'[Line Key], 'Production Line'[Line Key], NONE )
+			)
+		formatString: #,##0
+		displayFolder: Links
+		lineageTag: 7027b3ee-7f8f-4343-8071-8d9ecf77cbc4
+
+	column '8D Key'
+		dataType: int64
+		isHidden
+		lineageTag: 28639e19-e56d-48d1-a8c5-7211dc2b91fb
+		summarizeBy: none
+		sourceColumn: eight_d_key
+
+	/// 8D report ID, 8D-YYYY-###.
+	column '8D ID'
+		dataType: string
+		lineageTag: b09864db-9d60-4665-8fe3-9485fb7dabe6
+		summarizeBy: none
+		sourceColumn: eight_d_id
+
+	column 'Opened Date Key'
+		dataType: int64
+		isHidden
+		lineageTag: 64fefda4-ce2d-4cbe-9920-3ac2eb63c9dc
+		summarizeBy: none
+		sourceColumn: opened_date_key
+
+	column 'Part Key'
+		dataType: int64
+		isHidden
+		lineageTag: c7215fbb-caab-4932-9171-ae6c4ad5850b
+		summarizeBy: none
+		sourceColumn: part_key
+
+	column 'Line Key'
+		dataType: int64
+		isHidden
+		lineageTag: bc073f2e-741c-454f-8188-905ac8ba313c
+		summarizeBy: none
+		sourceColumn: line_key
+
+	column 'Defect Type Key'
+		dataType: int64
+		isHidden
+		lineageTag: 10873d35-5fa8-4014-b730-84fd2ea7fde8
+		summarizeBy: none
+		sourceColumn: defect_type_key
+
+	/// Internal, Customer complaint or Audit.
+	column 'Problem Source'
+		dataType: string
+		lineageTag: ec6d8835-c554-4dd3-9244-4e852d7e07d4
+		summarizeBy: none
+		sourceColumn: problem_source
+
+	/// Responsible engineer (fictional).
+	column Owner
+		dataType: string
+		lineageTag: 0cdd7b36-27e0-4475-ae5d-e634e54805f4
+		summarizeBy: none
+		sourceColumn: owner_name
+
+	column 'Owner Department'
+		dataType: string
+		lineageTag: bb02894e-9fb6-4135-88d2-b3ba625d9b39
+		summarizeBy: none
+		sourceColumn: owner_department
+
+	/// D1: team formed.
+	column 'D1 Team'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		displayFolder: Milestones
+		lineageTag: 8ac1d725-61df-4747-b863-54f49772b979
+		summarizeBy: none
+		sourceColumn: d1_date
+
+	/// D2: problem described.
+	column 'D2 Problem'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		displayFolder: Milestones
+		lineageTag: 08932568-ee19-4675-8ead-c6fdb74513c2
+		summarizeBy: none
+		sourceColumn: d2_date
+
+	/// D3: containment in place.
+	column 'D3 Containment'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		displayFolder: Milestones
+		lineageTag: 667c00bb-c426-4521-900f-52d8b6c693cf
+		summarizeBy: none
+		sourceColumn: d3_date
+
+	/// D4: root cause found.
+	column 'D4 Root Cause'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		displayFolder: Milestones
+		lineageTag: 0c5db211-8c03-44fe-92f7-ee02ef4e100e
+		summarizeBy: none
+		sourceColumn: d4_date
+
+	/// D5: corrective actions chosen.
+	column 'D5 Corrective Action'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		displayFolder: Milestones
+		lineageTag: 578d3ea3-8b12-4047-9f08-2c828a92a693
+		summarizeBy: none
+		sourceColumn: d5_date
+
+	/// D6: corrective actions implemented.
+	column 'D6 Implemented'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		displayFolder: Milestones
+		lineageTag: 24ab97ab-c55e-4291-9b72-421fc51f524a
+		summarizeBy: none
+		sourceColumn: d6_date
+
+	/// D7: recurrence prevented.
+	column 'D7 Prevention'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		displayFolder: Milestones
+		lineageTag: 8856fbdf-f6e1-4237-9592-998ed8d9a12f
+		summarizeBy: none
+		sourceColumn: d7_date
+
+	/// D8: closed; this date defines Closed.
+	column 'D8 Closure'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		displayFolder: Milestones
+		lineageTag: 9f22e2db-66c1-4ada-a1af-3021fc4bfe78
+		summarizeBy: none
+		sourceColumn: d8_date
+
+	column 'Target Closure Date Key'
+		dataType: int64
+		isHidden
+		lineageTag: 09c7d0e8-c940-45ab-9050-47c44e6ac4c6
+		summarizeBy: none
+		sourceColumn: target_closure_date_key
+
+	column 'Closed Date Key'
+		dataType: int64
+		isHidden
+		lineageTag: 0921b544-1578-40d1-b222-1160c4a6e4a7
+		summarizeBy: none
+		sourceColumn: closed_date_key
+
+	/// Free-text status from the Excel tracker, shown for data-quality comparison only.
+	column 'Status Reported'
+		dataType: string
+		lineageTag: 0b59929a-864d-469b-8635-39f81d3c2ce3
+		summarizeBy: none
+		sourceColumn: status_reported
+
+	column 'Opened Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 95df69ba-e9df-446b-97a7-f52a4b93a6c0
+		summarizeBy: none
+		sourceColumn: opened_date
+
+	column 'Target Closure Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 49323675-460a-4149-82f9-881826d4d1b0
+		summarizeBy: none
+		sourceColumn: target_closure_date
+
+	/// = D8 date; blank while open.
+	column 'Closed Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: bc720507-0d5a-4047-b76a-c0ff9356089d
+		summarizeBy: none
+		sourceColumn: closed_date
+
+	column 'Is Closed'
+		dataType: boolean
+		lineageTag: 2a154a53-dbd0-4e16-a708-5e78ed76e381
+		summarizeBy: none
+		sourceColumn: is_closed
+
+	/// Closed (D8 set), Overdue (open and past target as of today) or Open.
+	column Status
+		dataType: string
+		lineageTag: 2307cff5-ba25-4865-81b0-3823f3192b8e
+		summarizeBy: none
+		sourceColumn: status_derived
+
+	/// Open and today is after the target closure date.
+	column 'Is Overdue'
+		dataType: boolean
+		lineageTag: a230b8c3-17b2-4583-aa67-8238844400cb
+		summarizeBy: none
+		sourceColumn: is_overdue
+
+	/// Closed on or before the target date; blank while open.
+	column 'Is Closed On Time'
+		dataType: boolean
+		lineageTag: afc04074-34f4-4875-b3eb-be130340356b
+		summarizeBy: none
+		sourceColumn: is_closed_on_time
+
+	column 'Days To Close'
+		dataType: int64
+		isHidden
+		lineageTag: 1b74e903-748d-426c-bb18-5acdb1e4167d
+		summarizeBy: none
+		sourceColumn: days_to_close
+
+	/// Days from opening to D8, or to today while open.
+	column 'Days Open'
+		dataType: int64
+		lineageTag: c6fb0d47-968b-4fb8-9c50-17e84d2861e3
+		summarizeBy: none
+		sourceColumn: days_open
+
+	/// Same part and defect type had another 8D closed in the 180 days before this one opened (D23).
+	column 'Is Repeat'
+		dataType: boolean
+		lineageTag: 0fcbcdc5-fbc6-4b27-9b23-ca33090e972e
+		summarizeBy: none
+		sourceColumn: is_repeat
+
+	column 'Has Linked NC'
+		dataType: boolean
+		lineageTag: 69eaf207-a652-436a-a7d5-2ff15f703dfd
+		summarizeBy: none
+		sourceColumn: has_linked_nc
+
+	/// Data-quality flag (VR-8D-02): the tracker's text status disagrees with the D8 date.
+	column 'Status Mismatch'
+		dataType: string
+		lineageTag: f0099fdd-b9e9-4048-8032-dc9d0bd0c2e0
+		summarizeBy: none
+		sourceColumn: status_mismatch
+
+	partition '8D Reports' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServer, SqlDatabase),
+				    Data = Source{[Schema = "rpt", Item = "v_fact_8d"]}[Data]
+				in
+				    Data
+

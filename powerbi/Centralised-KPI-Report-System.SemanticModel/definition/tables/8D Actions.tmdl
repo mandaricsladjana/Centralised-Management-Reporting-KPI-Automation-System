@@ -1,0 +1,149 @@
+/// Containment, corrective and preventive actions of the 8D reports (rpt.v_fact_8d_action). Filtered by the calendar through its 8D report; due and completed dates use inactive relationships.
+table '8D Actions'
+	lineageTag: 623edb50-378f-4178-a8f7-95e0521423b0
+
+	/// 8D actions due in the selected period.
+	measure '# Actions Due' =
+			CALCULATE (
+			    COUNTROWS ( '8D Actions' ),
+			    USERELATIONSHIP ( '8D Actions'[Due Date Key], 'Calendar'[Date Key] ),
+			    CROSSFILTER ( '8D Reports'[Opened Date Key], 'Calendar'[Date Key], NONE )
+			)
+		formatString: #,##0
+		displayFolder: Corrective Actions
+		lineageTag: a7b94f0b-a043-485f-9ec9-f575e5f02b70
+
+	/// Actions due in the period that were completed by the end of the period (even if late).
+	measure '# Actions Completed' =
+			VAR _periodEnd = MAX ( 'Calendar'[Date] )
+			RETURN
+			    CALCULATE (
+			        COUNTROWS ( '8D Actions' ),
+			        USERELATIONSHIP ( '8D Actions'[Due Date Key], 'Calendar'[Date Key] ),
+			        CROSSFILTER ( '8D Reports'[Opened Date Key], 'Calendar'[Date Key], NONE ),
+			        KEEPFILTERS ( '8D Actions'[Completed Date] <= _periodEnd ),
+			        KEEPFILTERS ( NOT ISBLANK ( '8D Actions'[Completed Date] ) )
+			    )
+		formatString: #,##0
+		displayFolder: Corrective Actions
+		lineageTag: 5e76074a-4cda-456b-9724-d45bf371a646
+
+	/// Corrective Action completion rate: actions due in the period and completed by its end / actions due. Target >= 95 %.
+	measure 'CA Completion %' = DIVIDE ( [# Actions Completed], [# Actions Due] )
+		formatString: 0.0%
+		displayFolder: Corrective Actions
+		lineageTag: 8c4ea9b5-5dd5-4268-a0a9-d0bc22f3a087
+
+	/// Actions completed (by completion date) in the selected period, whatever their due date.
+	measure '# Actions Completed In Period' =
+			CALCULATE (
+			    COUNTROWS ( '8D Actions' ),
+			    USERELATIONSHIP ( '8D Actions'[Completed Date Key], 'Calendar'[Date Key] ),
+			    CROSSFILTER ( '8D Reports'[Opened Date Key], 'Calendar'[Date Key], NONE )
+			)
+		formatString: #,##0
+		displayFolder: Corrective Actions
+		lineageTag: 36bb0ab6-d322-4ab9-b823-6d21513cad37
+
+	column 'Action Key'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: 9c8a2a38-9d60-4724-b087-884bc8d66352
+		summarizeBy: none
+		sourceColumn: action_key
+
+	column 'Action ID'
+		dataType: string
+		lineageTag: c5c9412e-0d3a-417d-b159-972b72ab8e92
+		summarizeBy: none
+		sourceColumn: action_id
+
+	column '8D Key'
+		dataType: int64
+		isHidden
+		lineageTag: 6de47b03-6dfd-40f3-955c-192f4b1d64a0
+		summarizeBy: none
+		sourceColumn: eight_d_key
+
+	/// Containment, Corrective or Preventive.
+	column 'Action Type'
+		dataType: string
+		lineageTag: d6eb2a99-d5fb-487b-9bf9-5d8534ad1340
+		summarizeBy: none
+		sourceColumn: action_type
+
+	column Action
+		dataType: string
+		lineageTag: 3a8b211c-acd8-4746-b71c-a2ca846179ae
+		summarizeBy: none
+		sourceColumn: action_description
+
+	column 'Action Owner'
+		dataType: string
+		lineageTag: f14fc240-d25b-42ef-9bc8-38b36cd8686c
+		summarizeBy: none
+		sourceColumn: owner_name
+
+	column 'Due Date Key'
+		dataType: int64
+		isHidden
+		lineageTag: 1559fc56-81f0-41b9-9d34-cc1c585bb0bd
+		summarizeBy: none
+		sourceColumn: due_date_key
+
+	column 'Completed Date Key'
+		dataType: int64
+		isHidden
+		lineageTag: fda23d5e-50fd-44fe-8ebd-80cb761a8d27
+		summarizeBy: none
+		sourceColumn: completed_date_key
+
+	column 'Action Status Reported'
+		dataType: string
+		lineageTag: 425b3fd2-f1d5-4a7f-8f29-c3357edb6471
+		summarizeBy: none
+		sourceColumn: status_reported
+
+	column 'Due Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: c5462895-2ec5-48c9-bf72-5642feb215c2
+		summarizeBy: none
+		sourceColumn: due_date
+
+	column 'Completed Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 94c10edf-563c-4ce2-8923-f53508c6b366
+		summarizeBy: none
+		sourceColumn: completed_date
+
+	column 'Is Completed'
+		dataType: boolean
+		lineageTag: c24a9b94-7b29-42d2-abd5-7d7fa617bc02
+		summarizeBy: none
+		sourceColumn: is_completed
+
+	column 'Is Completed On Time'
+		dataType: boolean
+		lineageTag: c1f48fea-a4fc-4472-98e4-cb139f708c41
+		summarizeBy: none
+		sourceColumn: is_completed_on_time
+
+	/// Not completed and today is after the due date.
+	column 'Is Action Overdue'
+		dataType: boolean
+		lineageTag: fb7fc98c-e4ae-4ce8-9faf-68c24b73245b
+		summarizeBy: none
+		sourceColumn: is_overdue
+
+	partition '8D Actions' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServer, SqlDatabase),
+				    Data = Source{[Schema = "rpt", Item = "v_fact_8d_action"]}[Data]
+				in
+				    Data
+

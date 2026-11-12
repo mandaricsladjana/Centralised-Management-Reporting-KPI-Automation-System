@@ -1,0 +1,143 @@
+/// One row per day, 2024-01-01 to 2027-12-31 (rpt.v_dim_calendar). Marked as the date table. Working days exclude weekends, plant holidays and the summer shutdown.
+table Calendar
+	lineageTag: 396cbf16-50b6-4460-9fb1-8a1830d978db
+	dataCategory: Time
+
+	/// yyyymmdd key used by all relationships.
+	column 'Date Key'
+		dataType: int64
+		isHidden
+		lineageTag: 1c889f6b-f306-40a5-b7ff-193d39dc728f
+		summarizeBy: none
+		sourceColumn: date_key
+
+	/// Calendar date.
+	column Date
+		dataType: dateTime
+		isUnique
+		formatString: yyyy-mm-dd
+		lineageTag: 9f3e0a43-2695-4820-876e-520c82f6a8a9
+		summarizeBy: none
+		sourceColumn: date
+
+	/// Calendar year (= fiscal year, decision D8).
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 6e874144-9e4d-4669-8d71-813dcb3af2ac
+		summarizeBy: none
+		sourceColumn: year
+
+	column 'Quarter Number'
+		dataType: int64
+		isHidden
+		lineageTag: f2189434-6ae6-4426-96ce-e6bc91897a90
+		summarizeBy: none
+		sourceColumn: quarter
+
+	/// Year and quarter, e.g. 2025-Q1.
+	column Quarter
+		dataType: string
+		lineageTag: 495f3413-7825-4df0-aa49-99d31c4fe7cb
+		summarizeBy: none
+		sourceColumn: quarter_label
+		sortByColumn: 'Quarter Number'
+
+	column 'Month Number'
+		dataType: int64
+		isHidden
+		lineageTag: 20946092-1c57-4938-8e95-8a4040e980d1
+		summarizeBy: none
+		sourceColumn: month
+
+	/// Month name, sorted January to December.
+	column 'Month Name'
+		dataType: string
+		lineageTag: 5e319b91-e659-4397-8295-a8ae9ba55599
+		summarizeBy: none
+		sourceColumn: month_name
+		sortByColumn: 'Month Number'
+
+	/// Three-letter month name, sorted January to December.
+	column 'Month Short'
+		dataType: string
+		lineageTag: feb6cc60-54a7-419e-b0a5-5cefc45b5f8d
+		summarizeBy: none
+		sourceColumn: month_short
+		sortByColumn: 'Month Number'
+
+	/// Year and month as text, e.g. 2025-03; sorts chronologically.
+	column 'Year Month'
+		dataType: string
+		lineageTag: 7aaa63ce-ab4e-4179-83a5-560ea87d3c71
+		summarizeBy: none
+		sourceColumn: year_month
+
+	/// First day of the month; use on chart axes for monthly trends.
+	column 'Month Start'
+		dataType: dateTime
+		formatString: mmm yyyy
+		lineageTag: 68de1269-9bfd-434c-add4-b2f6e5c6530c
+		summarizeBy: none
+		sourceColumn: month_start_date
+
+	/// ISO-8601 week-numbering year (ISO = International Organization for Standardization).
+	column 'ISO Year'
+		dataType: int64
+		formatString: 0
+		lineageTag: 97b6c476-6bec-476b-9965-c4c77cca1c2d
+		summarizeBy: none
+		sourceColumn: iso_year
+
+	/// ISO-8601 week number 1-53.
+	column 'ISO Week'
+		dataType: int64
+		lineageTag: 78567b16-fb86-4168-9259-9463d696754e
+		summarizeBy: none
+		sourceColumn: iso_week
+
+	column 'Day of Week Number'
+		dataType: int64
+		isHidden
+		lineageTag: a5a027db-a49b-4622-96a7-48954c6b0958
+		summarizeBy: none
+		sourceColumn: day_of_week
+
+	/// Weekday name, sorted Monday to Sunday.
+	column 'Day Name'
+		dataType: string
+		lineageTag: 268fd987-80ce-45db-99ab-3c6c92ef035b
+		summarizeBy: none
+		sourceColumn: day_name
+		sortByColumn: 'Day of Week Number'
+
+	/// Saturday or Sunday.
+	column 'Is Weekend'
+		dataType: boolean
+		lineageTag: f13fa371-a18e-4c03-ab4a-d1589bd00b99
+		summarizeBy: none
+		sourceColumn: is_weekend
+
+	/// Fictional plant holiday or summer shutdown (config/settings.toml).
+	column 'Is Plant Holiday'
+		dataType: boolean
+		lineageTag: ed90f038-65d6-471b-881c-b6d5489c4d8e
+		summarizeBy: none
+		sourceColumn: is_plant_holiday
+
+	/// Not a weekend and not a plant holiday.
+	column 'Is Working Day'
+		dataType: boolean
+		lineageTag: 41dd06ca-d61f-41e4-a710-3f90f5725fb8
+		summarizeBy: none
+		sourceColumn: is_working_day
+
+	partition Calendar = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServer, SqlDatabase),
+				    Data = Source{[Schema = "rpt", Item = "v_dim_calendar"]}[Data]
+				in
+				    Data
+

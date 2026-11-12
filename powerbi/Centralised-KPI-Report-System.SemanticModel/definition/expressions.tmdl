@@ -1,0 +1,12 @@
+/// SQL Server instance. DEV: .\SQLEXPRESS; PROD: sql-qualitykpi-og6p7.database.windows.net (blueprint 8.6).
+expression SqlServer = ".\SQLEXPRESS" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 310c8f6f-7fc8-4d82-8b16-d274953e4e88
+
+	annotation PBI_ResultType = Text
+
+/// Database name. DEV: QualityKPI_Dev; PROD: QualityKPI.
+expression SqlDatabase = "QualityKPI_Dev" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 0cb6269e-eca3-4edd-b7b8-08d5e9f5e3c9
+
+	annotation PBI_ResultType = Text
+

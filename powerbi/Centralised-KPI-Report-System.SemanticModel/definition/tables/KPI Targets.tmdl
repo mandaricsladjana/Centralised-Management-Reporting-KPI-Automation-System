@@ -1,0 +1,338 @@
+/// Current illustrative KPI targets and amber limits (rpt.v_kpi_target, is_current = 1). Utility table without relationships: target and status measures look values up by KPI Code. Targets are illustrative, not industry benchmarks (blueprint 6).
+table 'KPI Targets'
+	lineageTag: 4fcf19a4-26d0-46d6-ab16-29a2a80f3547
+
+	/// Illustrative target for FPY % (final stage): >= 97 %.
+	measure 'FPY % Target' = CALCULATE ( MAX ( 'KPI Targets'[Target Value] ), 'KPI Targets'[KPI Code] = "FPY_PCT" )
+		formatString: 0.0%
+		displayFolder: Targets
+		lineageTag: 7663863d-65df-4389-b07f-92167d388f41
+
+	/// Illustrative target for FTY %: >= 94 %.
+	measure 'FTY % Target' = CALCULATE ( MAX ( 'KPI Targets'[Target Value] ), 'KPI Targets'[KPI Code] = "FTY_PCT" )
+		formatString: 0.0%
+		displayFolder: Targets
+		lineageTag: 351361b5-12d5-4ba6-baae-b057b2c46949
+
+	/// Illustrative target for Defect Rate %: <= 3 %.
+	measure 'Defect Rate % Target' = CALCULATE ( MAX ( 'KPI Targets'[Target Value] ), 'KPI Targets'[KPI Code] = "DEFECT_RATE_PCT" )
+		formatString: 0.0%
+		displayFolder: Targets
+		lineageTag: 8fef0038-e7a3-4a0e-9a1d-397ce06f5257
+
+	/// Illustrative target for Scrap Rate %: <= 1.5 %.
+	measure 'Scrap Rate % Target' = CALCULATE ( MAX ( 'KPI Targets'[Target Value] ), 'KPI Targets'[KPI Code] = "SCRAP_RATE_PCT" )
+		formatString: 0.0%
+		displayFolder: Targets
+		lineageTag: 5f8b7a69-c58e-4dbe-93af-ad7718cadd3a
+
+	/// Illustrative monthly target for Scrap Cost: <= EUR 75k (D24). Compare at month level only.
+	measure 'Scrap Cost € Target' = CALCULATE ( MAX ( 'KPI Targets'[Target Value] ), 'KPI Targets'[KPI Code] = "SCRAP_COST_EUR" )
+		formatString: € #,##0
+		displayFolder: Targets
+		lineageTag: db3b5b6f-8aa9-42d7-bcd6-df9432f7fb80
+
+	/// Illustrative target for Rework Rate %: <= 2 %.
+	measure 'Rework Rate % Target' = CALCULATE ( MAX ( 'KPI Targets'[Target Value] ), 'KPI Targets'[KPI Code] = "REWORK_RATE_PCT" )
+		formatString: 0.0%
+		displayFolder: Targets
+		lineageTag: e3666848-31ae-45ae-ba7c-dbdc42ae3081
+
+	/// Illustrative target for Rework Success %: >= 90 %.
+	measure 'Rework Success % Target' = CALCULATE ( MAX ( 'KPI Targets'[Target Value] ), 'KPI Targets'[KPI Code] = "REWORK_SUCCESS_PCT" )
+		formatString: 0.0%
+		displayFolder: Targets
+		lineageTag: 08f1f0dd-27fd-41b3-ad2d-07705a4bce0e
+
+	/// Illustrative monthly target for Rework Cost: <= EUR 30k (D24). Compare at month level only.
+	measure 'Rework Cost € Target' = CALCULATE ( MAX ( 'KPI Targets'[Target Value] ), 'KPI Targets'[KPI Code] = "REWORK_COST_EUR" )
+		formatString: € #,##0
+		displayFolder: Targets
+		lineageTag: bb56d587-489a-4c0f-a262-ed07999f4154
+
+	/// Illustrative target for COPQ %: <= 1.5 % of production value.
+	measure 'COPQ % Target' = CALCULATE ( MAX ( 'KPI Targets'[Target Value] ), 'KPI Targets'[KPI Code] = "COPQ_PCT" )
+		formatString: 0.0%
+		displayFolder: Targets
+		lineageTag: db62a07b-d838-4029-8d3d-51bb0b8f1f79
+
+	/// Target for Overdue 8Ds: 0 (amber at 1, D21).
+	measure 'Overdue 8Ds Target' = CALCULATE ( MAX ( 'KPI Targets'[Target Value] ), 'KPI Targets'[KPI Code] = "OVERDUE_8D_COUNT" )
+		formatString: #,##0
+		displayFolder: Targets
+		lineageTag: d30fc8d6-81e7-4e5e-a0c4-9f035749f1d5
+
+	/// Illustrative target for average 8D closure time: <= 60 days.
+	measure 'Avg 8D Closure Days Target' = CALCULATE ( MAX ( 'KPI Targets'[Target Value] ), 'KPI Targets'[KPI Code] = "AVG_8D_CLOSURE_DAYS" )
+		formatString: #,##0
+		displayFolder: Targets
+		lineageTag: 7e429717-0ff7-4e23-ac88-c079dbf72e4c
+
+	/// Illustrative target for 8D on-time closure: >= 90 %.
+	measure '8D On-time Closure % Target' = CALCULATE ( MAX ( 'KPI Targets'[Target Value] ), 'KPI Targets'[KPI Code] = "EIGHT_D_ONTIME_PCT" )
+		formatString: 0.0%
+		displayFolder: Targets
+		lineageTag: bcbd40f6-f065-41b8-8809-afdc789cee41
+
+	/// Illustrative target for corrective-action completion: >= 95 %.
+	measure 'CA Completion % Target' = CALCULATE ( MAX ( 'KPI Targets'[Target Value] ), 'KPI Targets'[KPI Code] = "CA_COMPLETION_PCT" )
+		formatString: 0.0%
+		displayFolder: Targets
+		lineageTag: 830e179c-8d5d-40a0-bd54-e5ee3d2de8e6
+
+	/// Illustrative target for Repeat Defect Rate %: <= 5 %.
+	measure 'Repeat Defect Rate % Target' = CALCULATE ( MAX ( 'KPI Targets'[Target Value] ), 'KPI Targets'[KPI Code] = "REPEAT_DEFECT_PCT" )
+		formatString: 0.0%
+		displayFolder: Targets
+		lineageTag: 9f7893c5-0782-4aa5-8ff2-d30ec7149c9f
+
+	/// Target for overdue audit findings: 0 (amber at 1, D21).
+	measure 'Overdue Findings Target' = CALCULATE ( MAX ( 'KPI Targets'[Target Value] ), 'KPI Targets'[KPI Code] = "OVERDUE_FINDINGS_COUNT" )
+		formatString: #,##0
+		displayFolder: Targets
+		lineageTag: cde859d1-0771-4b0e-bb1f-a50b6095946b
+
+	/// Target for Major NCs in audits: 0 (no amber band, D21).
+	measure 'Major NCs Target' = CALCULATE ( MAX ( 'KPI Targets'[Target Value] ), 'KPI Targets'[KPI Code] = "MAJOR_NC_COUNT" )
+		formatString: #,##0
+		displayFolder: Targets
+		lineageTag: d55715c9-9cfe-4787-b93f-bc6a301a143c
+
+	/// Illustrative target for audit finding on-time closure: >= 90 %.
+	measure 'Audit On-time Closure % Target' = CALCULATE ( MAX ( 'KPI Targets'[Target Value] ), 'KPI Targets'[KPI Code] = "AUDIT_ONTIME_PCT" )
+		formatString: 0.0%
+		displayFolder: Targets
+		lineageTag: 424c6750-c808-4231-be1e-d0ed45a56f61
+
+	/// Illustrative target for average finding closure time: <= 30 days.
+	measure 'Avg Finding Closure Days Target' = CALCULATE ( MAX ( 'KPI Targets'[Target Value] ), 'KPI Targets'[KPI Code] = "AVG_FINDING_CLOSURE_DAYS" )
+		formatString: #,##0
+		displayFolder: Targets
+		lineageTag: 37604f28-6bb3-40f8-8362-0247f0cc0a9a
+
+	/// RAG status of FPY % (final stage): Green >= target, Amber within 10 % below, else Red (blueprint 6.3).
+	measure 'FPY % Status' =
+			VAR _value = [FPY Final Stage %]
+			VAR _target = [FPY % Target]
+			VAR _amber = CALCULATE ( MAX ( 'KPI Targets'[Amber Limit] ), 'KPI Targets'[KPI Code] = "FPY_PCT" )
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ), BLANK (), _value >= _target, "Green", _value >= _amber, "Amber", "Red" )
+		displayFolder: Status
+		lineageTag: e27fb7de-722d-45b2-a295-cf4a4ebd704f
+
+	/// RAG status of FTY % (higher is better).
+	measure 'FTY % Status' =
+			VAR _value = [FTY %]
+			VAR _target = [FTY % Target]
+			VAR _amber = CALCULATE ( MAX ( 'KPI Targets'[Amber Limit] ), 'KPI Targets'[KPI Code] = "FTY_PCT" )
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ), BLANK (), _value >= _target, "Green", _value >= _amber, "Amber", "Red" )
+		displayFolder: Status
+		lineageTag: 69138f73-3e4a-4e27-964b-894b1b88ef06
+
+	/// RAG status of Defect Rate % (lower is better).
+	measure 'Defect Rate % Status' =
+			VAR _value = [Defect Rate %]
+			VAR _target = [Defect Rate % Target]
+			VAR _amber = CALCULATE ( MAX ( 'KPI Targets'[Amber Limit] ), 'KPI Targets'[KPI Code] = "DEFECT_RATE_PCT" )
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ), BLANK (), _value <= _target, "Green", _value <= _amber, "Amber", "Red" )
+		displayFolder: Status
+		lineageTag: d539325c-6e41-4fdc-8725-236aebe38aa2
+
+	/// RAG status of Scrap Rate % (lower is better).
+	measure 'Scrap Rate % Status' =
+			VAR _value = [Scrap Rate %]
+			VAR _target = [Scrap Rate % Target]
+			VAR _amber = CALCULATE ( MAX ( 'KPI Targets'[Amber Limit] ), 'KPI Targets'[KPI Code] = "SCRAP_RATE_PCT" )
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ), BLANK (), _value <= _target, "Green", _value <= _amber, "Amber", "Red" )
+		displayFolder: Status
+		lineageTag: 845823b9-60c6-4a4d-8cb0-664d36aa07d5
+
+	/// RAG status of monthly Scrap Cost (lower is better). Meaningful at month level only.
+	measure 'Scrap Cost € Status' =
+			VAR _value = [Scrap Cost €]
+			VAR _target = [Scrap Cost € Target]
+			VAR _amber = CALCULATE ( MAX ( 'KPI Targets'[Amber Limit] ), 'KPI Targets'[KPI Code] = "SCRAP_COST_EUR" )
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ), BLANK (), _value <= _target, "Green", _value <= _amber, "Amber", "Red" )
+		displayFolder: Status
+		lineageTag: a5188248-f498-410e-943e-3c2fddcdfc00
+
+	/// RAG status of Rework Rate % (lower is better).
+	measure 'Rework Rate % Status' =
+			VAR _value = [Rework Rate %]
+			VAR _target = [Rework Rate % Target]
+			VAR _amber = CALCULATE ( MAX ( 'KPI Targets'[Amber Limit] ), 'KPI Targets'[KPI Code] = "REWORK_RATE_PCT" )
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ), BLANK (), _value <= _target, "Green", _value <= _amber, "Amber", "Red" )
+		displayFolder: Status
+		lineageTag: da0263fc-05b8-4001-9a9f-16dab2546411
+
+	/// RAG status of Rework Success % (higher is better).
+	measure 'Rework Success % Status' =
+			VAR _value = [Rework Success %]
+			VAR _target = [Rework Success % Target]
+			VAR _amber = CALCULATE ( MAX ( 'KPI Targets'[Amber Limit] ), 'KPI Targets'[KPI Code] = "REWORK_SUCCESS_PCT" )
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ), BLANK (), _value >= _target, "Green", _value >= _amber, "Amber", "Red" )
+		displayFolder: Status
+		lineageTag: 41c46803-551b-40b8-a14a-00247af0929a
+
+	/// RAG status of monthly Rework Cost (lower is better). Meaningful at month level only.
+	measure 'Rework Cost € Status' =
+			VAR _value = [Rework Cost €]
+			VAR _target = [Rework Cost € Target]
+			VAR _amber = CALCULATE ( MAX ( 'KPI Targets'[Amber Limit] ), 'KPI Targets'[KPI Code] = "REWORK_COST_EUR" )
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ), BLANK (), _value <= _target, "Green", _value <= _amber, "Amber", "Red" )
+		displayFolder: Status
+		lineageTag: 6d628259-8a1f-4433-9461-8b1de8ae645a
+
+	/// RAG status of COPQ % (lower is better).
+	measure 'COPQ % Status' =
+			VAR _value = [COPQ %]
+			VAR _target = [COPQ % Target]
+			VAR _amber = CALCULATE ( MAX ( 'KPI Targets'[Amber Limit] ), 'KPI Targets'[KPI Code] = "COPQ_PCT" )
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ), BLANK (), _value <= _target, "Green", _value <= _amber, "Amber", "Red" )
+		displayFolder: Status
+		lineageTag: fce99d71-333c-4421-b902-8395f3f66485
+
+	/// RAG status of Overdue 8Ds: 0 Green, 1 Amber, more Red (D21). Blank counts as 0.
+	measure 'Overdue 8Ds Status' =
+			VAR _value = COALESCE ( [Overdue 8Ds], 0 )
+			VAR _target = [Overdue 8Ds Target]
+			VAR _amber = CALCULATE ( MAX ( 'KPI Targets'[Amber Limit] ), 'KPI Targets'[KPI Code] = "OVERDUE_8D_COUNT" )
+			RETURN SWITCH ( TRUE (), _value <= _target, "Green", _value <= _amber, "Amber", "Red" )
+		displayFolder: Status
+		lineageTag: 88ec92e6-890b-4982-a151-04dfdb4660f9
+
+	/// RAG status of average 8D closure days (lower is better).
+	measure 'Avg 8D Closure Days Status' =
+			VAR _value = [Avg 8D Closure Days]
+			VAR _target = [Avg 8D Closure Days Target]
+			VAR _amber = CALCULATE ( MAX ( 'KPI Targets'[Amber Limit] ), 'KPI Targets'[KPI Code] = "AVG_8D_CLOSURE_DAYS" )
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ), BLANK (), _value <= _target, "Green", _value <= _amber, "Amber", "Red" )
+		displayFolder: Status
+		lineageTag: f32a367c-eb03-4412-a5f8-2e66f8edddf2
+
+	/// RAG status of 8D on-time closure (higher is better).
+	measure '8D On-time Closure % Status' =
+			VAR _value = [8D On-time Closure %]
+			VAR _target = [8D On-time Closure % Target]
+			VAR _amber = CALCULATE ( MAX ( 'KPI Targets'[Amber Limit] ), 'KPI Targets'[KPI Code] = "EIGHT_D_ONTIME_PCT" )
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ), BLANK (), _value >= _target, "Green", _value >= _amber, "Amber", "Red" )
+		displayFolder: Status
+		lineageTag: b15ac9c3-1f66-4c90-8bb5-55963a58f839
+
+	/// RAG status of corrective-action completion (higher is better).
+	measure 'CA Completion % Status' =
+			VAR _value = [CA Completion %]
+			VAR _target = [CA Completion % Target]
+			VAR _amber = CALCULATE ( MAX ( 'KPI Targets'[Amber Limit] ), 'KPI Targets'[KPI Code] = "CA_COMPLETION_PCT" )
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ), BLANK (), _value >= _target, "Green", _value >= _amber, "Amber", "Red" )
+		displayFolder: Status
+		lineageTag: ea0fd7ec-201b-472f-a24b-9b3734710023
+
+	/// RAG status of Repeat Defect Rate % (lower is better).
+	measure 'Repeat Defect Rate % Status' =
+			VAR _value = [Repeat Defect Rate %]
+			VAR _target = [Repeat Defect Rate % Target]
+			VAR _amber = CALCULATE ( MAX ( 'KPI Targets'[Amber Limit] ), 'KPI Targets'[KPI Code] = "REPEAT_DEFECT_PCT" )
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ), BLANK (), _value <= _target, "Green", _value <= _amber, "Amber", "Red" )
+		displayFolder: Status
+		lineageTag: c56d4f6c-c62c-4b57-96ff-abaa3b961473
+
+	/// RAG status of overdue audit findings: 0 Green, 1 Amber, more Red (D21).
+	measure 'Overdue Findings Status' =
+			VAR _value = COALESCE ( [Overdue Findings], 0 )
+			VAR _target = [Overdue Findings Target]
+			VAR _amber = CALCULATE ( MAX ( 'KPI Targets'[Amber Limit] ), 'KPI Targets'[KPI Code] = "OVERDUE_FINDINGS_COUNT" )
+			RETURN SWITCH ( TRUE (), _value <= _target, "Green", _value <= _amber, "Amber", "Red" )
+		displayFolder: Status
+		lineageTag: 837de7eb-387f-4864-b843-0723559e738d
+
+	/// RAG status of Major NCs: 0 Green, any Red (no amber band, D21).
+	measure 'Major NCs Status' =
+			VAR _value = COALESCE ( [Major NCs], 0 )
+			VAR _target = [Major NCs Target]
+			RETURN IF ( _value <= _target, "Green", "Red" )
+		displayFolder: Status
+		lineageTag: 9931503b-8ede-4c92-812e-669dd38e9274
+
+	/// RAG status of audit on-time closure (higher is better).
+	measure 'Audit On-time Closure % Status' =
+			VAR _value = [Audit On-time Closure %]
+			VAR _target = [Audit On-time Closure % Target]
+			VAR _amber = CALCULATE ( MAX ( 'KPI Targets'[Amber Limit] ), 'KPI Targets'[KPI Code] = "AUDIT_ONTIME_PCT" )
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ), BLANK (), _value >= _target, "Green", _value >= _amber, "Amber", "Red" )
+		displayFolder: Status
+		lineageTag: a6bddc2d-ef44-453d-b7a1-aaab126552d1
+
+	/// RAG status of average finding closure days (lower is better).
+	measure 'Avg Finding Closure Days Status' =
+			VAR _value = [Avg Finding Closure Days]
+			VAR _target = [Avg Finding Closure Days Target]
+			VAR _amber = CALCULATE ( MAX ( 'KPI Targets'[Amber Limit] ), 'KPI Targets'[KPI Code] = "AVG_FINDING_CLOSURE_DAYS" )
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ), BLANK (), _value <= _target, "Green", _value <= _amber, "Amber", "Red" )
+		displayFolder: Status
+		lineageTag: f531e863-6758-4753-8629-2748fd701a70
+
+	/// Overall Quality Performance scorecard: how many of the 6 core KPIs (FTY, Defect Rate, Scrap Rate, Rework Rate, COPQ %, Overdue 8Ds) are on target. A count, not a blended index (blueprint 6.2).
+	measure 'Core KPIs On Target' =
+			VAR _statuses = { [FTY % Status], [Defect Rate % Status], [Scrap Rate % Status], [Rework Rate % Status], [COPQ % Status], [Overdue 8Ds Status] }
+			RETURN COALESCE ( COUNTROWS ( FILTER ( _statuses, [Value] = "Green" ) ), 0 )
+		formatString: 0 "of 6"
+		displayFolder: Scorecard
+		lineageTag: fdc4b494-ab19-4700-a43c-9f3185659930
+
+	/// Code used by the target measures, e.g. FPY_PCT.
+	column 'KPI Code'
+		dataType: string
+		lineageTag: b50263f7-e553-4f71-b425-14a16c532dc2
+		summarizeBy: none
+		sourceColumn: kpi_code
+
+	column 'Valid From'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 89a85830-c076-45bd-b13a-96a7c674a93a
+		summarizeBy: none
+		sourceColumn: valid_from
+
+	column 'Target Value'
+		dataType: decimal
+		isHidden
+		lineageTag: 65f1ba0f-0298-4ce1-9850-ca5ae2ac9555
+		summarizeBy: none
+		sourceColumn: target_value
+
+	column 'Amber Limit'
+		dataType: decimal
+		isHidden
+		lineageTag: d600579b-79db-4cdb-bb04-708a689255eb
+		summarizeBy: none
+		sourceColumn: amber_limit
+
+	/// higher_better or lower_better.
+	column Direction
+		dataType: string
+		lineageTag: cecbae72-d975-43d5-9463-eb41bfb6998f
+		summarizeBy: none
+		sourceColumn: direction
+
+	column Unit
+		dataType: string
+		lineageTag: 5f6017a3-0d5d-47bf-a1c4-3a7584cbe6ad
+		summarizeBy: none
+		sourceColumn: unit
+
+	column 'Target Type'
+		dataType: string
+		lineageTag: d14539ad-5493-46e8-ab00-ecc866415e47
+		summarizeBy: none
+		sourceColumn: target_type
+
+	partition 'KPI Targets' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServer, SqlDatabase),
+				    Data = Source{[Schema = "rpt", Item = "v_kpi_target"]}[Data],
+				    Current = Table.SelectRows(Data, each [is_current] = true)
+				in
+				    Current
+

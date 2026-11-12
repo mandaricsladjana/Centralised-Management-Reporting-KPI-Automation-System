@@ -1,0 +1,134 @@
+/// One row per rework job (rpt.v_fact_rework). Cost Source shows whether the cost was reported or imputed from hours x rate (D12).
+table Rework
+	lineageTag: 78cc6e3e-fb99-4c9d-8e24-ce7e24309d59
+
+	/// Units sent to rework.
+	measure 'Reworked Quantity' = SUM ( 'Rework'[Qty Reworked] )
+		formatString: #,##0
+		displayFolder: Rework
+		lineageTag: 520602a9-a16c-47d2-a7fe-4bdc74580448
+
+	/// Reworked units that were OK afterwards.
+	measure 'Rework OK Quantity' = SUM ( 'Rework'[Qty Rework OK] )
+		formatString: #,##0
+		displayFolder: Rework
+		lineageTag: 40cec7dc-866b-4a16-ac64-7bbc0c6bcf36
+
+	/// Rework cost in EUR, reported or imputed (labour hours x EUR 38). Target <= EUR 30k per month (D24).
+	measure 'Rework Cost €' = SUM ( 'Rework'[Rework Cost] )
+		formatString: € #,##0
+		displayFolder: Rework
+		lineageTag: e08e126c-0411-4841-98f6-a32470eb9f0d
+
+	/// Part of Rework Cost that was estimated because the rework log had no cost (D12).
+	measure 'Rework Cost Imputed €' = CALCULATE ( SUM ( 'Rework'[Rework Cost] ), KEEPFILTERS ( 'Rework'[Cost Source] = "Imputed" ) )
+		formatString: € #,##0
+		displayFolder: Rework
+		lineageTag: 3f29de7b-f4b5-4ba2-aa50-75c46b6d7855
+
+	/// Units reworked / units started (the hidden factory). Target <= 2 %.
+	measure 'Rework Rate %' = DIVIDE ( [Reworked Quantity], [Production Volume] )
+		formatString: 0.00%
+		displayFolder: Rework
+		lineageTag: a6c8985e-7572-4f17-b33c-28eabe7d7a9d
+
+	/// Reworked units OK afterwards / units reworked. Target >= 90 %.
+	measure 'Rework Success %' = DIVIDE ( [Rework OK Quantity], [Reworked Quantity] )
+		formatString: 0.0%
+		displayFolder: Rework
+		lineageTag: ed5100c9-357c-42a5-8162-f0fb39b6a1a1
+
+	column 'Rework Key'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: d12acf26-e562-44f4-aabe-f94dcc8b3c65
+		summarizeBy: none
+		sourceColumn: rework_key
+
+	/// Rework job ID, RW-YYYY-######.
+	column 'Rework ID'
+		dataType: string
+		lineageTag: 7fc83dc8-d86d-4fe7-bc9d-5e04f6c483a6
+		summarizeBy: none
+		sourceColumn: rework_id
+
+	column 'Date Key'
+		dataType: int64
+		isHidden
+		lineageTag: 2fe400b4-1846-474f-b278-64d5804bcdc8
+		summarizeBy: none
+		sourceColumn: date_key
+
+	column 'Shift Key'
+		dataType: int64
+		isHidden
+		lineageTag: fb81e9d3-89a8-47d2-b367-b691b0cb8908
+		summarizeBy: none
+		sourceColumn: shift_key
+
+	column 'Line Key'
+		dataType: int64
+		isHidden
+		lineageTag: dcb4f4f2-94a3-444f-9e06-bb1154697330
+		summarizeBy: none
+		sourceColumn: line_key
+
+	column 'Part Key'
+		dataType: int64
+		isHidden
+		lineageTag: 55d1fd5b-10a3-47e6-af22-a40bd8f23777
+		summarizeBy: none
+		sourceColumn: part_key
+
+	column 'Defect Type Key'
+		dataType: int64
+		isHidden
+		lineageTag: 0e8d41e7-51c7-4852-a2d7-915952671078
+		summarizeBy: none
+		sourceColumn: defect_type_key
+
+	column 'Qty Reworked'
+		dataType: int64
+		isHidden
+		lineageTag: d1f2c961-faa8-422f-8ba9-539720e51760
+		summarizeBy: none
+		sourceColumn: qty_reworked
+
+	column 'Qty Rework OK'
+		dataType: int64
+		isHidden
+		lineageTag: 556078d0-06e1-4efc-a238-4062d3526f75
+		summarizeBy: none
+		sourceColumn: qty_rework_ok
+
+	column 'Labour Hours'
+		dataType: decimal
+		isHidden
+		lineageTag: 5545066d-8235-412e-981c-87016ae61921
+		summarizeBy: none
+		sourceColumn: labour_hours
+
+	column 'Rework Cost'
+		dataType: decimal
+		isHidden
+		lineageTag: 68187a84-cbe5-4f5e-9261-9d803b3fbcfa
+		summarizeBy: none
+		sourceColumn: rework_cost_eur
+
+	/// Reported = from the rework log; Imputed = cost was missing and calculated as labour hours x EUR 38 (D12).
+	column 'Cost Source'
+		dataType: string
+		lineageTag: 9d3d537b-9a6b-4204-a850-2f59f454c0a5
+		summarizeBy: none
+		sourceColumn: cost_source
+
+	partition Rework = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServer, SqlDatabase),
+				    Data = Source{[Schema = "rpt", Item = "v_fact_rework"]}[Data]
+				in
+				    Data
+

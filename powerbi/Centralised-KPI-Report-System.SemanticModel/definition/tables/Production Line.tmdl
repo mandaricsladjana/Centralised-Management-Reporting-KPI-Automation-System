@@ -1,0 +1,55 @@
+/// The six production lines (rpt.v_dim_production_line) plus Unknown (-1) and Not applicable (-2, plant-wide audit findings).
+table 'Production Line'
+	lineageTag: 17ff6dcb-b92e-45e4-ab6c-ecb609097cf1
+
+	column 'Line Key'
+		dataType: int64
+		isHidden
+		lineageTag: 2cc3ed92-e4dc-4d68-9114-4d2657aaa8f3
+		summarizeBy: none
+		sourceColumn: line_key
+
+	/// L01-L06; UNK = unknown code in a source file; N/A = plant-wide.
+	column 'Line Code'
+		dataType: string
+		lineageTag: 45f2bdf6-c5ae-4f5f-938b-5557589c0964
+		summarizeBy: none
+		sourceColumn: line_code
+
+	/// Line name, e.g. Paint Shop.
+	column Line
+		dataType: string
+		lineageTag: 4edfc798-0154-4989-ba5d-e72756afa6e7
+		summarizeBy: none
+		sourceColumn: line_name
+
+	/// Injection Moulding, Welding, Painting or Assembly; determines the inspection stages (D1).
+	column 'Process Type'
+		dataType: string
+		lineageTag: 83e5050f-7551-4a74-a1d2-f79debec554f
+		summarizeBy: none
+		sourceColumn: process_type
+
+	/// Plant hall.
+	column Area
+		dataType: string
+		lineageTag: 911f7ae8-f959-453d-8feb-8de141bfb17b
+		summarizeBy: none
+		sourceColumn: area
+
+	column 'Is Active'
+		dataType: boolean
+		isHidden
+		lineageTag: ab5356b2-d97f-40de-98d4-a3b3c0307740
+		summarizeBy: none
+		sourceColumn: is_active
+
+	partition 'Production Line' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlServer, SqlDatabase),
+				    Data = Source{[Schema = "rpt", Item = "v_dim_production_line"]}[Data]
+				in
+				    Data
+
