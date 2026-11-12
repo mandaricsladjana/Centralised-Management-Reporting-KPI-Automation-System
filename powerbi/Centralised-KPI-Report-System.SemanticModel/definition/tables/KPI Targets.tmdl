@@ -279,6 +279,56 @@ table 'KPI Targets'
 		displayFolder: Scorecard
 		lineageTag: fdc4b494-ab19-4700-a43c-9f3185659930
 
+	/// Hex color of the FTY % status, for conditional formatting.
+	measure 'FTY % Color' = SWITCH ( [FTY % Status], "Green", "#2E7D32", "Amber", "#B26A00", "Red", "#C62828", "#6B7280" )
+		displayFolder: Status Colors
+		lineageTag: 4e58c10b-b02a-4846-9c6d-48c1c80cb92f
+
+	/// Hex color of the FPY % status, for conditional formatting.
+	measure 'FPY % Color' = SWITCH ( [FPY % Status], "Green", "#2E7D32", "Amber", "#B26A00", "Red", "#C62828", "#6B7280" )
+		displayFolder: Status Colors
+		lineageTag: 32f8d1cd-961d-4ffb-899a-8df8d0db0808
+
+	/// Hex color of the Defect Rate % status, for conditional formatting.
+	measure 'Defect Rate % Color' = SWITCH ( [Defect Rate % Status], "Green", "#2E7D32", "Amber", "#B26A00", "Red", "#C62828", "#6B7280" )
+		displayFolder: Status Colors
+		lineageTag: 003740bd-7d40-41d8-ad3e-626027c5c32d
+
+	/// Hex color of the Scrap Rate % status, for conditional formatting.
+	measure 'Scrap Rate % Color' = SWITCH ( [Scrap Rate % Status], "Green", "#2E7D32", "Amber", "#B26A00", "Red", "#C62828", "#6B7280" )
+		displayFolder: Status Colors
+		lineageTag: aa9a20ac-e648-4180-8c60-0cc79b385e8f
+
+	/// Hex color of the Rework Rate % status, for conditional formatting.
+	measure 'Rework Rate % Color' = SWITCH ( [Rework Rate % Status], "Green", "#2E7D32", "Amber", "#B26A00", "Red", "#C62828", "#6B7280" )
+		displayFolder: Status Colors
+		lineageTag: deceee78-74f9-4682-95bb-9035027c5938
+
+	/// Hex color of the COPQ % status, for conditional formatting.
+	measure 'COPQ % Color' = SWITCH ( [COPQ % Status], "Green", "#2E7D32", "Amber", "#B26A00", "Red", "#C62828", "#6B7280" )
+		displayFolder: Status Colors
+		lineageTag: 049acdde-302d-4387-8286-4e47e9e17aa5
+
+	/// Hex color of the Overdue 8Ds status, for conditional formatting.
+	measure 'Overdue 8Ds Color' = SWITCH ( [Overdue 8Ds Status], "Green", "#2E7D32", "Amber", "#B26A00", "Red", "#C62828", "#6B7280" )
+		displayFolder: Status Colors
+		lineageTag: 8b3d3639-0db4-4f48-a16b-07aabf5dbbb5
+
+	/// Hex color of the CA Completion % status, for conditional formatting.
+	measure 'CA Completion % Color' = SWITCH ( [CA Completion % Status], "Green", "#2E7D32", "Amber", "#B26A00", "Red", "#C62828", "#6B7280" )
+		displayFolder: Status Colors
+		lineageTag: abaa61b6-2570-4c31-8ab3-1caa70e00280
+
+	/// Hex color of the 8D On-time Closure % status, for conditional formatting.
+	measure '8D On-time Closure % Color' = SWITCH ( [8D On-time Closure % Status], "Green", "#2E7D32", "Amber", "#B26A00", "Red", "#C62828", "#6B7280" )
+		displayFolder: Status Colors
+		lineageTag: 75ffb76e-c63b-4b21-af30-0864e48e8982
+
+	/// Hex color of the Overdue Findings status, for conditional formatting.
+	measure 'Overdue Findings Color' = SWITCH ( [Overdue Findings Status], "Green", "#2E7D32", "Amber", "#B26A00", "Red", "#C62828", "#6B7280" )
+		displayFolder: Status Colors
+		lineageTag: 69924c10-dbbb-43da-9c36-151b7c13ad67
+
 	/// Code used by the target measures, e.g. FPY_PCT.
 	column 'KPI Code'
 		dataType: string

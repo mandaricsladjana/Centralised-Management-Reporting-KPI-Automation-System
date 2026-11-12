@@ -1,4 +1,5 @@
 table 'Time Comparison'
+	lineageTag: 9594d5fd-f53d-4939-98da-6ff2839ca0e8
 
 	/// Applies a time comparison to any KPI measure (blueprint 7: Δ vs previous month on page 1; MoM, YoY and rolling 3 months on page 7). Delta items only work on numeric measures.
 	calculationGroup
@@ -38,6 +39,7 @@ table 'Time Comparison'
 
 	column 'Time Comparison'
 		dataType: string
+		lineageTag: 624b8f9b-faa8-423e-bcd5-9f7b4e39ed90
 
 	partition 'Partition_Time Comparison' = calculationGroup
 

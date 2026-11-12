@@ -223,6 +223,12 @@ table 'Audit Findings'
 		summarizeBy: none
 		sourceColumn: days_to_close
 
+	/// 8D report opened because of this finding (usually Major NCs); blank = none.
+	column 'Linked 8D' = LOOKUPVALUE ( '8D Reports'[8D ID], '8D Reports'[8D Key], 'Audit Findings'[8D Key] )
+		dataType: string
+		lineageTag: f59436b2-0c7c-430e-ba65-53551581b51e
+		summarizeBy: none
+
 	partition 'Audit Findings' = m
 		mode: import
 		source =
