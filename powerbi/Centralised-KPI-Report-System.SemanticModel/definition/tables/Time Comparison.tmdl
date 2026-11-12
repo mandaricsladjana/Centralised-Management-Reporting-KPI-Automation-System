@@ -9,7 +9,7 @@ table 'Time Comparison'
 		calculationItem Current = SELECTEDMEASURE ()
 
 		/// The KPI for the same period shifted back one month.
-		calculationItem 'Previous Month' = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Calendar'[Date], -1, MONTH ) )
+		calculationItem 'Previous Month' = IF ( NOT ISBLANK ( SELECTEDMEASURE () ), CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Calendar'[Date], -1, MONTH ) ) )
 
 		/// Current minus previous month, in the KPI's own unit (percentage points for % KPIs).
 		calculationItem 'Change vs Previous Month' =
@@ -22,7 +22,7 @@ table 'Time Comparison'
 					RETURN "+" & _f & ";-" & _f & ";" & _f
 
 		/// The KPI for the same period one year earlier.
-		calculationItem 'Previous Year' = CALCULATE ( SELECTEDMEASURE (), SAMEPERIODLASTYEAR ( 'Calendar'[Date] ) )
+		calculationItem 'Previous Year' = IF ( NOT ISBLANK ( SELECTEDMEASURE () ), CALCULATE ( SELECTEDMEASURE (), SAMEPERIODLASTYEAR ( 'Calendar'[Date] ) ) )
 
 		/// Current minus the same period last year, in the KPI's own unit.
 		calculationItem 'Change vs Previous Year' =
@@ -35,7 +35,7 @@ table 'Time Comparison'
 					RETURN "+" & _f & ";-" & _f & ";" & _f
 
 		/// The KPI recalculated over the 3 months ending with the selected period (ratio of sums, not an average of monthly rates).
-		calculationItem 'Rolling 3 Months' = CALCULATE ( SELECTEDMEASURE (), DATESINPERIOD ( 'Calendar'[Date], MAX ( 'Calendar'[Date] ), -3, MONTH ) )
+		calculationItem 'Rolling 3 Months' = IF ( NOT ISBLANK ( SELECTEDMEASURE () ), CALCULATE ( SELECTEDMEASURE (), DATESINPERIOD ( 'Calendar'[Date], MAX ( 'Calendar'[Date] ), -3, MONTH ) ) )
 
 	column 'Time Comparison'
 		dataType: string

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "42495797f8cfdbe6f8f6",
+  "displayName": "Executive Quality Overview",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280,
+  "visualInteractions": [
+    {
+      "source": "351224e4d0481fcccaf7",
+      "target": "0f2472ec82d7cea2c5ec",
+      "type": "NoFilter"
+    },
+    {
+      "source": "351224e4d0481fcccaf7",
+      "target": "33d8601c0d0334c11325",
+      "type": "NoFilter"
+    }
+  ]
+}

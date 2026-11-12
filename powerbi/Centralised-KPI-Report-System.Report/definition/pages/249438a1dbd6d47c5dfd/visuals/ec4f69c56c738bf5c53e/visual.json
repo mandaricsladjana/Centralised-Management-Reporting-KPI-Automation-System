@@ -1,0 +1,299 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "ec4f69c56c738bf5c53e",
+  "position": {
+    "x": 16,
+    "y": 470,
+    "z": 1000,
+    "height": 234,
+    "width": 1248,
+    "tabOrder": 4702
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Audit Findings"
+                    }
+                  },
+                  "Property": "Finding ID"
+                }
+              },
+              "queryRef": "Audit Findings.Finding ID",
+              "nativeQueryRef": "Finding ID"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Audit Findings"
+                    }
+                  },
+                  "Property": "Audit Date"
+                }
+              },
+              "queryRef": "Audit Findings.Audit Date",
+              "nativeQueryRef": "Audit Date"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Audit Findings"
+                    }
+                  },
+                  "Property": "Audit Type"
+                }
+              },
+              "queryRef": "Audit Findings.Audit Type",
+              "nativeQueryRef": "Audit Type"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Audit Findings"
+                    }
+                  },
+                  "Property": "Classification"
+                }
+              },
+              "queryRef": "Audit Findings.Classification",
+              "nativeQueryRef": "Classification"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Production Line"
+                    }
+                  },
+                  "Property": "Line Code"
+                }
+              },
+              "queryRef": "Production Line.Line Code",
+              "nativeQueryRef": "Line Code"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Audit Findings"
+                    }
+                  },
+                  "Property": "Finding"
+                }
+              },
+              "queryRef": "Audit Findings.Finding",
+              "nativeQueryRef": "Finding"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Audit Findings"
+                    }
+                  },
+                  "Property": "Finding Owner"
+                }
+              },
+              "queryRef": "Audit Findings.Finding Owner",
+              "nativeQueryRef": "Finding Owner"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Audit Findings"
+                    }
+                  },
+                  "Property": "Finding Due Date"
+                }
+              },
+              "queryRef": "Audit Findings.Finding Due Date",
+              "nativeQueryRef": "Finding Due Date"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Audit Findings"
+                    }
+                  },
+                  "Property": "Finding Closed Date"
+                }
+              },
+              "queryRef": "Audit Findings.Finding Closed Date",
+              "nativeQueryRef": "Finding Closed Date"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Audit Findings"
+                    }
+                  },
+                  "Property": "Is Finding Overdue"
+                }
+              },
+              "queryRef": "Audit Findings.Is Finding Overdue",
+              "nativeQueryRef": "Is Finding Overdue"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Audit Findings"
+                    }
+                  },
+                  "Property": "Linked 8D"
+                }
+              },
+              "queryRef": "Audit Findings.Linked 8D",
+              "nativeQueryRef": "Linked 8D"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Audit Findings"
+                  }
+                },
+                "Property": "Audit Date"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "columnAdjustment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'growToFit'"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Audit findings'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'List of audit findings with classification, owner, dates and linked 8D'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

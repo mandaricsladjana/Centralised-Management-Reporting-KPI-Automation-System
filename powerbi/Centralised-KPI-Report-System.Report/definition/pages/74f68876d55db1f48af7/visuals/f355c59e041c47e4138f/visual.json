@@ -1,0 +1,313 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "f355c59e041c47e4138f",
+  "position": {
+    "x": 16,
+    "y": 470,
+    "z": 1000,
+    "height": 234,
+    "width": 1248,
+    "tabOrder": 4702
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "8D Reports"
+                    }
+                  },
+                  "Property": "8D ID"
+                }
+              },
+              "queryRef": "8D Reports.8D ID",
+              "nativeQueryRef": "8D ID"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "8D Reports"
+                    }
+                  },
+                  "Property": "Status"
+                }
+              },
+              "queryRef": "8D Reports.Status",
+              "nativeQueryRef": "Status"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "8D Reports"
+                    }
+                  },
+                  "Property": "Problem Source"
+                }
+              },
+              "queryRef": "8D Reports.Problem Source",
+              "nativeQueryRef": "Problem Source"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Production Line"
+                    }
+                  },
+                  "Property": "Line"
+                }
+              },
+              "queryRef": "Production Line.Line",
+              "nativeQueryRef": "Line"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Part"
+                    }
+                  },
+                  "Property": "Part"
+                }
+              },
+              "queryRef": "Part.Part",
+              "nativeQueryRef": "Part"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Defect Type"
+                    }
+                  },
+                  "Property": "Defect"
+                }
+              },
+              "queryRef": "Defect Type.Defect",
+              "nativeQueryRef": "Defect"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "8D Reports"
+                    }
+                  },
+                  "Property": "Owner"
+                }
+              },
+              "queryRef": "8D Reports.Owner",
+              "nativeQueryRef": "Owner"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "8D Reports"
+                    }
+                  },
+                  "Property": "Opened Date"
+                }
+              },
+              "queryRef": "8D Reports.Opened Date",
+              "nativeQueryRef": "Opened Date"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "8D Reports"
+                    }
+                  },
+                  "Property": "Target Closure Date"
+                }
+              },
+              "queryRef": "8D Reports.Target Closure Date",
+              "nativeQueryRef": "Target Closure Date"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "8D Reports"
+                    }
+                  },
+                  "Property": "Closed Date"
+                }
+              },
+              "queryRef": "8D Reports.Closed Date",
+              "nativeQueryRef": "Closed Date"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "8D Reports"
+                    }
+                  },
+                  "Property": "Days Open"
+                }
+              },
+              "queryRef": "8D Reports.Days Open",
+              "nativeQueryRef": "Days Open"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "8D Reports"
+                    }
+                  },
+                  "Property": "Is Repeat"
+                }
+              },
+              "queryRef": "8D Reports.Is Repeat",
+              "nativeQueryRef": "Is Repeat"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "8D Reports"
+                  }
+                },
+                "Property": "Days Open"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "columnAdjustment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'growToFit'"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'8D reports'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'List of 8D reports with status, owner, dates and age'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

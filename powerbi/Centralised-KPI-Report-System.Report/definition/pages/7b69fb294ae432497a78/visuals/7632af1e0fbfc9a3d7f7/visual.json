@@ -1,0 +1,178 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "7632af1e0fbfc9a3d7f7",
+  "position": {
+    "x": 16,
+    "y": 142,
+    "z": 1000,
+    "height": 92,
+    "width": 1248,
+    "tabOrder": 1422
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Scrap"
+                    }
+                  },
+                  "Property": "Scrap Cost €"
+                }
+              },
+              "queryRef": "Scrap.Scrap Cost €",
+              "nativeQueryRef": "Scrap Cost €",
+              "displayName": "Scrap cost"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Rework"
+                    }
+                  },
+                  "Property": "Rework Cost €"
+                }
+              },
+              "queryRef": "Rework.Rework Cost €",
+              "nativeQueryRef": "Rework Cost €",
+              "displayName": "Rework cost"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Scrap"
+                    }
+                  },
+                  "Property": "COPQ €"
+                }
+              },
+              "queryRef": "Scrap.COPQ €",
+              "nativeQueryRef": "COPQ €",
+              "displayName": "COPQ"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Rework"
+                    }
+                  },
+                  "Property": "Rework Cost Imputed €"
+                }
+              },
+              "queryRef": "Rework.Rework Cost Imputed €",
+              "nativeQueryRef": "Rework Cost Imputed €",
+              "displayName": "Rework cost imputed"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Rework"
+                    }
+                  },
+                  "Property": "Rework Success %"
+                }
+              },
+              "queryRef": "Rework.Rework Success %",
+              "nativeQueryRef": "Rework Success %",
+              "displayName": "Rework success"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "value": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "20D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Scrap cost, rework cost, COPQ, imputed rework cost and rework success rate'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

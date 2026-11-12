@@ -31,11 +31,13 @@ const str = (s) => lit(`'${String(s).replace(/'/g, "''")}'`);
 const num = (n) => lit(`${n}D`);
 const bool = (b) => lit(b ? "true" : "false");
 const solid = (hex) => ({ solid: { color: str(hex) } });
-const M = (table, name) => ({ kind: "Measure", table, name });
-const C = (table, name) => ({ kind: "Column", table, name });
+const M = (table, name, label) => ({ kind: "Measure", table, name, label });
+const C = (table, name, label) => ({ kind: "Column", table, name, label });
+const as = (fld, label) => ({ ...fld, label });             // same field, shorter label in this visual
 const fieldExpr = (f) => ({ [f.kind]: { Expression: { SourceRef: { Entity: f.table } }, Property: f.name } });
 const queryRef = (f) => `${f.table}.${f.name}`;
-const proj = (f, extra = {}) => ({ field: fieldExpr(f), queryRef: queryRef(f), nativeQueryRef: f.name, ...extra });
+const proj = (f, extra = {}) => ({ field: fieldExpr(f), queryRef: queryRef(f), nativeQueryRef: f.name,
+  ...(f.label ? { displayName: f.label } : {}), ...extra });
 const roles = (map) =>
   Object.fromEntries(Object.entries(map).filter(([, v]) => v && v.length)
     .map(([role, fields]) => [role, { projections: fields.map((f, i) => proj(f, role === "Category" && i === 0 ? { active: true } : {})) }]));
@@ -76,6 +78,8 @@ function container(page, name, { x, y, w, h, type, query, objects, vco = {}, tit
     visual: { visualType: type, ...(query ? { query } : {}), ...(objects ? { objects } : {}), ...extra,
       visualContainerObjects: {
         padding: pad(),
+        // auto subtitles ("COPQ € by Month Start") only repeat the title
+        subTitle: [{ properties: { show: bool(false) } }],
         ...(title ? { title: [{ properties: { show: bool(true), text: str(title) } }] } : {}),
         ...(alt ? { general: [{ properties: { altText: str(alt) } }] } : {}),
         ...vco,
@@ -93,19 +97,27 @@ const kpiCard = (measure, status, title, alt) => ({ type: "cardVisual", title, a
     label: [{ properties: { show: bool(false) }, selector: { id: "default" } }],
   } });
 
-const deltaCard = (measure, title) => ({ type: "cardVisual", title,
+// One-line text card under a KPI (target, or month-on-month change). No title: the KPI card above names it.
+// fontColor: a constant, or a Trend measure (Improving/Worsening/Stable) -> green/red/grey arrow.
+const lineCard = (measure, { trend, alt } = {}) => ({ type: "cardVisual", alt,
   query: { queryState: roles({ Data: [measure] }) },
   objects: {
-    value: [{ properties: { fontSize: num(14), fontColor: solid(COLORS.muted) }, selector: { id: "default" } }],
+    value: [{ properties: { fontSize: num(12), fontColor: trend ? trendRule(trend) : solid(COLORS.muted) }, selector: { id: "default" } }],
     label: [{ properties: { show: bool(false) }, selector: { id: "default" } }],
   },
-  filters: [inFilter(C("Time Comparison", "Time Comparison"), ["Change vs Previous Month"])] });
+  vco: { title: [{ properties: { show: bool(false) } }] } });
+const trendRule = (trendMeasure) => ({
+  solid: { color: { expr: { Conditional: { Cases: [["Improving", COLORS.green], ["Worsening", COLORS.red], ["Stable", COLORS.muted]].map(([s, hex]) => ({
+    Condition: { Comparison: { ComparisonKind: 0, Left: fieldExpr(trendMeasure), Right: { Literal: { Value: `'${s}'` } } } },
+    Value: { Literal: { Value: `'${hex}'` } },
+  })) } } } },
+});
 
 const multiCard = (measures, title, alt) => ({ type: "cardVisual", title, alt,
   query: { queryState: roles({ Data: measures }) },
   objects: { value: [{ properties: { fontSize: num(20) }, selector: { id: "default" } }] } });
 
-const chart = (type, { category, y = [], y2 = [], series = [], title, alt, sortBy, desc = true, color, filters, rowsSM = [] }) => ({
+const chart = (type, { category, y = [], y2 = [], series = [], title, alt, sortBy, desc = true, color, filters, rowsSM = [], labels, axisStart }) => ({
   type, title, alt, filters,
   query: {
     queryState: roles({ Category: [category], Y: y, Y2: y2, Series: series, Rows: rowsSM }),
@@ -113,7 +125,8 @@ const chart = (type, { category, y = [], y2 = [], series = [], title, alt, sortB
   },
   objects: {
     ...(color ? { dataPoint: [{ properties: { defaultColor: solid(color) } }] } : {}),
-    ...(type !== "lineChart" && series.length === 0 && y.length + y2.length <= 1 ? {} : {}),
+    ...(labels ? { labels: [{ properties: { show: bool(true) } }] } : {}),
+    ...(axisStart !== undefined ? { valueAxis: [{ properties: { start: num(axisStart) } }] } : {}),
   },
 });
 
@@ -205,13 +218,14 @@ const PROGRAM = [f.program, "Vehicle program"];
 const LINE = [f.line, "Line"];
 
 // ---------------------------------------------------------------- the 8 pages (blueprint §7)
+// KPI card titles are the KPI name only; the target and the trend arrow sit underneath (user request)
 const CORE = [
-  ["FTY %", f.fty, "FTY % (target ≥ 94%)"],
-  ["Defect Rate %", f.defectRate, "Defect rate (target ≤ 3%)"],
-  ["Scrap Rate %", f.scrapRate, "Scrap rate (target ≤ 1.5%)"],
-  ["Rework Rate %", f.reworkRate, "Rework rate (target ≤ 2%)"],
-  ["COPQ %", f.copqPct, "COPQ % of value (target ≤ 1.5%)"],
-  ["Overdue 8Ds", f.overdue8d, "Overdue 8Ds (target 0)"],
+  ["FTY %", f.fty, "FTY"],
+  ["Defect Rate %", f.defectRate, "Defect rate"],
+  ["Scrap Rate %", f.scrapRate, "Scrap rate"],
+  ["Rework Rate %", f.reworkRate, "Rework rate"],
+  ["COPQ %", f.copqPct, "COPQ % of production value"],
+  ["Overdue 8Ds", f.overdue8d, "Overdue 8Ds"],
 ];
 const cw = (W - 2 * PAD - 5 * GAP) / 6;
 
@@ -223,13 +237,18 @@ const PAGES = [
       ...slicerRow([MONTH, PROGRAM]),
       ["on-target", { x: W - PAD - 250, y: 58, w: 250, h: 80, ...multiCard([f.onTarget], "Core KPIs on target", "Number of the six core KPIs that meet their target") }],
       ...CORE.flatMap(([n, m, title], i) => [
-        [`kpi-${i}`, { x: PAD + i * (cw + GAP), y: TOP, w: cw, h: 96, ...kpiCard(m, status(n), title, `${title}: green, amber or red against target`) }],
-        [`kpi-delta-${i}`, { x: PAD + i * (cw + GAP), y: TOP + 100, w: cw, h: 52, ...deltaCard(m, "vs previous month") }],
+        [`kpi-${i}`, { x: PAD + i * (cw + GAP), y: TOP, w: cw, h: 88, ...kpiCard(m, status(n), title, `${title}: green, amber or red against target`) }],
+        [`kpi-target-${i}`, { x: PAD + i * (cw + GAP), y: TOP + 92, w: cw, h: 44,
+          ...lineCard(M(T.kt, `${n} Target Label`), { alt: `${title} target` }) }],
+        [`kpi-change-${i}`, { x: PAD + i * (cw + GAP), y: TOP + 140, w: cw, h: 44,
+          ...lineCard(M(T.kt, `${n} Change Label`), { trend: M(T.kt, `${n} Trend`),
+            alt: `${title} change versus previous month: green arrow when moving towards target, red when moving away` }) }],
       ]),
-      ["copq-trend", { x: PAD, y: 308, w: 620, h: 196, ...chart("lineChart", { category: f.month, y: [f.copq], title: "Cost of poor quality per month (€)", alt: "Monthly internal cost of poor quality: scrap plus rework cost", color: COLORS.accent }) }],
-      ["scorecard-trend", { x: PAD, y: 512, w: 620, h: 192, ...chart("clusteredColumnChart", { category: f.month, y: [f.onTarget], title: "Core KPIs on target per month (of 6)", alt: "How many of the six core KPIs were on target in each month", color: COLORS.accent }) }],
-      ["scorecard", { x: PAD + 630, y: 308, w: W - 2 * PAD - 630, h: 396, ...matrix({
-        rows: [f.line], values: [f.fty, f.defectRate, f.scrapRate, f.reworkRate, f.copqPct, f.overdue8d],
+      ["copq-trend", { x: PAD, y: 334, w: 620, h: 178, ...chart("lineChart", { category: f.month, y: [f.copq], title: "Cost of poor quality per month (€)", alt: "Monthly internal cost of poor quality: scrap plus rework cost", color: COLORS.accent }) }],
+      ["scorecard-trend", { x: PAD, y: 520, w: 620, h: 186, ...chart("clusteredColumnChart", { category: f.month, y: [f.onTarget], title: "Core KPIs on target per month (of 6)", alt: "How many of the six core KPIs were on target in each month", color: COLORS.accent }) }],
+      ["scorecard", { x: PAD + 630, y: 334, w: W - 2 * PAD - 630, h: 372, ...matrix({
+        rows: [f.line], values: [as(f.fty, "FTY"), as(f.defectRate, "Defect"), as(f.scrapRate, "Scrap"),
+                                  as(f.reworkRate, "Rework"), as(f.copqPct, "COPQ"), as(f.overdue8d, "Overdue 8Ds")],
         colorBy: { "FTY %": colour("FTY %"), "Defect Rate %": colour("Defect Rate %"), "Scrap Rate %": colour("Scrap Rate %"),
                    "Rework Rate %": colour("Rework Rate %"), "COPQ %": colour("COPQ %") },
         title: "Scorecard by line", alt: "Core KPIs per production line, coloured green, amber or red against target" }) }],
@@ -239,7 +258,7 @@ const PAGES = [
     visuals: [
       ...header("Production Quality Performance", "Where are first-pass and first-time yield lost?"),
       ...slicerRow([[f.year, "Year"], LINE, [f.stage, "Inspection stage"], PROGRAM]),
-      ["fpy-stage", { x: PAD, y: TOP, w: 400, h: 270, ...chart("clusteredBarChart", { category: f.stage, y: [f.fpy], title: "FPY by inspection stage", alt: "First pass yield per inspection stage", color: COLORS.accent }) }],
+      ["fpy-stage", { x: PAD, y: TOP, w: 400, h: 270, ...chart("clusteredBarChart", { category: f.stage, y: [f.fpy], title: "FPY by inspection stage", alt: "First pass yield per inspection stage", color: COLORS.accent, labels: true, axisStart: 0.9 }) }],
       ["fty-trend", { x: PAD + 410, y: TOP, w: W - 2 * PAD - 410, h: 270, ...chart("lineChart", { category: f.month, y: [f.fty], title: "FTY per month", alt: "First time yield per month", color: COLORS.accent }) }],
       ["volume-fpy", { x: PAD, y: TOP + 280, w: 600, h: 282, ...chart("lineClusteredColumnComboChart", { category: f.month, y: [f.volume], y2: [f.fpyFinal], title: "Volume vs final-stage FPY", alt: "Production volume as columns and final-stage first pass yield as a line, per month" }) }],
       ["line-month", { x: PAD + 610, y: TOP + 280, w: W - 2 * PAD - 610, h: 282, ...matrix({ rows: [f.line], columns: [f.yearMonth], values: [f.fpyFinal], colorBy: { "FPY Final Stage %": colour("FPY %") }, title: "Final-stage FPY by line and month", alt: "Final-stage first pass yield per line and month, coloured against the 97% target" }) }],
@@ -249,7 +268,7 @@ const PAGES = [
     visuals: [
       ...header("Scrap and Rework Analysis", "What costs us money, and why?"),
       ...slicerRow([[f.year, "Year"], LINE, PROGRAM, [f.defectCat, "Defect category"]]),
-      ["cost-cards", { x: PAD, y: TOP, w: W - 2 * PAD, h: 92, ...multiCard([f.scrapCost, f.reworkCost, f.copq, f.reworkImputed, f.reworkSuccess], null, "Scrap cost, rework cost, COPQ, imputed rework cost and rework success rate") }],
+      ["cost-cards", { x: PAD, y: TOP, w: W - 2 * PAD, h: 92, ...multiCard([as(f.scrapCost, "Scrap cost"), as(f.reworkCost, "Rework cost"), as(f.copq, "COPQ"), as(f.reworkImputed, "Rework cost imputed"), as(f.reworkSuccess, "Rework success")], null, "Scrap cost, rework cost, COPQ, imputed rework cost and rework success rate") }],
       ["cost-trend", { x: PAD, y: TOP + 100, w: 620, h: 220, ...chart("clusteredColumnChart", { category: f.month, y: [f.scrapCost, f.reworkCost], title: "Scrap and rework cost per month (€)", alt: "Monthly scrap cost and rework cost" }) }],
       ["rates-trend", { x: PAD + 630, y: TOP + 100, w: W - 2 * PAD - 630, h: 220, ...chart("lineChart", { category: f.month, y: [f.scrapRate, f.reworkRate], title: "Scrap and rework rate per month", alt: "Monthly scrap rate and rework rate" }) }],
       ["cost-defect", { x: PAD, y: TOP + 328, w: 620, h: 234, ...chart("clusteredBarChart", { category: f.defect, y: [f.copq], sortBy: f.copq, title: "Cost of poor quality by defect type (Pareto)", alt: "Scrap plus rework cost per defect type, largest first", color: COLORS.accent }) }],
@@ -271,7 +290,7 @@ const PAGES = [
     visuals: [
       ...header("Corrective Action / 8D Tracking", "What is open, overdue, and who owns it?"),
       ...slicerRow([[C(T.e8d, "Status"), "Status"], [C(T.e8d, "Owner"), "Owner"], LINE, [C(T.e8d, "Problem Source"), "Source"]]),
-      ["8d-cards", { x: PAD, y: TOP, w: W - 2 * PAD, h: 92, ...multiCard([f.open8d, f.overdue8d, f.avg8d, f.ontime8d, f.caPct, f.repeat], null, "Open and overdue 8Ds, average closure days, on-time closure, corrective-action completion and repeat defect rate") }],
+      ["8d-cards", { x: PAD, y: TOP, w: W - 2 * PAD, h: 92, ...multiCard([as(f.open8d, "Open 8Ds"), as(f.overdue8d, "Overdue 8Ds"), as(f.avg8d, "Avg closure days"), as(f.ontime8d, "On-time closure"), as(f.caPct, "Action completion"), as(f.repeat, "Repeat rate")], null, "Open and overdue 8Ds, average closure days, on-time closure, corrective-action completion and repeat defect rate") }],
       ["ageing", { x: PAD, y: TOP + 100, w: 380, h: 220, ...chart("clusteredColumnChart", { category: C(T.e8d, "Age Bucket"), y: [f.open8d], title: "Open 8Ds by age", alt: "Open 8D reports by age bucket", color: COLORS.accent }) }],
       ["flow", { x: PAD + 390, y: TOP + 100, w: W - 2 * PAD - 390, h: 220, ...chart("clusteredColumnChart", { category: f.month, y: [f.opened8d, f.closed8d], title: "8Ds opened and closed per month", alt: "8D reports opened and closed per month" }) }],
       ["8d-table", { x: PAD, y: TOP + 328, w: W - 2 * PAD, h: 234, ...table({
@@ -283,12 +302,12 @@ const PAGES = [
   { key: "line-shift", name: "Line and Shift Performance",
     visuals: [
       ...header("Line and Shift Performance", "Which line and shift combination underperforms?"),
-      ...slicerRow([[f.year, "Year"], PROGRAM]),
-      ["line-shift", { x: PAD, y: TOP, w: 620, h: 290, ...matrix({ rows: [f.line], columns: [f.shift], values: [f.fpyFinal, f.defectRate, f.scrapRate],
-        colorBy: { "FPY Final Stage %": colour("FPY %"), "Defect Rate %": colour("Defect Rate %"), "Scrap Rate %": colour("Scrap Rate %") },
-        title: "Line × shift: FPY, defect rate, scrap rate", alt: "Final-stage FPY, defect rate and scrap rate per line and shift, coloured against target" }) }],
+      ...slicerRow([[f.year, "Year"], LINE, PROGRAM]),
+      ["line-shift", { x: PAD, y: TOP, w: 620, h: 290, ...matrix({ rows: [f.line], columns: [f.shift], values: [as(f.defectRate, "Defect rate"), as(f.fpyFinal, "FPY")],
+        colorBy: { "Defect Rate %": colour("Defect Rate %"), "FPY Final Stage %": colour("FPY %") },
+        title: "Line × shift: defect rate and final-stage FPY", alt: "Defect rate and final-stage FPY per line and shift, coloured against target" }) }],
       ["ranking", { x: PAD + 630, y: TOP, w: W - 2 * PAD - 630, h: 290, ...chart("clusteredBarChart", { category: f.line, y: [f.defectRate], sortBy: f.defectRate, title: "Line ranking by defect rate", alt: "Production lines ranked by defect rate, highest first", color: COLORS.accent }) }],
-      ["multiples", { x: PAD, y: TOP + 300, w: W - 2 * PAD, h: 262, ...chart("lineChart", { category: f.month, y: [f.fpyFinal], series: [f.shift], rowsSM: [f.line], title: "Final-stage FPY per month and shift, one panel per line", alt: "Small multiples: final-stage FPY trend per shift for each line" }) }],
+      ["shift-trend", { x: PAD, y: TOP + 300, w: W - 2 * PAD, h: 262, ...chart("lineChart", { category: f.month, y: [f.defectRate], series: [f.shift], title: "Defect rate per month by shift (use the Line slicer to compare lines)", alt: "Monthly defect rate for the early, late and night shift" }) }],
     ] },
 
   { key: "trends", name: "Historical Trends and Comparison",
@@ -308,7 +327,7 @@ const PAGES = [
     visuals: [
       ...header("Audit and Compliance", "Are we audit-ready? What is open or overdue?"),
       ...slicerRow([[C(T.af, "Audit Type"), "Audit type"], [C(T.af, "Classification"), "Classification"], LINE, [f.year, "Year"]]),
-      ["audit-cards", { x: PAD, y: TOP, w: W - 2 * PAD, h: 92, ...multiCard([f.openF, f.overdueF, f.majorNC, f.raisedF, f.ontimeF, f.avgF], null, "Open and overdue findings, major nonconformities, findings raised, on-time closure and average closure days") }],
+      ["audit-cards", { x: PAD, y: TOP, w: W - 2 * PAD, h: 92, ...multiCard([as(f.openF, "Open findings"), as(f.overdueF, "Overdue findings"), as(f.majorNC, "Major NCs"), as(f.raisedF, "Findings raised"), as(f.ontimeF, "On-time closure"), as(f.avgF, "Avg closure days")], null, "Open and overdue findings, major nonconformities, findings raised, on-time closure and average closure days") }],
       ["type-class", { x: PAD, y: TOP + 100, w: 560, h: 220, ...matrix({ rows: [C(T.af, "Audit Type")], columns: [C(T.af, "Classification")], values: [f.raisedF], title: "Findings by audit type and classification", alt: "Number of audit findings per audit type and classification" }) }],
       ["clause", { x: PAD + 570, y: TOP + 100, w: W - 2 * PAD - 570, h: 220, ...chart("clusteredBarChart", { category: C(T.af, "Standard Reference"), y: [f.raisedF], sortBy: f.raisedF, title: "Findings by standard clause", alt: "Number of findings per standard clause reference", color: COLORS.accent }) }],
       ["finding-table", { x: PAD, y: TOP + 328, w: W - 2 * PAD, h: 234, ...table({

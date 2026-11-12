@@ -1,0 +1,193 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "0e60157c912fd68aab4f",
+  "position": {
+    "x": 16,
+    "y": 142,
+    "z": 1000,
+    "height": 92,
+    "width": 1248,
+    "tabOrder": 1422
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Audit Findings"
+                    }
+                  },
+                  "Property": "Open Findings"
+                }
+              },
+              "queryRef": "Audit Findings.Open Findings",
+              "nativeQueryRef": "Open Findings",
+              "displayName": "Open findings"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Audit Findings"
+                    }
+                  },
+                  "Property": "Overdue Findings"
+                }
+              },
+              "queryRef": "Audit Findings.Overdue Findings",
+              "nativeQueryRef": "Overdue Findings",
+              "displayName": "Overdue findings"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Audit Findings"
+                    }
+                  },
+                  "Property": "Major NCs"
+                }
+              },
+              "queryRef": "Audit Findings.Major NCs",
+              "nativeQueryRef": "Major NCs",
+              "displayName": "Major NCs"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Audit Findings"
+                    }
+                  },
+                  "Property": "# Findings Raised"
+                }
+              },
+              "queryRef": "Audit Findings.# Findings Raised",
+              "nativeQueryRef": "# Findings Raised",
+              "displayName": "Findings raised"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Audit Findings"
+                    }
+                  },
+                  "Property": "Audit On-time Closure %"
+                }
+              },
+              "queryRef": "Audit Findings.Audit On-time Closure %",
+              "nativeQueryRef": "Audit On-time Closure %",
+              "displayName": "On-time closure"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Audit Findings"
+                    }
+                  },
+                  "Property": "Avg Finding Closure Days"
+                }
+              },
+              "queryRef": "Audit Findings.Avg Finding Closure Days",
+              "nativeQueryRef": "Avg Finding Closure Days",
+              "displayName": "Avg closure days"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "value": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "20D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Open and overdue findings, major nonconformities, findings raised, on-time closure and average closure days'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,193 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "2b0b6d7bf0c6de47975d",
+  "position": {
+    "x": 16,
+    "y": 142,
+    "z": 1000,
+    "height": 92,
+    "width": 1248,
+    "tabOrder": 1422
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "8D Reports"
+                    }
+                  },
+                  "Property": "Open 8Ds"
+                }
+              },
+              "queryRef": "8D Reports.Open 8Ds",
+              "nativeQueryRef": "Open 8Ds",
+              "displayName": "Open 8Ds"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "8D Reports"
+                    }
+                  },
+                  "Property": "Overdue 8Ds"
+                }
+              },
+              "queryRef": "8D Reports.Overdue 8Ds",
+              "nativeQueryRef": "Overdue 8Ds",
+              "displayName": "Overdue 8Ds"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "8D Reports"
+                    }
+                  },
+                  "Property": "Avg 8D Closure Days"
+                }
+              },
+              "queryRef": "8D Reports.Avg 8D Closure Days",
+              "nativeQueryRef": "Avg 8D Closure Days",
+              "displayName": "Avg closure days"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "8D Reports"
+                    }
+                  },
+                  "Property": "8D On-time Closure %"
+                }
+              },
+              "queryRef": "8D Reports.8D On-time Closure %",
+              "nativeQueryRef": "8D On-time Closure %",
+              "displayName": "On-time closure"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "8D Actions"
+                    }
+                  },
+                  "Property": "CA Completion %"
+                }
+              },
+              "queryRef": "8D Actions.CA Completion %",
+              "nativeQueryRef": "CA Completion %",
+              "displayName": "Action completion"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "8D Reports"
+                    }
+                  },
+                  "Property": "Repeat Defect Rate %"
+                }
+              },
+              "queryRef": "8D Reports.Repeat Defect Rate %",
+              "nativeQueryRef": "Repeat Defect Rate %",
+              "displayName": "Repeat rate"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "value": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "20D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Open and overdue 8Ds, average closure days, on-time closure, corrective-action completion and repeat defect rate'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
