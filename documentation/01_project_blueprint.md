@@ -663,5 +663,8 @@ No Notion connection is available in this environment, so this is the structure 
 | D26 | New rule VR-GEN-08: wrong type or value outside an allowed list → row rejected | ✅ Otherwise one bad value fails the whole file on a dw CHECK constraint. Migration `062` |
 | D27 | Warn rules are written to `audit.dq_result` as one row per file and rule (count + up to 10 examples), not one row per occurrence | ✅ Readable data-quality page; the occurrences stay countable |
 | D28 | Integration tests that need an empty warehouse run on a separate local database `QualityKPI_Test`, never DEV | ✅ DEV keeps the 24-month load for Power BI development |
+| D29 | Power BI: business-friendly table and column names (`Production`, `8D Reports`) and measures on their fact tables with display folders, instead of `dim_*/fact_*` names and one `_Measures` table (§7) | ✅ Follows the Power BI modelling guidelines; the SQL layer keeps snake_case. KPI measure names still match the KPI dictionary |
+| D30 | Time intelligence (Δ previous month, previous year, rolling 3 months) as one calculation group `Time Comparison` instead of `… PM / … YoY` measures per KPI | ✅ Works for every KPI without measure explosion; rolling values are ratios of sums |
+| D31 | Quantity measures renamed `Inspected Quantity`, `Scrapped Quantity`, … | ✅ A measure cannot share its name with a column (`Qty Inspected`) |
 
 Every future decision is added here and mirrored in the Notion *Decisions & Change Log* database.

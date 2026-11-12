@@ -2,7 +2,7 @@
 
 A portfolio project that simulates an automotive Tier‑1 supplier (*Danube Automotive Components*, fictional). Quality data from five departments is scattered across Excel and CSV files. The project consolidates it into **one governed SQL star schema**, with **one definition per KPI**, and reports it in **Power BI**.
 
-> **Status:** Phases 1–8 complete: 24 months of synthetic data loaded into DEV by the ETL. Next: Phase 9, the Power BI report. See the [roadmap](documentation/01_project_blueprint.md#11-implementation-roadmap).
+> **Status:** Phase 9 in progress: Power BI semantic model done (86 measures, reconciled with SQL); report pages next. See the [roadmap](documentation/01_project_blueprint.md#11-implementation-roadmap).
 
 ## Architecture
 
@@ -28,6 +28,7 @@ The full design is in [documentation/01_project_blueprint.md](documentation/01_p
 | [03 Azure infrastructure](documentation/03_azure_infrastructure.md) | Cloud resources, authentication, rebuild commands, issues log |
 | [04 Synthetic data](documentation/04_synthetic_data.md) | Generator, source files, the built-in quality story, injected data-quality issues |
 | [05 ETL pipeline](documentation/05_etl_pipeline.md) | How to run the load, flow, modules, validation rules, data-quality checks |
+| [06 Power BI model](documentation/06_powerbi_model.md) | Tables, relationships, measures, DAX = SQL reconciliation |
 
 ## Repository structure
 
