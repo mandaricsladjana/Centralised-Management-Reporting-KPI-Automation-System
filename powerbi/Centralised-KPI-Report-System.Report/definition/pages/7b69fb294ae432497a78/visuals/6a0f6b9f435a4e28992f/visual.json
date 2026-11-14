@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "6a0f6b9f435a4e28992f",
   "position": {
     "x": 646,
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "Defect Type.Defect Category",
-              "nativeQueryRef": "Defect Category"
+              "nativeQueryRef": "Defect Category",
+              "active": true
             }
           ]
         }

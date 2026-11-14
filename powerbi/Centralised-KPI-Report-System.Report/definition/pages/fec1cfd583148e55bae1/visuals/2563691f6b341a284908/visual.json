@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "2563691f6b341a284908",
   "position": {
     "x": 626,
@@ -13,24 +13,6 @@
     "visualType": "pivotTable",
     "query": {
       "queryState": {
-        "Rows": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Production Line"
-                    }
-                  },
-                  "Property": "Line"
-                }
-              },
-              "queryRef": "Production Line.Line",
-              "nativeQueryRef": "Line"
-            }
-          ]
-        },
         "Columns": {
           "projections": [
             {
@@ -45,7 +27,27 @@
                 }
               },
               "queryRef": "Calendar.Year Month",
-              "nativeQueryRef": "Year Month"
+              "nativeQueryRef": "Year Month",
+              "active": true
+            }
+          ]
+        },
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Production Line"
+                    }
+                  },
+                  "Property": "Line"
+                }
+              },
+              "queryRef": "Production Line.Line",
+              "nativeQueryRef": "Line",
+              "active": true
             }
           ]
         },

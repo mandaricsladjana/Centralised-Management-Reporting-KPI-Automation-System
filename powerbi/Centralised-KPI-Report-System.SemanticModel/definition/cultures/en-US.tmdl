@@ -1,2 +1,504 @@
 cultureInfo en-US
 
+	linguisticMetadata =
+			{
+			  "Version": "2.0.0",
+			  "Language": "en-US",
+			  "Entities": {
+			    "inspections.fty_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Inspections",
+			          "ConceptualProperty": "FTY %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "FTY": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "inspections.fpy_final_stage_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Inspections",
+			          "ConceptualProperty": "FPY Final Stage %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "FPY": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "nonconformities.defect_rate_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Nonconformities",
+			          "ConceptualProperty": "Defect Rate %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Defect": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Defect rate": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "scrap.scrap_rate_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Scrap",
+			          "ConceptualProperty": "Scrap Rate %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Scrap": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "scrap.copq_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Scrap",
+			          "ConceptualProperty": "COPQ %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "COPQ": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "scrap.scrap_cost_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Scrap",
+			          "ConceptualProperty": "Scrap Cost €"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Scrap cost": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "scrap.copq_1": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Scrap",
+			          "ConceptualProperty": "COPQ €"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "COPQ": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "rework.rework_rate_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Rework",
+			          "ConceptualProperty": "Rework Rate %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Rework": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "rework.rework_cost_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Rework",
+			          "ConceptualProperty": "Rework Cost €"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Rework cost": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "rework.rework_cost_imputed_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Rework",
+			          "ConceptualProperty": "Rework Cost Imputed €"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Rework cost imputed": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "rework.rework_success_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Rework",
+			          "ConceptualProperty": "Rework Success %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Rework success": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table8d_reports.overdue_8ds": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "8D Reports",
+			          "ConceptualProperty": "Overdue 8Ds"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Overdue 8Ds": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table8d_reports.open_8ds": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "8D Reports",
+			          "ConceptualProperty": "Open 8Ds"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Open 8Ds": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table8d_reports.avg_8d_closure_days": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "8D Reports",
+			          "ConceptualProperty": "Avg 8D Closure Days"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Avg closure days": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table8d_reports.column8d_ontime_closure_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "8D Reports",
+			          "ConceptualProperty": "8D On-time Closure %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "On-time closure": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table8d_reports.repeat_defect_rate_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "8D Reports",
+			          "ConceptualProperty": "Repeat Defect Rate %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Repeat rate": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table8d_actions.ca_completion_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "8D Actions",
+			          "ConceptualProperty": "CA Completion %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Action completion": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "audit_findings.open_findings": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Audit Findings",
+			          "ConceptualProperty": "Open Findings"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Open findings": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "audit_findings.overdue_findings": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Audit Findings",
+			          "ConceptualProperty": "Overdue Findings"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Overdue findings": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "audit_findings.major_ncs": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Audit Findings",
+			          "ConceptualProperty": "Major NCs"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Major NCs": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "audit_findings.findings_raised": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Audit Findings",
+			          "ConceptualProperty": "# Findings Raised"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Findings raised": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "audit_findings.audit_ontime_closure_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Audit Findings",
+			          "ConceptualProperty": "Audit On-time Closure %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "On-time closure": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "audit_findings.avg_finding_closure_days": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Audit Findings",
+			          "ConceptualProperty": "Avg Finding Closure Days"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Avg closure days": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    }
+			  }
+			}
+		contentType: json
+

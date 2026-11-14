@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "66033d608511a0dbb0ea",
   "position": {
     "x": 646,
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "8D Reports.Problem Source",
-              "nativeQueryRef": "Problem Source"
+              "nativeQueryRef": "Problem Source",
+              "active": true
             }
           ]
         }

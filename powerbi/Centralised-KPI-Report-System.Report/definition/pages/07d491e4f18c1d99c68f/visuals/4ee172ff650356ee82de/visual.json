@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "4ee172ff650356ee82de",
   "position": {
     "x": 646,
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "Inspection Stage.Stage",
-              "nativeQueryRef": "Stage"
+              "nativeQueryRef": "Stage",
+              "active": true
             }
           ]
         }

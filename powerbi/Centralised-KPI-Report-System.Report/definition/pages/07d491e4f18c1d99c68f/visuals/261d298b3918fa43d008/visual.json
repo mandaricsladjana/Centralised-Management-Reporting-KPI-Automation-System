@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "261d298b3918fa43d008",
   "position": {
     "x": 646,
@@ -32,24 +32,6 @@
             }
           ]
         },
-        "Y": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Nonconformities"
-                    }
-                  },
-                  "Property": "Defect Rate %"
-                }
-              },
-              "queryRef": "Nonconformities.Defect Rate %",
-              "nativeQueryRef": "Defect Rate %"
-            }
-          ]
-        },
         "Series": {
           "projections": [
             {
@@ -67,10 +49,27 @@
               "nativeQueryRef": "Shift"
             }
           ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Nonconformities"
+                    }
+                  },
+                  "Property": "Defect Rate %"
+                }
+              },
+              "queryRef": "Nonconformities.Defect Rate %",
+              "nativeQueryRef": "Defect Rate %"
+            }
+          ]
         }
       }
     },
-    "objects": {},
     "visualContainerObjects": {
       "padding": [
         {

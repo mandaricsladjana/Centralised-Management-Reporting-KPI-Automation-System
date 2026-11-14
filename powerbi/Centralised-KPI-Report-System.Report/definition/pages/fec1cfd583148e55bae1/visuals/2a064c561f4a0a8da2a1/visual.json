@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "2a064c561f4a0a8da2a1",
   "position": {
     "x": 646,
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "Part.Program",
-              "nativeQueryRef": "Program"
+              "nativeQueryRef": "Program",
+              "active": true
             }
           ]
         }

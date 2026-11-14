@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "6b9939cf479580aba5a0",
   "position": {
     "x": 16,
@@ -13,24 +13,6 @@
     "visualType": "pivotTable",
     "query": {
       "queryState": {
-        "Rows": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Audit Findings"
-                    }
-                  },
-                  "Property": "Audit Type"
-                }
-              },
-              "queryRef": "Audit Findings.Audit Type",
-              "nativeQueryRef": "Audit Type"
-            }
-          ]
-        },
         "Columns": {
           "projections": [
             {
@@ -45,7 +27,27 @@
                 }
               },
               "queryRef": "Audit Findings.Classification",
-              "nativeQueryRef": "Classification"
+              "nativeQueryRef": "Classification",
+              "active": true
+            }
+          ]
+        },
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Audit Findings"
+                    }
+                  },
+                  "Property": "Audit Type"
+                }
+              },
+              "queryRef": "Audit Findings.Audit Type",
+              "nativeQueryRef": "Audit Type",
+              "active": true
             }
           ]
         },

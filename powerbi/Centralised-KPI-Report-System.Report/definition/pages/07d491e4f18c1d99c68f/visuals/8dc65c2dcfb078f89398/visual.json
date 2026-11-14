@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "8dc65c2dcfb078f89398",
   "position": {
     "x": 446,
@@ -13,24 +13,6 @@
     "visualType": "pivotTable",
     "query": {
       "queryState": {
-        "Rows": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Defect Type"
-                    }
-                  },
-                  "Property": "Defect Category"
-                }
-              },
-              "queryRef": "Defect Type.Defect Category",
-              "nativeQueryRef": "Defect Category"
-            }
-          ]
-        },
         "Columns": {
           "projections": [
             {
@@ -45,7 +27,27 @@
                 }
               },
               "queryRef": "Production Line.Line Code",
-              "nativeQueryRef": "Line Code"
+              "nativeQueryRef": "Line Code",
+              "active": true
+            }
+          ]
+        },
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Defect Type"
+                    }
+                  },
+                  "Property": "Defect Category"
+                }
+              },
+              "queryRef": "Defect Type.Defect Category",
+              "nativeQueryRef": "Defect Category",
+              "active": true
             }
           ]
         },

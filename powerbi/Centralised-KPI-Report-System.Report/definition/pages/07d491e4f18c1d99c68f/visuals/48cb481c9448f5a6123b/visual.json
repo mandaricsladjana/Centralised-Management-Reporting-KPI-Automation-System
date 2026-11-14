@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "48cb481c9448f5a6123b",
   "position": {
     "x": 856,
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "Defect Type.Severity Label",
-              "nativeQueryRef": "Severity Label"
+              "nativeQueryRef": "Severity Label",
+              "active": true
             }
           ]
         }

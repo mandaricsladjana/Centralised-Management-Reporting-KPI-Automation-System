@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "36937b98311623b9a7f8",
   "position": {
     "x": 226,
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "Audit Findings.Classification",
-              "nativeQueryRef": "Classification"
+              "nativeQueryRef": "Classification",
+              "active": true
             }
           ]
         }

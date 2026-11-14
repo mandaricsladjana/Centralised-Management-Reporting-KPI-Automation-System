@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "fea7bb51ce2d5755a14c",
   "position": {
     "x": 226,
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "Production Line.Line",
-              "nativeQueryRef": "Line"
+              "nativeQueryRef": "Line",
+              "active": true
             }
           ]
         }

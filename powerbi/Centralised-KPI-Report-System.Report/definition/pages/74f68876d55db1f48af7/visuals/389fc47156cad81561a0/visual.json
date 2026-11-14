@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "389fc47156cad81561a0",
   "position": {
     "x": 226,
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "8D Reports.Owner",
-              "nativeQueryRef": "Owner"
+              "nativeQueryRef": "Owner",
+              "active": true
             }
           ]
         }

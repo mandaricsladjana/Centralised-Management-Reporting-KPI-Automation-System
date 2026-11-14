@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "7d61dafbf3d74aa39560",
   "position": {
     "x": 436,
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "Shift.Shift",
-              "nativeQueryRef": "Shift"
+              "nativeQueryRef": "Shift",
+              "active": true
             }
           ]
         }

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "1573269dff2f052d0b64",
   "position": {
     "x": 16,
@@ -32,24 +32,6 @@
             }
           ]
         },
-        "Y": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Scrap"
-                    }
-                  },
-                  "Property": "COPQ %"
-                }
-              },
-              "queryRef": "Scrap.COPQ %",
-              "nativeQueryRef": "COPQ %"
-            }
-          ]
-        },
         "Series": {
           "projections": [
             {
@@ -67,10 +49,27 @@
               "nativeQueryRef": "Time Comparison"
             }
           ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Scrap"
+                    }
+                  },
+                  "Property": "COPQ %"
+                }
+              },
+              "queryRef": "Scrap.COPQ %",
+              "nativeQueryRef": "COPQ %"
+            }
+          ]
         }
       }
     },
-    "objects": {},
     "visualContainerObjects": {
       "padding": [
         {

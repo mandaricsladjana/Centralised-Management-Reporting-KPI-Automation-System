@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "9ffce16a50259a4d7da5",
   "position": {
     "x": 16,
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "Audit Findings.Audit Type",
-              "nativeQueryRef": "Audit Type"
+              "nativeQueryRef": "Audit Type",
+              "active": true
             }
           ]
         }
