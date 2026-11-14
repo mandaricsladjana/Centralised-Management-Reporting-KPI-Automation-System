@@ -1,10 +1,13 @@
 // Generates the PBIR pages, visuals and theme of the Quality KPI report (Phase 9).
 //
 //   node powerbi/tools/build_report.mjs [path/to/Centralised-KPI-Report-System.Report]
+//   node powerbi/tools/build_report.mjs --pages executive,kpi-cards-backup   (only these pages)
 //
 // The report is code: page layouts live in PAGES below, so the report can be rebuilt,
-// reviewed in Git and changed consistently. It replaces definition/pages/* and the
-// custom theme; report.json keeps its settings. Design (blueprint §7, D32):
+// reviewed in Git and changed consistently. Without --pages it replaces definition/pages/*
+// and the custom theme; with --pages it rewrites only the named pages (theme, report.json and
+// all other pages untouched). report.json always keeps its settings and custom-visual
+// registrations. Design (blueprint §7, D32):
 // 1280x720 canvas, light-grey page, white cards, dark-grey title band, one accent
 // colour (#0F6E8C) and semantic RAG colours only (green #2E7D32, amber #B26A00, red #C62828).
 import { createHash } from "node:crypto";
@@ -13,7 +16,8 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const REPORT = resolve(process.argv[2] ?? join(HERE, "..", "Centralised-KPI-Report-System.Report"));
+const pathArg = process.argv[2] && !process.argv[2].startsWith("--") ? process.argv[2] : null;
+const REPORT = resolve(pathArg ?? join(HERE, "..", "Centralised-KPI-Report-System.Report"));
 const DEF = join(REPORT, "definition");
 const W = 1280, H = 720, PAD = 16, GAP = 10;
 const THEME_NAME = "DanubeQuality";
@@ -166,6 +170,16 @@ const slicer = (col, label, { selected, single = false } = {}) => ({
   },
 });
 
+// AppSource visual "HTML Content Secure" (dm-p/powerbi-visuals-html-content). GUID copied from the
+// Desktop-authored instance / report.json publicCustomVisuals (never guessed); data role: content.
+const HTML_CONTENT = "htmlContent443BE3AD55E043BF878BED274D3A6865";
+const htmlContent = (measure, alt) => ({ type: HTML_CONTENT, alt,
+  query: { queryState: { content: { projections: [proj(measure)] } } },
+  objects: { compatibility: [{ properties: { legacyRendering: bool(false) } }] },
+  // the HTML draws its own tiles, so the container is invisible
+  vco: { title: [{ properties: { show: bool(false) } }], background: [{ properties: { show: bool(false) } }],
+         border: [{ properties: { show: bool(false) } }], padding: pad(0, 0, 0, 0) } });
+
 const textRun = (value, size, color, family = "Segoe UI") => ({ value, textStyle: { fontFamily: family, fontSize: `${size}px`, color } });
 const textbox = (runs, align = "left") => ({ type: "textbox",
   objects: { general: [{ properties: { paragraphs: [{ textRuns: runs, horizontalTextAlignment: align }] } }] },
@@ -228,6 +242,16 @@ const CORE = [
   ["Overdue 8Ds", f.overdue8d, "Overdue 8Ds"],
 ];
 const cw = (W - 2 * PAD - 5 * GAP) / 6;
+// The original native KPI cards (value + target line + change line per KPI): kept on a hidden backup
+// page since the HTML Content visual replaced them on the Executive page (documentation/07).
+const coreCards = (top) => CORE.flatMap(([n, m, title], i) => [
+  [`kpi-${i}`, { x: PAD + i * (cw + GAP), y: top, w: cw, h: 88, ...kpiCard(m, status(n), title, `${title}: green, amber or red against target`) }],
+  [`kpi-target-${i}`, { x: PAD + i * (cw + GAP), y: top + 92, w: cw, h: 44,
+    ...lineCard(M(T.kt, `${n} Target Label`), { alt: `${title} target` }) }],
+  [`kpi-change-${i}`, { x: PAD + i * (cw + GAP), y: top + 140, w: cw, h: 44,
+    ...lineCard(M(T.kt, `${n} Change Label`), { trend: M(T.kt, `${n} Trend`),
+      alt: `${title} change versus previous month: green arrow when moving towards target, red when moving away` }) }],
+]);
 
 const PAGES = [
   { key: "executive", name: "Executive Quality Overview",
@@ -236,14 +260,9 @@ const PAGES = [
       ...header("Executive Quality Overview", SUB),
       ...slicerRow([MONTH, PROGRAM]),
       ["on-target", { x: W - PAD - 250, y: 58, w: 250, h: 80, ...multiCard([f.onTarget], "Core KPIs on target", "Number of the six core KPIs that meet their target") }],
-      ...CORE.flatMap(([n, m, title], i) => [
-        [`kpi-${i}`, { x: PAD + i * (cw + GAP), y: TOP, w: cw, h: 88, ...kpiCard(m, status(n), title, `${title}: green, amber or red against target`) }],
-        [`kpi-target-${i}`, { x: PAD + i * (cw + GAP), y: TOP + 92, w: cw, h: 44,
-          ...lineCard(M(T.kt, `${n} Target Label`), { alt: `${title} target` }) }],
-        [`kpi-change-${i}`, { x: PAD + i * (cw + GAP), y: TOP + 140, w: cw, h: 44,
-          ...lineCard(M(T.kt, `${n} Change Label`), { trend: M(T.kt, `${n} Trend`),
-            alt: `${title} change versus previous month: green arrow when moving towards target, red when moving away` }) }],
-      ]),
+      // KPI cards with targets: one HTML Content Secure visual driven by [KPI Cards HTML] (documentation/07)
+      ["kpi-cards-html", { x: PAD, y: TOP, w: W - 2 * PAD, h: 184, ...htmlContent(M(T.kt, "KPI Cards HTML"),
+        "Six core KPIs: current value against target with status, and an arrow showing the change since the previous month (green towards target, red away from it)") }],
       ["copq-trend", { x: PAD, y: 334, w: 620, h: 178, ...chart("lineChart", { category: f.month, y: [f.copq], title: "Cost of poor quality per month (€)", alt: "Monthly internal cost of poor quality: scrap plus rework cost", color: COLORS.accent }) }],
       ["scorecard-trend", { x: PAD, y: 520, w: 620, h: 186, ...chart("clusteredColumnChart", { category: f.month, y: [f.onTarget], title: "Core KPIs on target per month (of 6)", alt: "How many of the six core KPIs were on target in each month", color: COLORS.accent }) }],
       ["scorecard", { x: PAD + 630, y: 334, w: W - 2 * PAD - 630, h: 372, ...matrix({
@@ -336,6 +355,17 @@ const PAGES = [
                   C(T.af, "Is Finding Overdue"), C(T.af, "Linked 8D")],
         sortBy: C(T.af, "Audit Date"), title: "Audit findings", alt: "List of audit findings with classification, owner, dates and linked 8D" }) }],
     ] },
+
+  // Hidden in view mode: the 18 native KPI cards exactly as they were before the HTML visual.
+  { key: "kpi-cards-backup", name: "KPI cards (original, hidden)", hidden: true,
+    visuals: [
+      ...header("KPI cards · original native version (hidden backup)", "Replaced on the Executive page by the HTML Content visual"),
+      ...slicerRow([MONTH, PROGRAM]),
+      ...coreCards(TOP),
+      ["note", { x: PAD, y: TOP + 200, w: W - 2 * PAD, h: 60, ...textbox([textRun(
+        "To switch back: copy these 18 cards to the Executive Quality Overview page and remove the HTML Content visual. Same measures, same filters; nothing in the model depends on this page.",
+        12, COLORS.muted)]) }],
+    ] },
 ];
 
 // ---------------------------------------------------------------- theme
@@ -380,16 +410,19 @@ function writeTheme() {
 }
 
 // ---------------------------------------------------------------- write pages
-function writePages() {
+// only: null = rebuild every page; otherwise a Set of page keys to rewrite (others untouched)
+function writePages(only) {
   const pagesDir = join(DEF, "pages");
-  if (existsSync(pagesDir)) rmSync(pagesDir, { recursive: true });
+  if (!only && existsSync(pagesDir)) rmSync(pagesDir, { recursive: true });
   mkdirSync(pagesDir, { recursive: true });
   const order = [];
   let visualCount = 0;
   for (const p of PAGES) {
     const pageName = id("page", p.key);
     order.push(pageName);
+    if (only && !only.has(p.key)) continue;
     const dir = join(pagesDir, pageName);
+    if (existsSync(dir)) rmSync(dir, { recursive: true });
     const names = {};
     for (const [key, spec] of p.visuals) {
       const v = container(p.key, key, spec);
@@ -398,17 +431,31 @@ function writePages() {
       writeFileSync(join(dir, "visuals", v.name, "visual.json"), JSON.stringify(v, null, 2) + "\n");
       visualCount++;
     }
-    const page = { $schema: SCHEMA.page, name: pageName, displayName: p.name, displayOption: "FitToPage", height: H, width: W };
+    const page = { $schema: SCHEMA.page, name: pageName, displayName: p.name, displayOption: "FitToPage", height: H, width: W,
+      ...(p.hidden ? { visibility: "HiddenInViewMode" } : {}) };
     if (p.interactionsNoFilter) {
       page.visualInteractions = p.interactionsNoFilter.map(([s, t]) => ({ source: names[s], target: names[t], type: "NoFilter" }));
     }
     writeFileSync(join(dir, "page.json"), JSON.stringify(page, null, 2) + "\n");
   }
-  writeFileSync(join(pagesDir, "pages.json"),
-    JSON.stringify({ $schema: SCHEMA.pages, pageOrder: order, activePageName: order[0] }, null, 2) + "\n");
-  return { pages: order.length, visuals: visualCount };
+  const pagesJson = join(pagesDir, "pages.json");
+  let finalOrder = order;
+  if (only && existsSync(pagesJson)) {            // keep the existing order; append pages that are new
+    const existing = JSON.parse(readFileSync(pagesJson, "utf8")).pageOrder || [];
+    finalOrder = [...existing.filter((n) => order.includes(n)), ...order.filter((n) => !existing.includes(n))];
+  }
+  writeFileSync(pagesJson,
+    JSON.stringify({ $schema: SCHEMA.pages, pageOrder: finalOrder, activePageName: finalOrder[0] }, null, 2) + "\n");
+  return { pages: finalOrder.length, rewritten: only ? [...only] : "all", visuals: visualCount };
 }
 
-const theme = writeTheme();
-const stats = writePages();
+// --pages executive,kpi-cards-backup  -> rewrite only those pages; theme and other pages untouched
+const pagesArg = process.argv.indexOf("--pages");
+const only = pagesArg > 0 ? new Set(process.argv[pagesArg + 1].split(",")) : null;
+if (only) {
+  const unknown = [...only].filter((k) => !PAGES.some((p) => p.key === k));
+  if (unknown.length) throw new Error(`unknown page keys: ${unknown.join(", ")}`);
+}
+const theme = only ? "(unchanged)" : writeTheme();
+const stats = writePages(only);
 console.log(JSON.stringify({ report: REPORT, theme, ...stats }));

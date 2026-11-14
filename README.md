@@ -29,6 +29,7 @@ The full design is in [documentation/01_project_blueprint.md](documentation/01_p
 | [04 Synthetic data](documentation/04_synthetic_data.md) | Generator, source files, the built-in quality story, injected data-quality issues |
 | [05 ETL pipeline](documentation/05_etl_pipeline.md) | How to run the load, flow, modules, validation rules, data-quality checks |
 | [06 Power BI model](documentation/06_powerbi_model.md) | Tables, relationships, measures, DAX = SQL reconciliation |
+| [07 KPI cards HTML visual](documentation/07_kpi_cards_html_visual.md) | Executive KPI cards as an HTML Content visual: design, files, parity tests, limitations |
 
 ## Repository structure
 

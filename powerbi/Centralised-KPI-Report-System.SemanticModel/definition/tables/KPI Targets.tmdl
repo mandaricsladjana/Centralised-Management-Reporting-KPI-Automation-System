@@ -279,138 +279,6 @@ table 'KPI Targets'
 		displayFolder: Scorecard
 		lineageTag: fdc4b494-ab19-4700-a43c-9f3185659930
 
-	/// Target of FTY % for the KPI card, e.g. "Target ≥ 94.0%".
-	measure 'FTY % Target Label' =
-			VAR _value = [FTY %]
-			RETURN IF ( NOT ISBLANK ( _value ), "Target ≥ " & FORMAT ( [FTY % Target], "0.0%" ) )
-		displayFolder: Target Cards
-
-	/// Month-on-month change of FTY % for the KPI card: arrow in the direction of the value and the size of the change in percentage points; "=" when unchanged.
-	measure 'FTY % Change Label' =
-			VAR _value = [FTY %]
-			VAR _previous = CALCULATE ( [FTY %], DATEADD ( 'Calendar'[Date], -1, MONTH ) )
-			VAR _change = _value - _previous
-			RETURN SWITCH ( TRUE (), ISBLANK ( _value ) || ISBLANK ( _previous ), BLANK (), _change = 0, "= no change", IF ( _change > 0, "▲ ", "▼ " ) & FORMAT ( ABS ( _change ) * 100, "0.00" ) & " pp" & " vs prev. month" )
-		displayFolder: Target Cards
-
-	/// Improving when FTY % moved towards (or further past) its target since the previous month, Worsening when it moved away, Stable when unchanged. Colours the change arrow (green / red / grey).
-	measure 'FTY % Trend' =
-			VAR _value = [FTY %]
-			VAR _previous = CALCULATE ( [FTY %], DATEADD ( 'Calendar'[Date], -1, MONTH ) )
-			VAR _change = _value - _previous
-			RETURN SWITCH ( TRUE (), ISBLANK ( _value ) || ISBLANK ( _previous ), BLANK (), _change = 0, "Stable", _change > 0, "Improving", "Worsening" )
-		displayFolder: Target Cards
-
-	/// Target of Defect Rate % for the KPI card, e.g. "Target ≤ 94.0%".
-	measure 'Defect Rate % Target Label' =
-			VAR _value = [Defect Rate %]
-			RETURN IF ( NOT ISBLANK ( _value ), "Target ≤ " & FORMAT ( [Defect Rate % Target], "0.0%" ) )
-		displayFolder: Target Cards
-
-	/// Month-on-month change of Defect Rate % for the KPI card: arrow in the direction of the value and the size of the change in percentage points; "=" when unchanged.
-	measure 'Defect Rate % Change Label' =
-			VAR _value = [Defect Rate %]
-			VAR _previous = CALCULATE ( [Defect Rate %], DATEADD ( 'Calendar'[Date], -1, MONTH ) )
-			VAR _change = _value - _previous
-			RETURN SWITCH ( TRUE (), ISBLANK ( _value ) || ISBLANK ( _previous ), BLANK (), _change = 0, "= no change", IF ( _change > 0, "▲ ", "▼ " ) & FORMAT ( ABS ( _change ) * 100, "0.00" ) & " pp" & " vs prev. month" )
-		displayFolder: Target Cards
-
-	/// Improving when Defect Rate % moved towards (or further past) its target since the previous month, Worsening when it moved away, Stable when unchanged. Colours the change arrow (green / red / grey).
-	measure 'Defect Rate % Trend' =
-			VAR _value = [Defect Rate %]
-			VAR _previous = CALCULATE ( [Defect Rate %], DATEADD ( 'Calendar'[Date], -1, MONTH ) )
-			VAR _change = _value - _previous
-			RETURN SWITCH ( TRUE (), ISBLANK ( _value ) || ISBLANK ( _previous ), BLANK (), _change = 0, "Stable", _change < 0, "Improving", "Worsening" )
-		displayFolder: Target Cards
-
-	/// Target of Scrap Rate % for the KPI card, e.g. "Target ≤ 94.0%".
-	measure 'Scrap Rate % Target Label' =
-			VAR _value = [Scrap Rate %]
-			RETURN IF ( NOT ISBLANK ( _value ), "Target ≤ " & FORMAT ( [Scrap Rate % Target], "0.0%" ) )
-		displayFolder: Target Cards
-
-	/// Month-on-month change of Scrap Rate % for the KPI card: arrow in the direction of the value and the size of the change in percentage points; "=" when unchanged.
-	measure 'Scrap Rate % Change Label' =
-			VAR _value = [Scrap Rate %]
-			VAR _previous = CALCULATE ( [Scrap Rate %], DATEADD ( 'Calendar'[Date], -1, MONTH ) )
-			VAR _change = _value - _previous
-			RETURN SWITCH ( TRUE (), ISBLANK ( _value ) || ISBLANK ( _previous ), BLANK (), _change = 0, "= no change", IF ( _change > 0, "▲ ", "▼ " ) & FORMAT ( ABS ( _change ) * 100, "0.00" ) & " pp" & " vs prev. month" )
-		displayFolder: Target Cards
-
-	/// Improving when Scrap Rate % moved towards (or further past) its target since the previous month, Worsening when it moved away, Stable when unchanged. Colours the change arrow (green / red / grey).
-	measure 'Scrap Rate % Trend' =
-			VAR _value = [Scrap Rate %]
-			VAR _previous = CALCULATE ( [Scrap Rate %], DATEADD ( 'Calendar'[Date], -1, MONTH ) )
-			VAR _change = _value - _previous
-			RETURN SWITCH ( TRUE (), ISBLANK ( _value ) || ISBLANK ( _previous ), BLANK (), _change = 0, "Stable", _change < 0, "Improving", "Worsening" )
-		displayFolder: Target Cards
-
-	/// Target of Rework Rate % for the KPI card, e.g. "Target ≤ 94.0%".
-	measure 'Rework Rate % Target Label' =
-			VAR _value = [Rework Rate %]
-			RETURN IF ( NOT ISBLANK ( _value ), "Target ≤ " & FORMAT ( [Rework Rate % Target], "0.0%" ) )
-		displayFolder: Target Cards
-
-	/// Month-on-month change of Rework Rate % for the KPI card: arrow in the direction of the value and the size of the change in percentage points; "=" when unchanged.
-	measure 'Rework Rate % Change Label' =
-			VAR _value = [Rework Rate %]
-			VAR _previous = CALCULATE ( [Rework Rate %], DATEADD ( 'Calendar'[Date], -1, MONTH ) )
-			VAR _change = _value - _previous
-			RETURN SWITCH ( TRUE (), ISBLANK ( _value ) || ISBLANK ( _previous ), BLANK (), _change = 0, "= no change", IF ( _change > 0, "▲ ", "▼ " ) & FORMAT ( ABS ( _change ) * 100, "0.00" ) & " pp" & " vs prev. month" )
-		displayFolder: Target Cards
-
-	/// Improving when Rework Rate % moved towards (or further past) its target since the previous month, Worsening when it moved away, Stable when unchanged. Colours the change arrow (green / red / grey).
-	measure 'Rework Rate % Trend' =
-			VAR _value = [Rework Rate %]
-			VAR _previous = CALCULATE ( [Rework Rate %], DATEADD ( 'Calendar'[Date], -1, MONTH ) )
-			VAR _change = _value - _previous
-			RETURN SWITCH ( TRUE (), ISBLANK ( _value ) || ISBLANK ( _previous ), BLANK (), _change = 0, "Stable", _change < 0, "Improving", "Worsening" )
-		displayFolder: Target Cards
-
-	/// Target of COPQ % for the KPI card, e.g. "Target ≤ 94.0%".
-	measure 'COPQ % Target Label' =
-			VAR _value = [COPQ %]
-			RETURN IF ( NOT ISBLANK ( _value ), "Target ≤ " & FORMAT ( [COPQ % Target], "0.0%" ) )
-		displayFolder: Target Cards
-
-	/// Month-on-month change of COPQ % for the KPI card: arrow in the direction of the value and the size of the change in percentage points; "=" when unchanged.
-	measure 'COPQ % Change Label' =
-			VAR _value = [COPQ %]
-			VAR _previous = CALCULATE ( [COPQ %], DATEADD ( 'Calendar'[Date], -1, MONTH ) )
-			VAR _change = _value - _previous
-			RETURN SWITCH ( TRUE (), ISBLANK ( _value ) || ISBLANK ( _previous ), BLANK (), _change = 0, "= no change", IF ( _change > 0, "▲ ", "▼ " ) & FORMAT ( ABS ( _change ) * 100, "0.00" ) & " pp" & " vs prev. month" )
-		displayFolder: Target Cards
-
-	/// Improving when COPQ % moved towards (or further past) its target since the previous month, Worsening when it moved away, Stable when unchanged. Colours the change arrow (green / red / grey).
-	measure 'COPQ % Trend' =
-			VAR _value = [COPQ %]
-			VAR _previous = CALCULATE ( [COPQ %], DATEADD ( 'Calendar'[Date], -1, MONTH ) )
-			VAR _change = _value - _previous
-			RETURN SWITCH ( TRUE (), ISBLANK ( _value ) || ISBLANK ( _previous ), BLANK (), _change = 0, "Stable", _change < 0, "Improving", "Worsening" )
-		displayFolder: Target Cards
-
-	/// Target of Overdue 8Ds for the KPI card, e.g. "Target 0".
-	measure 'Overdue 8Ds Target Label' =
-			VAR _value = COALESCE ( [Overdue 8Ds], 0 )
-			RETURN IF ( NOT ISBLANK ( [Production Volume] ), "Target " & FORMAT ( [Overdue 8Ds Target], "0" ) )
-		displayFolder: Target Cards
-
-	/// Month-on-month change of Overdue 8Ds for the KPI card: arrow in the direction of the value and the size of the change; "=" when unchanged.
-	measure 'Overdue 8Ds Change Label' =
-			VAR _value = COALESCE ( [Overdue 8Ds], 0 )
-			VAR _previous = COALESCE ( CALCULATE ( [Overdue 8Ds], DATEADD ( 'Calendar'[Date], -1, MONTH ) ), 0 )
-			VAR _change = _value - _previous
-			RETURN SWITCH ( TRUE (), ISBLANK ( [Production Volume] ) || ISBLANK ( CALCULATE ( [Production Volume], DATEADD ( 'Calendar'[Date], -1, MONTH ) ) ), BLANK (), _change = 0, "= no change", IF ( _change > 0, "▲ ", "▼ " ) & FORMAT ( ABS ( _change ), "0" ) & " vs prev. month" )
-		displayFolder: Target Cards
-
-	/// Improving when Overdue 8Ds moved towards (or further past) its target since the previous month, Worsening when it moved away, Stable when unchanged. Colours the change arrow (green / red / grey).
-	measure 'Overdue 8Ds Trend' =
-			VAR _value = COALESCE ( [Overdue 8Ds], 0 )
-			VAR _previous = COALESCE ( CALCULATE ( [Overdue 8Ds], DATEADD ( 'Calendar'[Date], -1, MONTH ) ), 0 )
-			VAR _change = _value - _previous
-			RETURN SWITCH ( TRUE (), ISBLANK ( [Production Volume] ) || ISBLANK ( CALCULATE ( [Production Volume], DATEADD ( 'Calendar'[Date], -1, MONTH ) ) ), BLANK (), _change = 0, "Stable", _change < 0, "Improving", "Worsening" )
-		displayFolder: Target Cards
-
 	/// Hex color of the FTY % status, for conditional formatting.
 	measure 'FTY % Color' = SWITCH ( [FTY % Status], "Green", "#2E7D32", "Amber", "#B26A00", "Red", "#C62828", "#6B7280" )
 		displayFolder: Status Colors
@@ -461,7 +329,206 @@ table 'KPI Targets'
 		displayFolder: Status Colors
 		lineageTag: 69924c10-dbbb-43da-9c36-151b7c13ad67
 
+	/// Target of FTY % for the KPI card, e.g. "Target ≥ 94.0%".
+	measure 'FTY % Target Label' =
+			VAR _value = [FTY %]
+			RETURN IF ( NOT ISBLANK ( _value ), "Target ≥ " & FORMAT ( [FTY % Target], "0.0%" ) )
+		displayFolder: Target Cards
+		lineageTag: e1cb6683-b772-4299-944c-8651aab6e688
+
+	/// Month-on-month change of FTY % for the KPI card: arrow in the direction of the value and the size of the change in percentage points; "=" when unchanged.
+	measure 'FTY % Change Label' =
+			VAR _value = [FTY %]
+			VAR _previous = CALCULATE ( [FTY %], DATEADD ( 'Calendar'[Date], -1, MONTH ) )
+			VAR _change = _value - _previous
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ) || ISBLANK ( _previous ), BLANK (), _change = 0, "= no change", IF ( _change > 0, "▲ ", "▼ " ) & FORMAT ( ABS ( _change ) * 100, "0.00" ) & " pp" & " vs prev. month" )
+		displayFolder: Target Cards
+		lineageTag: 86e9299f-a898-4827-bd2b-13bd6b624332
+
+	/// Improving when FTY % moved towards (or further past) its target since the previous month, Worsening when it moved away, Stable when unchanged. Colours the change arrow (green / red / grey).
+	measure 'FTY % Trend' =
+			VAR _value = [FTY %]
+			VAR _previous = CALCULATE ( [FTY %], DATEADD ( 'Calendar'[Date], -1, MONTH ) )
+			VAR _change = _value - _previous
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ) || ISBLANK ( _previous ), BLANK (), _change = 0, "Stable", _change > 0, "Improving", "Worsening" )
+		displayFolder: Target Cards
+		lineageTag: d1306ebf-d2c9-4aee-8e28-d9e7a9a0c15b
+
+	/// Target of Defect Rate % for the KPI card, e.g. "Target ≤ 94.0%".
+	measure 'Defect Rate % Target Label' =
+			VAR _value = [Defect Rate %]
+			RETURN IF ( NOT ISBLANK ( _value ), "Target ≤ " & FORMAT ( [Defect Rate % Target], "0.0%" ) )
+		displayFolder: Target Cards
+		lineageTag: 2c7e6f65-3836-4d35-b662-716d18b79fed
+
+	/// Month-on-month change of Defect Rate % for the KPI card: arrow in the direction of the value and the size of the change in percentage points; "=" when unchanged.
+	measure 'Defect Rate % Change Label' =
+			VAR _value = [Defect Rate %]
+			VAR _previous = CALCULATE ( [Defect Rate %], DATEADD ( 'Calendar'[Date], -1, MONTH ) )
+			VAR _change = _value - _previous
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ) || ISBLANK ( _previous ), BLANK (), _change = 0, "= no change", IF ( _change > 0, "▲ ", "▼ " ) & FORMAT ( ABS ( _change ) * 100, "0.00" ) & " pp" & " vs prev. month" )
+		displayFolder: Target Cards
+		lineageTag: 41c9a38a-6421-465e-a5c0-601af17f9371
+
+	/// Improving when Defect Rate % moved towards (or further past) its target since the previous month, Worsening when it moved away, Stable when unchanged. Colours the change arrow (green / red / grey).
+	measure 'Defect Rate % Trend' =
+			VAR _value = [Defect Rate %]
+			VAR _previous = CALCULATE ( [Defect Rate %], DATEADD ( 'Calendar'[Date], -1, MONTH ) )
+			VAR _change = _value - _previous
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ) || ISBLANK ( _previous ), BLANK (), _change = 0, "Stable", _change < 0, "Improving", "Worsening" )
+		displayFolder: Target Cards
+		lineageTag: db714985-4a14-4aa1-b8c1-bdcf884afa51
+
+	/// Target of Scrap Rate % for the KPI card, e.g. "Target ≤ 94.0%".
+	measure 'Scrap Rate % Target Label' =
+			VAR _value = [Scrap Rate %]
+			RETURN IF ( NOT ISBLANK ( _value ), "Target ≤ " & FORMAT ( [Scrap Rate % Target], "0.0%" ) )
+		displayFolder: Target Cards
+		lineageTag: 5c86e7ce-68bf-4f65-a40b-08baaba3b2c7
+
+	/// Month-on-month change of Scrap Rate % for the KPI card: arrow in the direction of the value and the size of the change in percentage points; "=" when unchanged.
+	measure 'Scrap Rate % Change Label' =
+			VAR _value = [Scrap Rate %]
+			VAR _previous = CALCULATE ( [Scrap Rate %], DATEADD ( 'Calendar'[Date], -1, MONTH ) )
+			VAR _change = _value - _previous
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ) || ISBLANK ( _previous ), BLANK (), _change = 0, "= no change", IF ( _change > 0, "▲ ", "▼ " ) & FORMAT ( ABS ( _change ) * 100, "0.00" ) & " pp" & " vs prev. month" )
+		displayFolder: Target Cards
+		lineageTag: 93fd54ac-177d-419a-8c0d-2b85acaf713f
+
+	/// Improving when Scrap Rate % moved towards (or further past) its target since the previous month, Worsening when it moved away, Stable when unchanged. Colours the change arrow (green / red / grey).
+	measure 'Scrap Rate % Trend' =
+			VAR _value = [Scrap Rate %]
+			VAR _previous = CALCULATE ( [Scrap Rate %], DATEADD ( 'Calendar'[Date], -1, MONTH ) )
+			VAR _change = _value - _previous
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ) || ISBLANK ( _previous ), BLANK (), _change = 0, "Stable", _change < 0, "Improving", "Worsening" )
+		displayFolder: Target Cards
+		lineageTag: e658a84e-b302-42f3-b80b-b0be16d7ccc5
+
+	/// Target of Rework Rate % for the KPI card, e.g. "Target ≤ 94.0%".
+	measure 'Rework Rate % Target Label' =
+			VAR _value = [Rework Rate %]
+			RETURN IF ( NOT ISBLANK ( _value ), "Target ≤ " & FORMAT ( [Rework Rate % Target], "0.0%" ) )
+		displayFolder: Target Cards
+		lineageTag: 19c28b1f-8353-44c9-a170-18953df73e21
+
+	/// Month-on-month change of Rework Rate % for the KPI card: arrow in the direction of the value and the size of the change in percentage points; "=" when unchanged.
+	measure 'Rework Rate % Change Label' =
+			VAR _value = [Rework Rate %]
+			VAR _previous = CALCULATE ( [Rework Rate %], DATEADD ( 'Calendar'[Date], -1, MONTH ) )
+			VAR _change = _value - _previous
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ) || ISBLANK ( _previous ), BLANK (), _change = 0, "= no change", IF ( _change > 0, "▲ ", "▼ " ) & FORMAT ( ABS ( _change ) * 100, "0.00" ) & " pp" & " vs prev. month" )
+		displayFolder: Target Cards
+		lineageTag: 010b95c8-27d3-4ea8-ae16-4dd19d1fb9b6
+
+	/// Improving when Rework Rate % moved towards (or further past) its target since the previous month, Worsening when it moved away, Stable when unchanged. Colours the change arrow (green / red / grey).
+	measure 'Rework Rate % Trend' =
+			VAR _value = [Rework Rate %]
+			VAR _previous = CALCULATE ( [Rework Rate %], DATEADD ( 'Calendar'[Date], -1, MONTH ) )
+			VAR _change = _value - _previous
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ) || ISBLANK ( _previous ), BLANK (), _change = 0, "Stable", _change < 0, "Improving", "Worsening" )
+		displayFolder: Target Cards
+		lineageTag: 59f9a5c4-96ad-4d58-8662-feb4ca61d9d1
+
+	/// Target of COPQ % for the KPI card, e.g. "Target ≤ 94.0%".
+	measure 'COPQ % Target Label' =
+			VAR _value = [COPQ %]
+			RETURN IF ( NOT ISBLANK ( _value ), "Target ≤ " & FORMAT ( [COPQ % Target], "0.0%" ) )
+		displayFolder: Target Cards
+		lineageTag: 47109692-a5ea-4cc5-aa55-765730b5614d
+
+	/// Month-on-month change of COPQ % for the KPI card: arrow in the direction of the value and the size of the change in percentage points; "=" when unchanged.
+	measure 'COPQ % Change Label' =
+			VAR _value = [COPQ %]
+			VAR _previous = CALCULATE ( [COPQ %], DATEADD ( 'Calendar'[Date], -1, MONTH ) )
+			VAR _change = _value - _previous
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ) || ISBLANK ( _previous ), BLANK (), _change = 0, "= no change", IF ( _change > 0, "▲ ", "▼ " ) & FORMAT ( ABS ( _change ) * 100, "0.00" ) & " pp" & " vs prev. month" )
+		displayFolder: Target Cards
+		lineageTag: 0d1ca2b5-3d42-420b-8191-227d45fae6ab
+
+	/// Improving when COPQ % moved towards (or further past) its target since the previous month, Worsening when it moved away, Stable when unchanged. Colours the change arrow (green / red / grey).
+	measure 'COPQ % Trend' =
+			VAR _value = [COPQ %]
+			VAR _previous = CALCULATE ( [COPQ %], DATEADD ( 'Calendar'[Date], -1, MONTH ) )
+			VAR _change = _value - _previous
+			RETURN SWITCH ( TRUE (), ISBLANK ( _value ) || ISBLANK ( _previous ), BLANK (), _change = 0, "Stable", _change < 0, "Improving", "Worsening" )
+		displayFolder: Target Cards
+		lineageTag: 730eb37d-3759-45ec-aa84-af6d7fd23a12
+
+	/// Target of Overdue 8Ds for the KPI card, e.g. "Target 0".
+	measure 'Overdue 8Ds Target Label' =
+			VAR _value = COALESCE ( [Overdue 8Ds], 0 )
+			RETURN IF ( NOT ISBLANK ( [Production Volume] ), "Target " & FORMAT ( [Overdue 8Ds Target], "0" ) )
+		displayFolder: Target Cards
+		lineageTag: 2a23a5dc-161a-4fb2-9087-a2c6ecf14c98
+
+	/// Month-on-month change of Overdue 8Ds for the KPI card: arrow in the direction of the value and the size of the change; "=" when unchanged.
+	measure 'Overdue 8Ds Change Label' =
+			VAR _value = COALESCE ( [Overdue 8Ds], 0 )
+			VAR _previous = COALESCE ( CALCULATE ( [Overdue 8Ds], DATEADD ( 'Calendar'[Date], -1, MONTH ) ), 0 )
+			VAR _change = _value - _previous
+			RETURN SWITCH ( TRUE (), ISBLANK ( [Production Volume] ) || ISBLANK ( CALCULATE ( [Production Volume], DATEADD ( 'Calendar'[Date], -1, MONTH ) ) ), BLANK (), _change = 0, "= no change", IF ( _change > 0, "▲ ", "▼ " ) & FORMAT ( ABS ( _change ), "0" ) & " vs prev. month" )
+		displayFolder: Target Cards
+		lineageTag: e67f4ccf-4004-4f60-9fbc-de70cfbfaa9d
+
+	/// Improving when Overdue 8Ds moved towards (or further past) its target since the previous month, Worsening when it moved away, Stable when unchanged. Colours the change arrow (green / red / grey).
+	measure 'Overdue 8Ds Trend' =
+			VAR _value = COALESCE ( [Overdue 8Ds], 0 )
+			VAR _previous = COALESCE ( CALCULATE ( [Overdue 8Ds], DATEADD ( 'Calendar'[Date], -1, MONTH ) ), 0 )
+			VAR _change = _value - _previous
+			RETURN SWITCH ( TRUE (), ISBLANK ( [Production Volume] ) || ISBLANK ( CALCULATE ( [Production Volume], DATEADD ( 'Calendar'[Date], -1, MONTH ) ) ), BLANK (), _change = 0, "Stable", _change < 0, "Improving", "Worsening" )
+		displayFolder: Target Cards
+		lineageTag: 8deb01b3-0e8f-4168-8a45-ca0a987ff382
+
 	/// Code used by the target measures, e.g. FPY_PCT.
+	/// HTML for the Executive KPI cards (HTML Content Secure visual): current value vs target, status pill, target bar and month-on-month arrow (green towards target, red away). Presentation only; all logic comes from the existing <KPI> measures. Source: powerbi/tools/build_kpi_cards.mjs.
+	measure 'KPI Cards HTML' =
+			// Executive KPI cards with targets as one HTML Content Secure visual. Presentation only: every number,
+			// status, target and trend comes from the existing measures. Generated by powerbi/tools/build_kpi_cards.mjs.
+			VAR _hasData = NOT ISBLANK ( [Production Volume] )
+			// order, label, value, value text, status, target label, change label, trend, bar low, bar high, target
+			VAR _kpis =
+			    {
+			        ( 1, "FTY", [FTY %], FORMAT ( [FTY %], "0.00%" ), [FTY % Status], [FTY % Target Label], [FTY % Change Label], [FTY % Trend], 0.9, 1, [FTY % Target] ),
+			        ( 2, "Defect rate", [Defect Rate %], FORMAT ( [Defect Rate %], "0.00%" ), [Defect Rate % Status], [Defect Rate % Target Label], [Defect Rate % Change Label], [Defect Rate % Trend], 0, 2 * [Defect Rate % Target], [Defect Rate % Target] ),
+			        ( 3, "Scrap rate", [Scrap Rate %], FORMAT ( [Scrap Rate %], "0.00%" ), [Scrap Rate % Status], [Scrap Rate % Target Label], [Scrap Rate % Change Label], [Scrap Rate % Trend], 0, 2 * [Scrap Rate % Target], [Scrap Rate % Target] ),
+			        ( 4, "Rework rate", [Rework Rate %], FORMAT ( [Rework Rate %], "0.00%" ), [Rework Rate % Status], [Rework Rate % Target Label], [Rework Rate % Change Label], [Rework Rate % Trend], 0, 2 * [Rework Rate % Target], [Rework Rate % Target] ),
+			        ( 5, "COPQ %", [COPQ %], FORMAT ( [COPQ %], "0.00%" ), [COPQ % Status], [COPQ % Target Label], [COPQ % Change Label], [COPQ % Trend], 0, 2 * [COPQ % Target], [COPQ % Target] ),
+			        ( 6, "Overdue 8Ds", COALESCE ( [Overdue 8Ds], 0 ), FORMAT ( COALESCE ( [Overdue 8Ds], 0 ), "0" ), [Overdue 8Ds Status], [Overdue 8Ds Target Label], [Overdue 8Ds Change Label], [Overdue 8Ds Trend], 0, MAX ( 6, COALESCE ( [Overdue 8Ds], 0 ) ), [Overdue 8Ds Target] )
+			    }
+			VAR _tiles =
+			    CONCATENATEX (
+			        _kpis,
+			        VAR _value = [Value3]
+			        VAR _status = [Value5]
+			        VAR _change = [Value7]
+			        VAR _trend = [Value8]
+			        VAR _low = [Value9]
+			        VAR _span = [Value10] - [Value9]
+			        VAR _color = SWITCH ( _status, "Green", "#2E7D32", "Amber", "#B26A00", "Red", "#C62828", "#6B7280" )
+			        VAR _tint = SWITCH ( _status, "Green", "#E8F5E9", "Amber", "#FFF3E0", "Red", "#FDECEA", "#F3F4F6" )
+			        VAR _pill = SWITCH ( _status, "Green", "On target", "Amber", "Near target", "Red", "Off target", "No data" )
+			        VAR _trendColor = SWITCH ( _trend, "Improving", "#2E7D32", "Worsening", "#C62828", "#6B7280" )
+			        VAR _trendTint = SWITCH ( _trend, "Improving", "#E8F5E9", "Worsening", "#FDECEA", "#F3F4F6" )
+			        VAR _valueText = IF ( ISBLANK ( _value ), "–", [Value4] )
+			        VAR _targetText = SUBSTITUTE ( [Value6], "Target ", "" )
+			        // bar: share of the KPI scale covered by the value, and where the target sits (whole percent, 0-100)
+			        VAR _fill = IF ( ISBLANK ( _value ) || _span <= 0, 0, INT ( ROUND ( MAX ( 0, MIN ( 1, DIVIDE ( _value - _low, _span ) ) ) * 100, 0 ) ) )
+			        VAR _tick = IF ( _span <= 0, 0, MIN ( 99, INT ( ROUND ( MAX ( 0, MIN ( 1, DIVIDE ( [Value11] - _low, _span ) ) ) * 100, 0 ) ) ) )
+			        VAR _changeHtml =
+			            IF (
+			                ISBLANK ( _change ),
+			                "<span>No previous month to compare</span>",
+			                "<span style='font-weight:700;padding:2px 8px;border-radius:999px;background:" & _trendTint & ";color:" & _trendColor & "'>" & SUBSTITUTE ( _change, " vs prev. month", "" ) & "</span><span>" & IF ( CONTAINSSTRING ( _change, " vs prev. month" ), "vs prev. month", "" ) & "</span>"
+			            )
+			        RETURN
+			            "<div style='flex:1 1 172px;min-width:0;box-sizing:border-box;background:#FFFFFF;border:1px solid #E5E7EB;border-top:3px solid " & _color & ";border-radius:8px;padding:10px 12px 11px'>" & "<div style='display:flex;justify-content:space-between;align-items:center;gap:6px'>" & "<span style='font-size:12px;font-weight:600;color:#374151;white-space:nowrap;overflow:hidden;text-overflow:ellipsis'>" & [Value2] & "</span>" & "<span style='flex:none;font-size:10px;font-weight:600;padding:2px 8px;border-radius:999px;background:" & _tint & ";color:" & _color & "'>" & _pill & "</span></div>" & "<div style='display:flex;justify-content:space-between;align-items:flex-end;margin-top:8px'>" & "<div><div style='" & "font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#6B7280;" & "'>Now</div><div style='font-size:27px;font-weight:700;line-height:1.1;color:" & _color & "'>" & _valueText & "</div></div>" & "<div style='text-align:right'><div style='" & "font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#6B7280;" & "'>Target</div><div style='font-size:15px;font-weight:600;line-height:1.5;color:#1F2937'>" & _targetText & "</div></div></div>" & "<div style='position:relative;height:6px;margin:9px 0 9px;background:#EEF0F3;border-radius:3px'>" & "<div style='width:" & _fill & "%;height:6px;border-radius:3px;background:" & _color & "'></div>" & "<div style='position:absolute;top:-4px;left:" & _tick & "%;width:2px;height:14px;background:#111827'></div></div>" & "<div style='display:flex;align-items:center;gap:6px;font-size:11px;color:#6B7280'>" & _changeHtml & "</div></div>",
+			        "",
+			        [Value1], ASC
+			    )
+			RETURN
+			    IF ( _hasData, "<div style='display:flex;flex-wrap:wrap;gap:10px;font-family:Segoe UI,Arial,sans-serif;'>" & _tiles & "</div>", "<div style='font-family:Segoe UI,Arial,sans-serif;padding:26px 12px;text-align:center;font-size:13px;color:#6B7280;background:#FFFFFF;border:1px dashed #D1D5DB;border-radius:8px'>No data for the selected period and filters</div>" )
+		displayFolder: Visuals
+
 	column 'KPI Code'
 		dataType: string
 		lineageTag: b50263f7-e553-4f71-b425-14a16c532dc2

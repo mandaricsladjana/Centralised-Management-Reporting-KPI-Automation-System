@@ -666,5 +666,7 @@ No Notion connection is available in this environment, so this is the structure 
 | D29 | Power BI: business-friendly table and column names (`Production`, `8D Reports`) and measures on their fact tables with display folders, instead of `dim_*/fact_*` names and one `_Measures` table (§7) | ✅ Follows the Power BI modelling guidelines; the SQL layer keeps snake_case. KPI measure names still match the KPI dictionary |
 | D30 | Time intelligence (Δ previous month, previous year, rolling 3 months) as one calculation group `Time Comparison` instead of `… PM / … YoY` measures per KPI | ✅ Works for every KPI without measure explosion; rolling values are ratios of sums |
 | D31 | Quantity measures renamed `Inspected Quantity`, `Scrapped Quantity`, … | ✅ A measure cannot share its name with a column (`Qty Inspected`) |
+| D32 | Report pages generated from code (`powerbi/tools/build_report.mjs`): 1280×720 canvas, light-grey page, white cards, dark title band, one accent (#0F6E8C) plus RAG colours only | ✅ Reproducible, reviewable report; design applied consistently on all 8 pages |
+| D33 | Executive KPI cards with targets as one **HTML Content Secure** visual (AppSource, certified) driven by the measure `KPI Cards HTML`, instead of 18 native cards or an SDK custom visual | ✅ Modern tiles (now vs target, status, target bar, green/red arrow) with all logic in existing DAX measures; parity test 181/181. Originals kept on a hidden backup page (documentation/07) |
 
 Every future decision is added here and mirrored in the Notion *Decisions & Change Log* database.
